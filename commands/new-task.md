@@ -1,10 +1,15 @@
 # Skill: new-task
 
-Agente conversacional que recoge los requisitos de una tarea y genera el directorio `tasks/<nombre>/` completo listo para ejecutar con Claude Code o Codex.
+Agente conversacional que ancla el objetivo de una tarea con tests ejecutables y genera el scaffolding adaptable para ejecutarla con Claude Code o Codex.
+
+**Principio que guía todas las decisiones:**
+- `goal.md` (objetivo + verificación) es el contrato inmutable. No se toca una vez acordado.
+- `plan.md` y las tareas son orientación mutable — se espera que cambien durante la ejecución.
+- Sin criterio de verificación ejecutable no existe objetivo válido.
 
 **Cómo encontrar los templates (portable, sin paths hardcodeados):**
-1. Lee `~/.claude/iriaagents_path` con la herramienta Read → contiene la ruta absoluta del repo iriaagents en esta máquina.
-2. Los templates están en `<esa-ruta>/templates/`. Lee todos los `.md` y `.sh` de ese directorio antes de generar archivos.
+1. Lee `~/.claude/iriaagents_path` → contiene la ruta absoluta del repo iriaagents en esta máquina.
+2. Los templates están en `<esa-ruta>/templates/`. Lee todos los `.md` y `.sh` antes de generar archivos.
 
 ## Cuándo usar este skill
 
@@ -20,26 +25,32 @@ Ejecuta las fases en orden. **No generes archivos hasta tener todas las respuest
 ### Fase 1: Recopilación (7 preguntas secuenciales)
 
 **P1 — Qué construir**
-> ¿Qué quieres construir? Describe el problema: qué está mal o qué falta, y qué debe quedar distinto al terminar.
+> ¿Qué quieres construir o corregir? Describe el problema: qué está mal o qué falta, y qué debe quedar distinto al terminar.
 
 **P2 — Estado actual**
-> ¿Cuál es el estado actual? Dame métricas concretas si las hay (ej: "593/817 tests pasan", "VSAM OPEN falla con RESP=19"). Si no hay métricas, describe qué funciona y qué no.
+> ¿Cuál es el estado actual? Dame métricas concretas si las hay (ej: "0/53 specs pasan", "B21-B40 sin cerrar"). Si no hay métricas, describe qué funciona y qué no.
 
-**P3 — Verificación**
-> ¿Cómo se verifica que el trabajo está terminado? Dame los comandos exactos que el agente ejecutará para demostrar que lo logró (tests, greps, scripts de smoke). Si la respuesta es vaga ("que funcione"), sigue preguntando hasta tener comandos concretos.
+**P3 — Verificación** ← la más importante
+> ¿Cómo se demuestra que el trabajo está terminado? Dame los comandos exactos que ejecutaremos al final para probar que el objetivo se ha conseguido.
+>
+> Si la respuesta es vaga ("que funcione", "que mejore"), no avances. Sigue preguntando hasta tener:
+> - Comandos concretos y ejecutables
+> - Salida esperada o criterio de éxito para cada comando
+>
+> Estos comandos se convierten en el criterio de éxito de `goal.md` y **no cambian durante la tarea**.
 
 **P4 — Proyecto y rama**
 > ¿En qué proyecto se crea la carpeta `tasks/`? Dame la ruta absoluta o el nombre del repo.
 >
 > Tras recibir la respuesta, comprueba si el proyecto usa GitFlow:
-> - Si existe la rama `develop` (local o remota): informa al usuario y pregunta el nombre de la rama feature que se creará (`feature/<nombre-tarea>`). El trabajo se hará en un worktree separado.
-> - Si no existe `develop`: continúa sin rama feature (flujo clásico).
+> - Si existe la rama `develop` (local o remota): informa al usuario y pregunta el nombre de la rama feature (`feature/<nombre-tarea>`). El trabajo irá en un worktree separado.
+> - Si no existe `develop`: continúa sin rama feature.
 
 **P5 — Entorno**
-> ¿Hay un entorno especial que el agente debe conocer? (stack Docker, FTP, variables de entorno, comandos para arrancar el sistema). Si no, escribe "ninguno" — omitiré el archivo `INSTRUCTIONS.md`.
+> ¿Hay un entorno especial que el agente debe conocer? (Docker, FTP, variables de entorno, comandos para arrancar el sistema). Si no, escribe "ninguno" — omitiré `INSTRUCTIONS.md`.
 
 **P6 — Reglas de codificación**
-> ¿Hay reglas de codificación o restricciones para este trabajo? (lenguaje, framework de tests, naming, prohibiciones explícitas). Si no, escribe "ninguna".
+> ¿Hay reglas de codificación o restricciones? (lenguaje, framework de tests, naming, prohibiciones). Si no, escribe "ninguna".
 
 **P7 — Runner**
 > ¿Qué runner usará el agente: **Claude Code**, **Codex**, o **ambos**?
@@ -50,13 +61,17 @@ Ejecuta las fases en orden. **No generes archivos hasta tener todas las respuest
 
 Con las respuestas recogidas:
 
-1. **Nombre del directorio**: propón un nombre en kebab-case (ej: `vsam-open-fix`, `java-coverage`). Pregunta si está bien.
+1. **Nombre del directorio**: propón un nombre en kebab-case. Pregunta si está bien.
 
-2. **Descomposición en tareas**: propón una tabla de tareas atómicas:
+2. **Elementos clave del objetivo**: lista los aspectos del sistema que los tests de verificación cubren. Esto es lo que el agente debe tener claro antes de tocar código.
+
+3. **Descomposición en tareas**: propón una tabla orientativa de tareas atómicas:
    | # | Nombre | Qué hace | Depende de |
    |---|--------|----------|------------|
 
-   Cada tarea debe ser ejecutable en una sesión y tener criterio de DONE verificable con comandos. Pregunta si añaden, quitan o ajustan tareas antes de continuar.
+   Deja claro que esta tabla es orientación — se espera que cambie durante la ejecución. Lo que no cambia es la verificación del paso anterior.
+
+   Pregunta si añaden, quitan o ajustan tareas antes de continuar.
 
 ---
 
@@ -65,50 +80,47 @@ Con las respuestas recogidas:
 Una vez confirmada la propuesta:
 
 1. Lee `~/.claude/iriaagents_path` para obtener la ruta del repo iriaagents.
-2. Lee todos los templates de `<iriaagents>/templates/` (`.md` y `.sh`).
-3. Sustituye todos los `{{PLACEHOLDER}}` con la información del usuario. **Sin placeholders sin resolver.**
+2. Lee todos los templates de `<iriaagents>/templates/`.
+3. Sustituye todos los `{{PLACEHOLDER}}`. **Sin placeholders sin resolver.**
 
 4. **Si el proyecto usa GitFlow** (tiene rama `develop`):
-   - Crea un worktree: `git -C <proyecto> worktree add ../<proyecto>-<nombre-tarea> -b feature/<nombre-tarea> develop`
-   - Genera todos los archivos dentro del worktree (`../<proyecto>-<nombre-tarea>/tasks/<nombre>/`)
-   - Informa al usuario de la ruta del worktree y la rama creada.
+   - `git -C <proyecto> worktree add ../<proyecto>-<nombre-tarea> -b feature/<nombre-tarea> develop`
+   - Genera los archivos en el worktree (`../<proyecto>-<nombre-tarea>/tasks/<nombre>/`)
 
-5. **Si no usa GitFlow**: genera los archivos directamente en `<proyecto>/tasks/<nombre>/`.
+5. **Si no usa GitFlow**: genera en `<proyecto>/tasks/<nombre>/`.
 
 6. Archivos a crear:
 
    **Siempre:**
-   - `goal.md` — basado en `templates/goal.md`
-   - `plan.md` — basado en `templates/plan.md`
-   - `tasks.md` — basado en `templates/tasks.md`
-   - `coding-rules.md` — basado en `templates/coding-rules.md`
-   - `AGENT.md` — basado en `templates/AGENT.md`
-   - `PROMPT.md` — basado en `templates/PROMPT.md`
-   - `task01-<slug>.md` ... `taskNN-<slug>.md` — uno por tarea, basado en `templates/task-ejemplo.md`
+   - `goal.md` ← objetivo + verificación ejecutable. Marcar explícitamente: "Este archivo no se modifica durante la ejecución."
+   - `plan.md` ← diseño inicial. Marcar: "Documento vivo — se espera que evolucione."
+   - `tasks.md` ← tabla de tareas. Marcar: "Documento vivo — añade, elimina o reordena según avance el trabajo."
+   - `coding-rules.md`
+   - `AGENT.md`
+   - `PROMPT.md`
+   - `task01-<slug>.md` ... `taskNN-<slug>.md`
    - `evidence/.gitkeep`
    - `scripts/.gitkeep`
 
-   **Solo si hay entorno especial (P5 ≠ "ninguno"):**
-   - `INSTRUCTIONS.md` — basado en `templates/INSTRUCTIONS.md`
+   **Solo si P5 ≠ "ninguno":**
+   - `INSTRUCTIONS.md`
 
-   **Según runner elegido (P7):**
-   - `run-claude.sh` — si Claude Code o ambos
-   - `run-codex.sh` — si Codex o ambos
-   - `chmod +x` en todos los `.sh`
+   **Según runner (P7):**
+   - `run-claude.sh` y/o `run-codex.sh` — con `chmod +x`
 
-7. En los scripts `.sh`:
-   - Si el proyecto tiene git: `cd "$(git rev-parse --show-toplevel)"` como `{{CD_TOPLEVEL}}`
-   - Si no tiene git: `cd "<ruta absoluta>"` como `{{CD_TOPLEVEL}}`
+7. En los `.sh`: `cd "$(git rev-parse --show-toplevel)"` si el proyecto tiene git, o ruta absoluta si no.
 
-8. Al terminar, confirma:
+8. Al terminar, informa:
    - Rama y worktree creados (si GitFlow)
    - Archivos generados con ruta completa
+   - Recuerda al usuario: "El único archivo que no debe modificarse es `goal.md`. El resto evoluciona con el trabajo."
    - Siguiente paso: `cd ../<proyecto>-<nombre-tarea> && ./tasks/<nombre>/run-claude.sh`
 
 ## Reglas de generación
 
-- **Sin placeholders sin resolver**: todos los `{{...}}` deben estar rellenos
-- **Criterios siempre ejecutables**: si el usuario da un criterio vago, tradúcelo a comandos concretos
-- **No inventar detalles técnicos**: si no sabes la ruta exacta de un archivo, márcala con `# VERIFICAR`
-- **tasks.md refleja exactamente las tareas generadas**: una fila por cada taskNN
-- **Los timestamps usan la fecha de hoy**: obtenerla con la herramienta de fecha del sistema
+- **Sin verificación ejecutable, no hay tarea válida**: si P3 queda vaga, no generes nada — sigue preguntando.
+- **Sin placeholders sin resolver**: todos los `{{...}}` deben estar rellenos.
+- **Criterios siempre como comandos**: si el usuario da un criterio descriptivo, tradúcelo a comandos concretos con salida esperada.
+- **tasks.md refleja exactamente las tareas generadas**: una fila por taskNN.
+- **Los timestamps usan la fecha de hoy**: obtenerla con la herramienta de fecha del sistema.
+- **No inventar detalles técnicos**: rutas desconocidas → `# VERIFICAR`.
