@@ -54,6 +54,14 @@ Ejecuta las fases en orden. No declares el cierre hasta haber capturado evidenci
 
 ### Fase 3: Capturar evidencia
 
+La evidencia tiene que ser reproducible. En orden de preferencia:
+- **Playwright trace o screenshot** — para flujos de UI: `playwright test --reporter=html`, captura de pantalla del estado final.
+- **Dump** — para estado de datos: export JSON/CSV/SQL del estado que demuestra el resultado.
+- **Diff de archivos** — para cambios en código o configuración: `git diff`, output de spec runner.
+- **Output de comando** — solo si es la única opción (tests unitarios, checks de arquitectura, lint).
+
+Los logs de servidor o de aplicación no cuentan como evidencia — son efímeros y no demuestran el estado final del sistema.
+
 1. Obtén la fecha actual del sistema.
 
 2. Crea el archivo `evidence/close-YYYY-MM-DD.md` con este formato:
@@ -148,6 +156,7 @@ Delta:      <una línea del delta o "sin desviaciones">
 
 ## Reglas
 
+- **La evidencia tiene que ser reproducible**: Playwright traces, dumps o diffs. Los logs no cuentan.
 - **Sin evidencia ejecutable no hay cierre válido**: si los tests no se han podido correr, documenta el motivo y marca como cierre-manual.
 - **El veredicto lo da goal.md, no el plan**: el plan puede haber cambiado completamente — lo que importa es si los comandos del goal.md pasan.
 - **No modificar goal.md**: es el contrato inmutable. Si los criterios estaban mal definidos, es aprendizaje para la próxima tarea.

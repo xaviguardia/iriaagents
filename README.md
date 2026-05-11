@@ -201,7 +201,7 @@ El vocabulario del dominio tiene la misma trazabilidad que el código.
 | `goal.md` | No tocar. Si el objetivo cambia, es una tarea nueva. |
 | `plan.md` | Reescribir cuando la solución real difiere. |
 | `tasks.md` | Añadir, eliminar, reordenar según avanza. |
-| `evidence/` | Guardar diffs, logs y capturas que demuestran el avance. |
+| `evidence/` | Playwright traces, dumps y diffs. Los logs no cuentan — la evidencia tiene que ser reproducible. |
 
 ---
 
