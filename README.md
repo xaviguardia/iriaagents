@@ -33,6 +33,81 @@ Escribe `~/.claude/iriaagents_path` (para localizar templates sin paths hardcode
 
 ---
 
+## Para qué tipo de tareas funciona
+
+Tras aplicar esta técnica en más de 40 proyectos reales, los arquetipos donde más valor aporta son:
+
+### 1. Corrección sistemática de divergencias
+
+Un sistema conocido produce resultados incorrectos en N casos documentados. El objetivo es llevar esos N casos a cero con evidencia por caso.
+
+**Tests típicos:**
+```bash
+node run-spec.js specs/caso-001.prg   # salida esperada: "OK"
+grep -r "FIXED" report/divergences/  # todos tienen estado final
+```
+
+**Proyectos:** corrección de 40 divergencias VFP9→JS (strings, fechas, arrays, OOP, macros, errores, DBF); fixes en intérpretes PL/I, COBOL, CICS.
+
+---
+
+### 2. Conformance testing — especificación como contrato
+
+Construir una suite de specs que capture el comportamiento exacto de un sistema de referencia y verificar que la implementación alternativa lo replica.
+
+**Tests típicos:**
+```bash
+bash run-suite.sh
+# PASS: 53   FAIL: 0   TOTAL: 53
+```
+
+**Proyectos:** 53 specs de lifecycle VFP9 Form/Control/DataEnvironment; suite de conformance del corpus VFP9 (1606 programas); golden master pipeline WinGest8 (102h, 5 tracks); equivalencia COBOL→Rust en nuhost.
+
+---
+
+### 3. Migración de sistemas legados
+
+Convertir un sistema existente (VB6, VFP9, COBOL, PL/I, JCL) a un stack moderno preservando el comportamiento observable. El test es la equivalencia de salidas, no la similitud del código.
+
+**Tests típicos:**
+```bash
+diff <(run-legacy input.dat) <(run-modern input.dat)   # sin diferencias
+./e2e-suite.sh                                          # N/N specs en verde
+```
+
+**Proyectos:** VFP9→Java (newwingest, abina con 24 specs E2E); VB6→Java+React (ekoN ERP); COBOL/PL/I→Rust con event-sourcing (nuhost); pipeline Iria (F1-F8) para modernización de mainframe.
+
+---
+
+### 4. Construcción de infraestructura de interpretación
+
+Implementar un intérprete, transpiler o runtime para un lenguaje existente. El contrato es la cobertura del lenguaje medida en specs que pasan.
+
+**Tests típicos:**
+```bash
+node interpreter/run-spec.js corpus/programa.prg   # sin runtime errors
+./coverage.sh                                       # N% tokens cubiertos
+```
+
+**Proyectos:** intérprete VFP9 JS (corpus completo, lifecycle, OOP, SQL, DBF); intérprete PL/I (100% ECMA-50); intérprete CICS+TCP gateway contra Hercules/MVS real; pipeline JCL.
+
+---
+
+### 5. Nuevas funcionalidades en sistemas en producción
+
+Añadir capacidades a un sistema existente donde el criterio de éxito es un comportamiento nuevo demostrable, no "que el PR pase CI".
+
+**Tests típicos:**
+```bash
+./health.sh --symbols STRTRAN        # nueva flag funciona
+curl -s /api/nuevo-endpoint | jq .   # respuesta correcta
+playwright test e2e/nuevo-flujo.spec # flujo de usuario completo
+```
+
+**Proyectos:** flags `--symbols`/`--tokens` en conformance tooling; dark mode en frontend VFP; dashboard de observabilidad (token tracking, burndown, LLM proxy); TMS Obsly Verba (editor, MT, memoria de traducción); SDUI visual editor Trazz.
+
+---
+
 ## Cómo funciona
 
 `/new-task` conduce una conversación de 7 preguntas. La más importante es la tercera:
@@ -64,82 +139,58 @@ Si el proyecto usa GitFlow (rama `develop`), el skill crea la rama `feature/<nom
 
 ---
 
-## Ejemplos reales
+## Ejemplos de cómo el plan cambia pero el objetivo no
 
-### Lifecycle VFP9 — de 0 a 53/53 specs en verde
+### Lifecycle VFP9 — 0 → 53/53 specs
 
-**Objetivo acordado:**
-> El intérprete JS replica el ordering exacto de eventos Form/Control/DataEnvironment de VFP9 real en los 53 escenarios documentados.
-
-**Tests que lo anclan:**
+**Objetivo y tests (no cambiaron):**
 ```bash
 bash tasks/language-proof-lifecycle/scripts/run-lifecycle-suite.sh
 # PASS: 53   FAIL: 0   TOTAL: 53
 ```
 
-**Cómo evolucionó el trabajo:**
-El plan inicial era "arreglar el orden Load→Init→Activate". Al ejecutar los tests emergieron 8 capas adicionales que no estaban en el plan original:
-- `traceEvent` no era callable desde VFP (globalEnv no se consultaba)
+**Lo que no estaba en el plan inicial y emergió al ejecutar:**
+- `traceEvent` no era callable desde VFP — globalEnv JS no se consultaba
 - Los métodos VFP perdían frente a funciones nativas en `_callMethod`
-- `DataEnvironment.Destroy` debía dispararse *después* del `Unload` del form, no antes
-- Runtime `AddObject`: `THIS.Name` era incorrecto dentro de `Init` porque el nombre se asignaba después de ejecutarlo
-- `trace-base.prg` se eliminaba en el preprocesador en vez de inyectarse
+- `DataEnvironment.Destroy` tenía que dispararse *después* del `Unload`, no antes
+- Runtime `AddObject`: `THIS.Name` incorrecto dentro de `Init` — el nombre se asignaba después de ejecutarlo
+- `trace-base.prg` se eliminaba en el preprocesador en vez de inyectarse inline
 
-El objetivo no cambió. Los tests tampoco. El plan se reescribió cinco veces.
-
----
-
-### Wave-1 bugfix — 40 divergencias VFP9→JS cerradas
-
-**Objetivo acordado:**
-> Las divergencias B01-B40 documentadas en `report/divergences/` quedan marcadas FIXED o TRIAGED con evidencia ejecutable.
-
-**Tests que lo anclan:**
-```bash
-node interpreter/run-spec.js specs/Bxx-nombre.prg   # cada spec produce la salida esperada
-grep -r "FIXED\|TRIAGED" report/divergences/        # todas tienen estado final
-```
-
-**Cómo evolucionó el trabajo:**
-Las tareas se agruparon por bucket (strings, fechas, arrays, OOP, macros, errores, DBF) pero el orden real de ejecución fue distinto al planeado — algunas dependencias entre fixes solo se veían al ejecutar. B25 se movió a wave-2 porque dependía del parser, no del intérprete. El plan lo absorbió; el objetivo y los tests no se tocaron.
+El plan se reescribió cinco veces. El objetivo y los tests: ni una coma.
 
 ---
 
-### Conformance tooling — filtrado por símbolo y token
+### Wave-1 bugfix — 40 divergencias cerradas
 
-**Objetivo acordado:**
-> El runner de conformance permite aislar subconjuntos del corpus por símbolo VFP o por volumen de tokens.
-
-**Tests que lo anclan:**
+**Objetivo y tests (no cambiaron):**
 ```bash
-./health.sh --symbols STRTRAN        # solo specs que usan STRTRAN
-./health.sh --tokens 50              # specs con más de 50 tokens
-./health.sh --symbols SET,USE,CLOSE  # intersección de símbolos
+node interpreter/run-spec.js specs/Bxx-nombre.prg
+grep -r "FIXED\|TRIAGED" report/divergences/
 ```
 
-**Cómo evolucionó el trabajo:**
-La task inicial era "añadir `--symbols`". Al implementarlo apareció la necesidad natural de `--tokens` para detectar specs demasiado densas. Se añadió como subtarea no planificada. El objetivo original se cumplió y se amplió; los tests de verificación crecieron con él.
+**Lo que cambió durante la ejecución:**
+Las tareas se agruparon por bucket (strings, fechas, arrays, OOP, macros, errores, DBF) pero el orden de ejecución real fue distinto — algunas dependencias solo se veían al ejecutar. B25 se movió a wave-2 porque dependía del parser. El plan lo absorbió; el objetivo no.
 
 ---
 
 ## Adaptar al proyecto
 
-El directorio `tasks/<nombre>/` es una base, no una jaula. Lo normal es:
+El directorio generado es una base, no una jaula:
 
 - Reescribir `plan.md` cuando la solución real es distinta a la propuesta
 - Añadir o eliminar `taskNN-*.md` durante la ejecución
-- Guardar en `evidence/` los outputs clave que demuestran el avance
-- **No tocar `goal.md`** — si el objetivo cambia, es una nueva tarea
+- Guardar en `evidence/` los outputs que demuestran el avance
+- **No tocar `goal.md`** — si el objetivo cambia, es una tarea nueva
 
 ---
 
 ## Añadir nuevos skills
 
 ```bash
-# Crea el skill
-echo "# Skill: mi-skill\n..." > commands/mi-skill.md
+# Crea el skill en el repo
+vim commands/mi-skill.md
 
-# Instala
+# Instala el symlink
 ./install.sh --force
 
 # Disponible en Claude Code como /mi-skill
@@ -151,4 +202,3 @@ echo "# Skill: mi-skill\n..." > commands/mi-skill.md
 
 - Claude Code CLI
 - Git (para worktrees y actualizaciones)
-- `~/.claude/commands/` (gestionado por Claude Code)
