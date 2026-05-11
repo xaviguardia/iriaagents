@@ -163,6 +163,17 @@ El resultado siempre es el mismo: cero violaciones. Si alguien introduce una fug
 
 Tres capas. Un comando. Si cualquiera falla, no hay merge.
 
+**Arquitectura hexagonal como test** — ArchUnit verifica que ningún controller toca el dominio, que los ports son interfaces y que la aplicación nunca bypasea un port para ir directamente a un repositorio. Más de 20 reglas por módulo, dentro del build normal:
+
+```bash
+./mvnw verify
+# HexagonalArchitectureTest: pedcli, albcli, prepro, cartera... ✓
+# aplicacion_no_accede_repositorios_directamente ✓
+# controllers_should_not_access_domain ✓
+```
+
+No es un diagrama. Si alguien introduce un bypass, el build falla.
+
 **i18n como regla** — ningún string hardcodeado en rutas vigiladas. La regla corre en CI:
 
 ```bash
