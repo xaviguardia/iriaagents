@@ -362,7 +362,9 @@
   <ul>
     <li><a href="#archetypes">5 archetypes</a></li>
     <li><a href="#plan-vs-goal">Plan vs objective</a></li>
+    <li><a href="#coding-rules">Coding rules</a></li>
     <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#tests">Tests</a></li>
     <li><a href="#evidence">Evidence</a></li>
   </ul>
 
@@ -527,37 +529,104 @@ cd iriaagents
     <p>The task was only <code>--symbols</code>. While implementing it, the obvious need for <code>--tokens</code> appeared. It was added on the fly. The objective grew. The tests grew with it.</p>
   </section>
 
+  <!-- Coding rules -->
+  <section id="coding-rules">
+    <h2>Coding rules</h2>
+    <p>Every task carries a <code>coding-rules.md</code> — the non-negotiable constraints the agent must follow while working. These aren't style preferences. They're the rules that prevent the agent from introducing patterns that will break the system, conflict with the architecture, or create debt that nobody asked for.</p>
+
+    <h3>What goes in coding-rules.md</h3>
+    <table>
+      <tr><th>Category</th><th>Examples</th></tr>
+      <tr><td>Language / framework</td><td>Java 21, no Lombok, records over POJOs</td></tr>
+      <tr><td>Test framework</td><td>JUnit 5 + AssertJ only, no Mockito on domain</td></tr>
+      <tr><td>Naming</td><td>Ports are interfaces suffixed <code>Port</code>, adapters suffixed <code>PersistenceAdapter</code></td></tr>
+      <tr><td>Prohibited patterns</td><td>No <code>Map&lt;String,Object&gt;</code> in public APIs, no hardcoded strings in guarded paths</td></tr>
+      <tr><td>Architecture constraints</td><td>Application layer must not import from <code>..persistence..</code></td></tr>
+    </table>
+
+    <h3>Why it matters</h3>
+    <p>Without coding rules, the agent optimises for making the tests pass — which is correct — but may choose patterns that violate the architecture or the team's conventions. The rules are the guard rail that keeps the solution inside the boundaries of the system.</p>
+
+    <div class="callout">
+      <strong>Rule:</strong> If a coding rule conflicts with making a test pass, the rule wins. Fix the rule or fix the test — don't silently bypass either.
+    </div>
+
+    <h3>Automating the rules</h3>
+    <p>The best coding rules are the ones that enforce themselves. If a rule can be expressed as a linter, an ArchUnit test, or a CI check — do it. A rule in a markdown file can be ignored. A rule that breaks the build cannot.</p>
+<pre><code class="language-bash"># Rule: no Map in public APIs → enforced by ArchUnit
+# Rule: no hardcoded strings → enforced by check_frontend_i18n_debt.sh
+# Rule: ports must be interfaces → enforced by HexagonalArchitectureTest</code></pre>
+  </section>
+
   <!-- Architecture -->
   <section id="architecture">
-    <h2>When architecture matters</h2>
+    <h2>Architecture</h2>
     <p>Once you have the tests, the question changes. It's no longer "how do we build this?" — it's "can this system even do this?"</p>
-    <p>The tests don't say how to implement. They say what has to happen. That leaves room to bend the architecture to real constraints without touching the contract.</p>
+    <p>Sometimes part of the plan is a prior question: can this be done here? A one-afternoon spike that answers yes or no. If yes, the tests are already written — the architecture adapts to the system's constraints. The tests don't say how to implement. They say what has to happen.</p>
 
     <h3>Constraints become rules</h3>
-    <p>When architecture, glossary or dependencies matter, the objective isn't to "verify it once" — it's to make leaks impossible. The constraint becomes an executable rule that runs on every change.</p>
+    <p>When architecture matters, the objective isn't to verify it once — it's to make leaks impossible. The constraint becomes an executable rule that runs on every change. Zero violations. If someone introduces a leak, the check fails before reaching review.</p>
 
-    <h3>Example: newwingest</h3>
-    <p>VFP9/VB6 → Java + React + Python migration. One gate command across three layers:</p>
-<pre><code class="language-bash">./scripts/verify.sh
-# frontend: lint + build + unit tests
-# backend:  Checkstyle + PMD + tests
-# iria:     ruff + unit tests
-# === All checks passed ===</code></pre>
-
-    <h3>Example: hexagonal architecture as a test</h3>
-    <p>ArchUnit verifies that no controller touches the domain, that ports are interfaces, and that the application never bypasses a port to hit a repository directly. 20+ rules per module, inside the normal build:</p>
+    <h3>Hexagonal architecture — ArchUnit</h3>
+    <p>Architecture rules defined in code, verified on every build. No controller touches the domain. No application class bypasses a port to reach a repository directly. Ports are always interfaces.</p>
+<pre><code class="language-java">@ArchTest
+static final ArchRule aplicacion_no_accede_repositorios_directamente =
+    noClasses()
+        .that().resideInAnyPackage("com.sfy.wingest.sales.pedcli", ...)
+        .and().haveSimpleNameNotEndingWith("PersistenceAdapter")
+        .should().dependOnClassesThat()
+            .resideInAPackage("com.sfy.wingest.repository..")
+        .as("Application must not access JPA repositories directly — use ports");</code></pre>
 <pre><code class="language-bash">./mvnw verify
-# HexagonalArchitectureTest: pedcli, albcli, prepro... ✓
+# HexagonalArchitectureTest: pedcli, albcli, prepro, cartera... ✓
 # aplicacion_no_accede_repositorios_directamente ✓
 # controllers_should_not_access_domain ✓</code></pre>
     <div class="callout-warn callout">
       <strong>It's not a diagram.</strong> If someone introduces a bypass, the build fails.
     </div>
 
-    <h3>Example: glossary as code</h3>
-    <p>Domain terms live in Apicurio Registry, exported as a Maven JAR. The backend build depends on the JAR. If the glossary isn't consistent, the build fails:</p>
+    <h3>Glossary as code — Apicurio + Maven JAR</h3>
+    <p>Domain terms live in Apicurio Registry, exported as a Maven JAR. The backend build depends on the JAR. If the glossary is inconsistent, the build fails.</p>
 <pre><code class="language-bash">./scripts/ci-export-glossary.sh   # load glossary → export JAR
 ./mvnw verify                     # uses the JAR; fails if missing</code></pre>
+
+    <h3>i18n as a rule</h3>
+    <p>No hardcoded strings in guarded paths. Detected automatically in CI — not in code review.</p>
+<pre><code class="language-bash">./scripts/check_frontend_i18n_debt.sh
+# 0 violations in guarded paths</code></pre>
+  </section>
+
+  <!-- Tests -->
+  <section id="tests">
+    <h2>Tests</h2>
+    <p>The test is the objective made concrete. Not "it works" — the exact command and the exact output that proves it.</p>
+
+    <h3>What a good test looks like</h3>
+    <p>A test in <code>goal.md</code> has three parts: the command, the expected output or criterion, and nothing else.</p>
+<pre><code class="language-bash"># Good — concrete and executable
+bash run-suite.sh
+# PASS: 53   FAIL: 0   TOTAL: 53
+
+# Bad — not a test
+"The lifecycle events fire in the right order"</code></pre>
+
+    <h3>Tests by archetype</h3>
+    <table>
+      <tr><th>Archetype</th><th>Test form</th></tr>
+      <tr><td>Fix N failing cases</td><td><code>node run-spec.js B21.prg → PASS</code></td></tr>
+      <tr><td>Conformance</td><td><code>bash run-suite.sh → PASS: N FAIL: 0</code></td></tr>
+      <tr><td>Migration</td><td><code>diff &lt;(legacy in) &lt;(modern in) → no output</code></td></tr>
+      <tr><td>Interpreter</td><td><code>./coverage.sh → 1606/1606 100%</code></td></tr>
+      <tr><td>New feature</td><td><code>playwright test e2e/flow.spec → N passed</code></td></tr>
+      <tr><td>Architecture</td><td><code>./mvnw verify → BUILD SUCCESS, 0 violations</code></td></tr>
+    </table>
+
+    <h3>Tests don't change. The plan does.</h3>
+    <p>Once the test is in <code>goal.md</code> it is frozen. If the implementation takes a completely different path, the test stays the same. If the test needs to change, it's a new task — not a revision of the current one.</p>
+
+    <div class="callout">
+      <strong>If the test is vague, the objective doesn't exist yet.</strong> The skill won't generate files until there's a concrete, runnable verification criterion.
+    </div>
   </section>
 
   <!-- Evidence -->
