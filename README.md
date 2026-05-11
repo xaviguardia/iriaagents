@@ -137,6 +137,16 @@ La tarea era solo `--symbols`. Al implementarlo apareció la necesidad obvia de 
 
 ---
 
+## ¿Y cuando la arquitectura importa?
+
+Una vez tienes los tests, la pregunta cambia. Ya no es "¿cómo construimos esto?" — es "¿puede este sistema hacer esto?"
+
+A veces una parte del plan es una pregunta previa: ¿esto se puede hacer aquí? Un spike de una tarde que responde sí o no. Si la respuesta es sí, los tests ya están escritos — la arquitectura se adapta a las limitaciones del sistema. Si la respuesta es no, el objetivo cambia antes de invertir semanas.
+
+Los tests no dicen cómo implementar. Dicen qué tiene que pasar. Eso deja espacio para doblar la arquitectura a las restricciones reales sin tocar el contrato.
+
+---
+
 ## Adaptar al proyecto
 
 | Archivo | Regla |
