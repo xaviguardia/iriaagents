@@ -1,29 +1,31 @@
 # iriaagents
 
-> La receta es centrarse en el objetivo.
+> The recipe is to focus on the objective.
 
-Más de 20 proyectos terminados en 2026 usando la misma técnica: definir primero qué hay que conseguir y cómo demostrar que está conseguido. El resto — el plan, los pasos, las decisiones técnicas — se adapta sobre la marcha.
+20+ projects shipped in 2026 using the same technique: define what you need to achieve and how to prove it's done — before writing a single line of code. Everything else — the plan, the steps, the technical decisions — adapts as you execute.
 
----
-
-## La idea
-
-![Principio: inmutable vs mutable](docs/principle.svg)
-
-Antes de escribir código, responde dos preguntas:
-
-1. **¿Qué hay que conseguir?**
-2. **¿Cómo sabremos que está hecho?** — el comando exacto con la salida esperada.
-
-Esas dos respuestas son el contrato. No cambian.
-
-Todo lo demás — cómo llegar, qué tecnología usar, en qué orden — evoluciona con lo que aprendes al ejecutar. Si la respuesta a la segunda pregunta es vaga, no existe objetivo real todavía.
+**[→ Read the manual](https://xaviguardia.github.io/iriaagents)**
 
 ---
 
-## Instalación
+## The idea
 
-![Instalación en 3 pasos](docs/install.svg)
+![Principle: immutable vs mutable](docs/principle.svg)
+
+Before writing code, answer two questions:
+
+1. **What needs to be achieved?**
+2. **How will we know it's done?** — the exact command with the expected output.
+
+Those two answers are the contract. They don't change.
+
+Everything else — how to get there, which technology to use, in what order — evolves with what you learn while executing. If the answer to the second question is vague, there's no real objective yet.
+
+---
+
+## Installation
+
+![Installation in 3 steps](docs/install.svg)
 
 ```bash
 git clone https://github.com/xaviguardia/iriaagents
@@ -31,127 +33,127 @@ cd iriaagents
 ./install.sh
 ```
 
-Crea symlinks en `~/.claude/commands/`. Desde ese momento `/new-task` está disponible en Claude Code.
+Creates symlinks in `~/.claude/commands/`. From that point `/new-task` is available in Claude Code.
 
 ```bash
-./install.sh --list       # skills instalados
-./install.sh --force      # actualizar tras git pull
-./install.sh --uninstall  # desinstalar
+./install.sh --list       # installed skills
+./install.sh --force      # update after git pull
+./install.sh --uninstall  # uninstall
 ```
 
 ---
 
-## Cómo funciona `/new-task`
+## How `/new-task` works
 
-![Flujo de /new-task](docs/flow.svg)
+![/new-task flow](docs/flow.svg)
 
-Una conversación de 7 preguntas. Las dos primeras son el núcleo:
+A conversation of 7 questions. The two that matter most:
 
-- **¿Qué hay que conseguir?**
-- **¿Cómo se demuestra que está conseguido?**
+- **What needs to be achieved?**
+- **How do we prove it's done?**
 
-El skill no avanza si la segunda respuesta es vaga. Una vez acordadas, genera `tasks/<nombre>/` con todo lo necesario para arrancar. Si el proyecto usa GitFlow crea la rama `feature/<nombre>` y el worktree automáticamente.
+The skill won't advance if the second answer is vague. Once agreed, it generates `tasks/<name>/` with everything needed to start. If the project uses GitFlow it creates the `feature/<name>` branch and worktree automatically.
 
 ---
 
-## Dónde lo hemos usado
+## Where we've used it
 
-Más de 20 proyectos terminados en 2026. Cinco patrones que se repiten:
+20+ projects shipped in 2026. Five patterns that repeat:
 
-![5 arquetipos de tarea](docs/archetypes.svg)
+![5 task archetypes](docs/archetypes.svg)
 
-### Arreglar N casos que fallan
+### Fix N failing cases
 
-Tienes una lista de casos incorrectos. El objetivo es llevarlos a cero.
+You have a list of incorrect cases. The objective is to bring them to zero.
 
 ```bash
 node run-spec.js specs/B21.prg   # → PASS
-grep "FIXED" report/divergences/ # → todos cerrados
+grep "FIXED" report/divergences/ # → all closed
 ```
 
-40 bugs VFP9→JS cerrados. Fixes en intérpretes PL/I, COBOL y CICS.
+40 VFP9→JS bugs closed. Fixes in PL/I, COBOL and CICS interpreters.
 
 ---
 
-### Verificar que dos sistemas se comportan igual
+### Verify two systems behave identically
 
-Construyes una suite de tests contra el sistema original. La implementación nueva tiene que pasar esa misma suite.
+You build a test suite against the reference system. The new implementation has to pass the same suite.
 
 ```bash
 bash run-suite.sh
 # PASS: 53   FAIL: 0
 ```
 
-53 escenarios de ciclo de vida VFP9. Pipeline golden master WinGest8. Equivalencia COBOL→Rust.
+53 VFP9 lifecycle scenarios. WinGest8 golden master pipeline. COBOL→Rust equivalence.
 
 ---
 
-### Convertir un sistema antiguo a tecnología moderna
+### Migrate a legacy system to modern technology
 
-El código cambia completamente. El comportamiento no. El test es comparar salidas, no leer código.
+The code changes completely. The behaviour doesn't. The test is comparing outputs, not reading code.
 
 ```bash
-diff <(run-legacy input.dat) <(run-modern input.dat)  # sin diferencias
-./e2e-suite.sh                                         # todo verde
+diff <(run-legacy input.dat) <(run-modern input.dat)  # no differences
+./e2e-suite.sh                                         # all green
 ```
 
 VFP9→Java, VB6→React, COBOL/PL1→Rust, mainframe→cloud.
 
 ---
 
-### Construir un intérprete o runtime
+### Build an interpreter or runtime
 
-Implementas soporte para un lenguaje. La cobertura se mide en programas que ejecutan correctamente.
-
-```bash
-./coverage.sh   # 1606/1606 programas  100%
-```
-
-Intérprete VFP9 JS, intérprete PL/I (ECMA-50), gateway CICS+TCP, pipeline JCL.
-
----
-
-### Añadir una funcionalidad nueva
-
-El sistema existe y funciona. Añades algo. El test prueba el comportamiento nuevo, no la estructura del código.
+You implement support for a language. Coverage is measured in programs that run correctly.
 
 ```bash
-./health.sh --symbols STRTRAN        # nueva opción funciona
-playwright test e2e/nuevo-flujo.spec # flujo completo verde
+./coverage.sh   # 1606/1606 programs  100%
 ```
 
-Flags de filtrado en conformance tooling. Dark mode. Dashboard de tokens. Editor de traducciones. Visual editor SDUI.
+VFP9 JS interpreter, PL/I interpreter (ECMA-50), CICS+TCP gateway, JCL pipeline.
 
 ---
 
-## El plan cambia. El objetivo no.
+### Add new functionality
 
-**Lifecycle VFP9 — 0 a 53/53 PASS**
-El plan inicial era arreglar el orden de tres eventos. Al ejecutar aparecieron ocho problemas que nadie había visto antes. El plan se reescribió cinco veces. Los tests: ni una coma.
+The system exists and works. You add something. The test proves the new behaviour, not the code structure.
 
-**40 bugs cerrados**
-Las tareas estaban agrupadas por tipo. El orden de ejecución real fue completamente distinto — las dependencias solo se ven al ejecutar. El plan lo absorbió. El objetivo no se tocó.
+```bash
+./health.sh --symbols STRTRAN        # new option works
+playwright test e2e/new-flow.spec    # full flow green
+```
 
-**Flags `--symbols` y `--tokens`**
-La tarea era solo `--symbols`. Al implementarlo apareció la necesidad obvia de `--tokens`. Se añadió sobre la marcha. El objetivo creció. Los tests crecieron con él.
+Filtering flags in conformance tooling. Dark mode. Token dashboard. Translation editor. SDUI visual editor.
 
 ---
 
-## ¿Y cuando la arquitectura importa?
+## The plan changes. The objective doesn't.
 
-Una vez tienes los tests, la pregunta cambia. Ya no es "¿cómo construimos esto?" — es "¿puede este sistema hacer esto?"
+**VFP9 Lifecycle — 0 to 53/53 PASS**
+The initial plan was to fix the order of three events. While executing, eight previously unseen problems appeared. The plan was rewritten five times. The tests: not a comma changed.
 
-A veces una parte del plan es una pregunta previa: ¿esto se puede hacer aquí? Un spike de una tarde que responde sí o no. Si la respuesta es sí, los tests ya están escritos — la arquitectura se adapta a las limitaciones del sistema. Si la respuesta es no, el objetivo cambia antes de invertir semanas.
+**40 bugs closed**
+The tasks were grouped by type. The actual execution order was completely different — dependencies only become visible when you run things. The plan absorbed it. The objective was never touched.
 
-Los tests no dicen cómo implementar. Dicen qué tiene que pasar. Eso deja espacio para doblar la arquitectura a las restricciones reales sin tocar el contrato.
+**`--symbols` and `--tokens` flags**
+The task was only `--symbols`. While implementing it, the obvious need for `--tokens` appeared. It was added on the fly. The objective grew. The tests grew with it.
 
-### Las restricciones se convierten en reglas
+---
 
-Cuando la arquitectura, el glosario o las dependencias importan, el objetivo no es "verificarlo una vez" — es **hacer imposible la fuga**. La restricción se codifica como una regla ejecutable que corre en cada cambio.
+## When architecture matters
 
-El resultado siempre es el mismo: cero violaciones. Si alguien introduce una fuga, el check falla antes de llegar a revisión.
+Once you have the tests, the question changes. It's no longer "how do we build this?" — it's "can this system even do this?"
 
-**newwingest** — migración VFP9/VB6 → Java + React + Python. Un solo comando de gate:
+Sometimes part of the plan is a prior question: can this be done here? A one-afternoon spike that answers yes or no. If yes, the tests are already written — the architecture adapts to the system's constraints. If no, the objective changes before investing weeks.
+
+The tests don't say how to implement. They say what has to happen. That leaves room to bend the architecture to real constraints without touching the contract.
+
+### Constraints become rules
+
+When architecture, glossary or dependencies matter, the objective isn't to "verify it once" — it's to **make leaks impossible**. The constraint is encoded as an executable rule that runs on every change.
+
+The result is always the same: zero violations. If someone introduces a leak, the check fails before reaching review.
+
+**newwingest** — VFP9/VB6 → Java + React + Python migration. A single gate command:
 
 ```bash
 ./scripts/verify.sh
@@ -161,9 +163,9 @@ El resultado siempre es el mismo: cero violaciones. Si alguien introduce una fug
 # === All checks passed ===
 ```
 
-Tres capas. Un comando. Si cualquiera falla, no hay merge.
+Three layers. One command. If any fails, no merge.
 
-**Arquitectura hexagonal como test** — ArchUnit verifica que ningún controller toca el dominio, que los ports son interfaces y que la aplicación nunca bypasea un port para ir directamente a un repositorio. Más de 20 reglas por módulo, dentro del build normal:
+**Hexagonal architecture as a test** — ArchUnit verifies that no controller touches the domain, that ports are interfaces, and that the application never bypasses a port to hit a repository directly. 20+ rules per module, inside the normal build:
 
 ```bash
 ./mvnw verify
@@ -172,50 +174,63 @@ Tres capas. Un comando. Si cualquiera falla, no hay merge.
 # controllers_should_not_access_domain ✓
 ```
 
-No es un diagrama. Si alguien introduce un bypass, el build falla.
+It's not a diagram. If someone introduces a bypass, the build fails.
 
-**i18n como regla** — ningún string hardcodeado en rutas vigiladas. La regla corre en CI:
+**i18n as a rule** — no hardcoded strings in guarded paths. The rule runs in CI:
 
 ```bash
 ./scripts/check_frontend_i18n_debt.sh
 # 0 violations in guarded paths
 ```
 
-No se revisa en code review. Se detecta automáticamente.
+Not reviewed in code review. Detected automatically.
 
-**Glosario como código** — los términos del dominio viven en Apicurio Registry y se exportan como JAR Maven. El build del backend depende del JAR. Si el glosario no está cargado y exportado, el build falla:
+**Glossary as code** — domain terms live in Apicurio Registry and are exported as a Maven JAR. The backend build depends on the JAR. If the glossary isn't loaded and exported, the build fails:
 
 ```bash
-./scripts/ci-export-glossary.sh   # carga glosario → exporta JAR
-./mvnw verify                     # usa el JAR; falla si no existe
+./scripts/ci-export-glossary.sh   # load glossary → export JAR
+./mvnw verify                     # uses the JAR; fails if missing
 ```
 
-El vocabulario del dominio tiene la misma trazabilidad que el código.
+The domain vocabulary has the same traceability as code.
 
 ---
 
-## Adaptar al proyecto
+## Evidence must be reproducible
 
-| Archivo | Regla |
-|---------|-------|
-| `goal.md` | No tocar. Si el objetivo cambia, es una tarea nueva. |
-| `plan.md` | Reescribir cuando la solución real difiere. |
-| `tasks.md` | Añadir, eliminar, reordenar según avanza. |
-| `evidence/` | Playwright traces, dumps y diffs. Los logs no cuentan — la evidencia tiene que ser reproducible. |
+Logs don't count. Evidence has to be verifiable after the fact:
+
+- **Playwright trace or screenshot** — for UI flows
+- **Dump** — JSON/CSV/SQL export of the final state
+- **File diff** — `git diff`, spec runner output
+- **Command output** — only if it's the only option (unit tests, architecture checks, lint)
+
+Server logs are ephemeral and don't prove the final state of the system.
 
 ---
 
-## Añadir un skill nuevo
+## Adapting to your project
+
+| File | Rule |
+|------|------|
+| `goal.md` | Don't touch. If the objective changes, it's a new task. |
+| `plan.md` | Rewrite when the real solution diverges. |
+| `tasks.md` | Add, remove, reorder as work progresses. |
+| `evidence/` | Playwright traces, dumps and diffs — not logs. |
+
+---
+
+## Adding a new skill
 
 ```bash
-vim commands/mi-skill.md
+vim commands/my-skill.md
 ./install.sh --force
-# disponible como /mi-skill en Claude Code
+# available as /my-skill in Claude Code
 ```
 
 ---
 
-## Requisitos
+## Requirements
 
 - [Claude Code](https://claude.ai/code)
 - Git

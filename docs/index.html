@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iriaagents — Focus on the objective</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --indigo:   #4f46e5;
+      --indigo-l: #e0e7ff;
+      --green:    #10b981;
+      --green-l:  #d1fae5;
+      --amber:    #d97706;
+      --dark:     #1e293b;
+      --mid:      #475569;
+      --muted:    #94a3b8;
+      --surface:  #f8fafc;
+      --white:    #ffffff;
+      --border:   #e2e8f0;
+      --code-bg:  #0f172a;
+      --sidebar-w: 260px;
+      --content-max: 720px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--dark);
+      background: var(--surface);
+      display: flex;
+      min-height: 100vh;
+    }
+
+    /* ── FORK RIBBON ── */
+    .github-corner {
+      position: fixed;
+      top: 0; right: 0;
+      z-index: 1000;
+    }
+    .github-corner svg {
+      fill: var(--indigo);
+      color: var(--white);
+      width: 80px; height: 80px;
+    }
+    .github-corner .octo-arm { transform-origin: 130px 106px; }
+    .github-corner:hover .octo-arm {
+      animation: octocat-wave 560ms ease-in-out;
+    }
+    @keyframes octocat-wave {
+      0%,100%{transform:rotate(0)}
+      20%,60%{transform:rotate(-25deg)}
+      40%,80%{transform:rotate(10deg)}
+    }
+
+    /* ── SIDEBAR ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0;
+      width: var(--sidebar-w);
+      height: 100vh;
+      overflow-y: auto;
+      background: var(--white);
+      border-right: 1px solid var(--border);
+      padding: 2rem 0 2rem;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .nav-logo {
+      padding: 0 1.5rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 1rem;
+    }
+    .nav-logo h1 {
+      font-size: 1.1rem;
+      font-weight: 800;
+      color: var(--indigo);
+      letter-spacing: -0.5px;
+    }
+    .nav-logo p {
+      font-size: 0.75rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+
+    nav ul { list-style: none; padding: 0 0.75rem; }
+    nav ul li { margin: 0; }
+    nav ul li a {
+      display: block;
+      padding: 0.35rem 0.75rem;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      color: var(--mid);
+      text-decoration: none;
+      transition: background 0.15s, color 0.15s;
+    }
+    nav ul li a:hover,
+    nav ul li a.active {
+      background: var(--indigo-l);
+      color: var(--indigo);
+      font-weight: 600;
+    }
+    .nav-section {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--muted);
+      padding: 1rem 1.5rem 0.25rem;
+    }
+
+    /* ── MAIN CONTENT ── */
+    main {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      padding: 3rem 4rem 6rem;
+      max-width: calc(var(--sidebar-w) + var(--content-max) + 8rem);
+    }
+
+    /* ── HERO ── */
+    .hero {
+      background: linear-gradient(135deg, var(--indigo) 0%, #7c3aed 100%);
+      border-radius: 16px;
+      padding: 2.5rem 2.5rem 2rem;
+      margin-bottom: 3rem;
+      color: var(--white);
+    }
+    .hero h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -1px;
+      margin-bottom: 0.5rem;
+    }
+    .hero .tagline {
+      font-size: 1.05rem;
+      opacity: 0.85;
+      margin-bottom: 1.25rem;
+    }
+    .hero .badges { display: flex; gap: 0.5rem; flex-wrap: wrap; }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      background: rgba(255,255,255,0.15);
+      border-radius: 20px;
+      padding: 0.25rem 0.75rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    /* ── SECTIONS ── */
+    section {
+      margin-bottom: 3.5rem;
+      scroll-margin-top: 1.5rem;
+    }
+
+    h2 {
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: var(--dark);
+      margin: 1.5rem 0 0.5rem;
+    }
+
+    p { margin-bottom: 1rem; color: var(--mid); }
+
+    img { max-width: 100%; border-radius: 10px; display: block; margin: 1.25rem 0; }
+
+    /* ── CODE ── */
+    pre {
+      background: var(--code-bg);
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      overflow-x: auto;
+      margin: 1rem 0 1.25rem;
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+    code { font-family: 'Fira Code', 'Cascadia Code', 'Menlo', monospace; }
+    p code, li code {
+      background: var(--indigo-l);
+      color: var(--indigo);
+      padding: 0.1em 0.4em;
+      border-radius: 4px;
+      font-size: 0.88em;
+    }
+
+    /* ── CONCEPT CARDS ── */
+    .contract-box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .contract-card {
+      border-radius: 12px;
+      padding: 1.25rem;
+    }
+    .contract-card.immutable { background: var(--indigo); color: var(--white); }
+    .contract-card.mutable   { background: #fef3c7; color: var(--dark); }
+    .contract-card h4 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.7; margin-bottom: 0.4rem; }
+    .contract-card p  { font-size: 0.9rem; margin: 0; }
+    .contract-card.immutable p { color: rgba(255,255,255,0.9); }
+
+    /* ── ARCHETYPE GRID ── */
+    .archetype-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1.25rem 0;
+    }
+    .archetype-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.1rem 1.25rem;
+      border-top: 3px solid var(--indigo);
+    }
+    .archetype-card:nth-child(2) { border-top-color: var(--green); }
+    .archetype-card:nth-child(3) { border-top-color: #f59e0b; }
+    .archetype-card:nth-child(4) { border-top-color: #ef4444; }
+    .archetype-card:nth-child(5) { border-top-color: #8b5cf6; }
+    .archetype-card h4 { font-size: 0.9rem; font-weight: 700; color: var(--dark); margin-bottom: 0.25rem; }
+    .archetype-card p  { font-size: 0.82rem; color: var(--mid); margin: 0; }
+
+    /* ── TABLE ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0;
+      font-size: 0.9rem;
+    }
+    th {
+      text-align: left;
+      padding: 0.5rem 0.75rem;
+      background: var(--indigo-l);
+      color: var(--indigo);
+      font-weight: 700;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    td { padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); color: var(--mid); }
+    td:first-child { font-family: monospace; color: var(--indigo); font-weight: 600; }
+    tr:last-child td { border-bottom: none; }
+
+    /* ── CALLOUT ── */
+    .callout {
+      background: var(--green-l);
+      border-left: 4px solid var(--green);
+      border-radius: 0 8px 8px 0;
+      padding: 1rem 1.25rem;
+      margin: 1.25rem 0;
+      font-size: 0.9rem;
+      color: var(--dark);
+    }
+    .callout strong { color: #065f46; }
+
+    .callout-warn {
+      background: #fef3c7;
+      border-left-color: var(--amber);
+    }
+    .callout-warn strong { color: #78350f; }
+
+    /* ── INSTALL STEPS ── */
+    .install-steps { display: flex; flex-direction: column; gap: 0.75rem; margin: 1.25rem 0; }
+    .install-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 0.9rem 1.1rem;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 28px; height: 28px;
+      background: var(--indigo);
+      color: var(--white);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    .step-body h4 { font-size: 0.9rem; font-weight: 700; color: var(--dark); margin-bottom: 0.15rem; }
+    .step-body p  { font-size: 0.82rem; color: var(--mid); margin: 0; }
+
+    /* ── EVIDENCE TYPES ── */
+    .evidence-list { list-style: none; padding: 0; margin: 1rem 0; }
+    .evidence-list li {
+      display: flex; align-items: flex-start; gap: 0.75rem;
+      padding: 0.6rem 0;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.9rem;
+    }
+    .evidence-list li:last-child { border-bottom: none; }
+    .ev-icon {
+      flex-shrink: 0;
+      width: 28px; height: 28px;
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 0.85rem;
+    }
+    .ev-icon.green { background: var(--green-l); }
+    .ev-icon.amber { background: #fef3c7; }
+    .ev-icon.red   { background: #fee2e2; }
+    .ev-body strong { display: block; font-weight: 600; color: var(--dark); }
+    .ev-body span   { color: var(--mid); font-size: 0.82rem; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 860px) {
+      nav { display: none; }
+      main { margin-left: 0; padding: 1.5rem; }
+      .contract-box, .archetype-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Fork me ribbon -->
+<a href="https://github.com/xaviguardia/iriaagents" class="github-corner" aria-label="Fork me on GitHub">
+  <svg viewBox="0 0 250 250" aria-hidden="true">
+    <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+    <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" class="octo-arm"></path>
+    <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z" fill="currentColor"></path>
+  </svg>
+</a>
+
+<!-- Sidebar -->
+<nav>
+  <div class="nav-logo">
+    <h1>iriaagents</h1>
+    <p>Claude Code skills</p>
+  </div>
+
+  <span class="nav-section">Getting started</span>
+  <ul>
+    <li><a href="#idea">The idea</a></li>
+    <li><a href="#install">Installation</a></li>
+    <li><a href="#new-task">/new-task</a></li>
+    <li><a href="#close-task">/close-task</a></li>
+  </ul>
+
+  <span class="nav-section">Patterns</span>
+  <ul>
+    <li><a href="#archetypes">5 archetypes</a></li>
+    <li><a href="#plan-vs-goal">Plan vs objective</a></li>
+    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#evidence">Evidence</a></li>
+  </ul>
+
+  <span class="nav-section">Reference</span>
+  <ul>
+    <li><a href="#adapting">Adapting to your project</a></li>
+    <li><a href="#new-skill">Adding a skill</a></li>
+  </ul>
+</nav>
+
+<!-- Main -->
+<main>
+
+  <!-- Hero -->
+  <div class="hero">
+    <h1>iriaagents</h1>
+    <p class="tagline">The recipe is to focus on the objective.</p>
+    <div class="badges">
+      <span class="badge">✓ 20+ projects shipped</span>
+      <span class="badge">✓ Claude Code skills</span>
+      <span class="badge">✓ Works with GitFlow</span>
+    </div>
+  </div>
+
+  <!-- The idea -->
+  <section id="idea">
+    <h2>The idea</h2>
+    <p>Before writing code, answer two questions:</p>
+    <div class="contract-box">
+      <div class="contract-card immutable">
+        <h4>Immutable · The contract</h4>
+        <p><strong>What needs to be achieved?</strong><br>And: how will we know it's done? The exact command with the expected output.</p>
+      </div>
+      <div class="contract-card mutable">
+        <h4>Mutable · The orientation</h4>
+        <p><strong>Plan + tasks.</strong><br>Expected to evolve. Reflects what you learn while executing.</p>
+      </div>
+    </div>
+    <p>Those two answers are the contract. They don't change.</p>
+    <p>Everything else — how to get there, which technology, in what order — adapts as you execute. If the answer to the second question is vague, there's no real objective yet.</p>
+    <div class="callout">
+      <strong>Key rule:</strong> Without an executable verification criterion, there is no valid objective. The skill won't generate files until this is clear.
+    </div>
+  </section>
+
+  <!-- Installation -->
+  <section id="install">
+    <h2>Installation</h2>
+    <div class="install-steps">
+      <div class="install-step">
+        <div class="step-num">1</div>
+        <div class="step-body">
+          <h4>Clone</h4>
+          <p>Get the repo from GitHub</p>
+        </div>
+      </div>
+      <div class="install-step">
+        <div class="step-num">2</div>
+        <div class="step-body">
+          <h4>Install</h4>
+          <p>Creates symlinks in <code>~/.claude/commands/</code> and saves the repo path</p>
+        </div>
+      </div>
+      <div class="install-step">
+        <div class="step-num">3</div>
+        <div class="step-body">
+          <h4>Use</h4>
+          <p>Type <code>/new-task</code> in any Claude Code session</p>
+        </div>
+      </div>
+    </div>
+<pre><code class="language-bash">git clone https://github.com/xaviguardia/iriaagents
+cd iriaagents
+./install.sh
+
+./install.sh --list       # installed skills
+./install.sh --force      # update after git pull
+./install.sh --uninstall  # uninstall</code></pre>
+  </section>
+
+  <!-- /new-task -->
+  <section id="new-task">
+    <h2>/new-task</h2>
+    <p>A conversation of 7 questions. The two that matter most:</p>
+    <ul style="padding-left:1.25rem; color: var(--mid); margin-bottom:1rem;">
+      <li style="margin-bottom:0.4rem"><strong style="color:var(--dark)">What needs to be achieved?</strong></li>
+      <li><strong style="color:var(--dark)">How do we prove it's done?</strong> — exact commands, expected output</li>
+    </ul>
+    <p>The skill won't advance if the second answer is vague. Once agreed, it generates <code>tasks/&lt;name&gt;/</code> with everything needed to start.</p>
+
+    <h3>Generated files</h3>
+    <table>
+      <tr><th>File</th><th>Purpose</th></tr>
+      <tr><td>goal.md</td><td>The contract — do not modify during execution</td></tr>
+      <tr><td>plan.md</td><td>Living document — rewrite when the solution diverges</td></tr>
+      <tr><td>tasks.md</td><td>Living document — add, remove, reorder as work progresses</td></tr>
+      <tr><td>AGENT.md</td><td>Agent instructions</td></tr>
+      <tr><td>PROMPT.md</td><td>Initial prompt</td></tr>
+      <tr><td>evidence/</td><td>Captures that prove progress</td></tr>
+      <tr><td>run-claude.sh</td><td>Launch script</td></tr>
+    </table>
+
+    <h3>GitFlow support</h3>
+    <p>If the project has a <code>develop</code> branch, the skill automatically creates a <code>feature/&lt;name&gt;</code> branch and worktree. Work stays isolated until the objective is achieved.</p>
+  </section>
+
+  <!-- /close-task -->
+  <section id="close-task">
+    <h2>/close-task</h2>
+    <p>The complement to <code>/new-task</code>. Closes the loop: runs the verification commands from <code>goal.md</code>, captures evidence, documents what changed from the original plan, and marks DONE.</p>
+<pre><code class="language-bash"># Inside a task directory:
+/close-task
+
+# Runs goal.md verification commands
+# Captures evidence/close-2026-05-11.md
+# Asks: what changed from the plan?
+# Marks tasks.md as DONE</code></pre>
+    <div class="callout">
+      The verdict comes from <code>goal.md</code>, not the plan. If the tests pass, the task is done — regardless of how many times the plan changed along the way.
+    </div>
+  </section>
+
+  <!-- Archetypes -->
+  <section id="archetypes">
+    <h2>5 archetypes</h2>
+    <p>20+ projects shipped. Five patterns that repeat:</p>
+    <div class="archetype-grid">
+      <div class="archetype-card">
+        <h4>Fix N failing cases</h4>
+        <p>You have a list of incorrect cases. The objective is to bring them to zero. Each case has its spec and expected output.</p>
+      </div>
+      <div class="archetype-card">
+        <h4>Conformance testing</h4>
+        <p>Suite that captures the reference system and verifies the new implementation replicates it exactly.</p>
+      </div>
+      <div class="archetype-card">
+        <h4>Legacy migration</h4>
+        <p>VB6/VFP9/COBOL/PL1 → modern stack. The test is output equivalence, not code review.</p>
+      </div>
+      <div class="archetype-card">
+        <h4>Interpreter / runtime</h4>
+        <p>Implement language support. Coverage measured in programs that run correctly, not lines of code.</p>
+      </div>
+      <div class="archetype-card">
+        <h4>New functionality</h4>
+        <p>The system exists and works. You add something. The test proves the new observable behaviour.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Plan vs goal -->
+  <section id="plan-vs-goal">
+    <h2>The plan changes. The objective doesn't.</h2>
+
+    <h3>VFP9 Lifecycle — 0 to 53/53 PASS</h3>
+    <p>The initial plan was to fix the order of three events. While executing, eight previously unseen problems appeared. The plan was rewritten five times. The tests: not a comma changed.</p>
+
+    <h3>40 bugs closed</h3>
+    <p>The tasks were grouped by type. The actual execution order was completely different — dependencies only become visible when you run things. The plan absorbed it. The objective was never touched.</p>
+
+    <h3><code>--symbols</code> and <code>--tokens</code> flags</h3>
+    <p>The task was only <code>--symbols</code>. While implementing it, the obvious need for <code>--tokens</code> appeared. It was added on the fly. The objective grew. The tests grew with it.</p>
+  </section>
+
+  <!-- Architecture -->
+  <section id="architecture">
+    <h2>When architecture matters</h2>
+    <p>Once you have the tests, the question changes. It's no longer "how do we build this?" — it's "can this system even do this?"</p>
+    <p>The tests don't say how to implement. They say what has to happen. That leaves room to bend the architecture to real constraints without touching the contract.</p>
+
+    <h3>Constraints become rules</h3>
+    <p>When architecture, glossary or dependencies matter, the objective isn't to "verify it once" — it's to make leaks impossible. The constraint becomes an executable rule that runs on every change.</p>
+
+    <h3>Example: newwingest</h3>
+    <p>VFP9/VB6 → Java + React + Python migration. One gate command across three layers:</p>
+<pre><code class="language-bash">./scripts/verify.sh
+# frontend: lint + build + unit tests
+# backend:  Checkstyle + PMD + tests
+# iria:     ruff + unit tests
+# === All checks passed ===</code></pre>
+
+    <h3>Example: hexagonal architecture as a test</h3>
+    <p>ArchUnit verifies that no controller touches the domain, that ports are interfaces, and that the application never bypasses a port to hit a repository directly. 20+ rules per module, inside the normal build:</p>
+<pre><code class="language-bash">./mvnw verify
+# HexagonalArchitectureTest: pedcli, albcli, prepro... ✓
+# aplicacion_no_accede_repositorios_directamente ✓
+# controllers_should_not_access_domain ✓</code></pre>
+    <div class="callout-warn callout">
+      <strong>It's not a diagram.</strong> If someone introduces a bypass, the build fails.
+    </div>
+
+    <h3>Example: glossary as code</h3>
+    <p>Domain terms live in Apicurio Registry, exported as a Maven JAR. The backend build depends on the JAR. If the glossary isn't consistent, the build fails:</p>
+<pre><code class="language-bash">./scripts/ci-export-glossary.sh   # load glossary → export JAR
+./mvnw verify                     # uses the JAR; fails if missing</code></pre>
+  </section>
+
+  <!-- Evidence -->
+  <section id="evidence">
+    <h2>Evidence must be reproducible</h2>
+    <p>Logs don't count. Evidence has to be verifiable after the fact. In order of preference:</p>
+    <ul class="evidence-list">
+      <li>
+        <div class="ev-icon green">▶</div>
+        <div class="ev-body">
+          <strong>Playwright trace or screenshot</strong>
+          <span>For UI flows — records the full interaction, reproducible on any machine</span>
+        </div>
+      </li>
+      <li>
+        <div class="ev-icon green">⬇</div>
+        <div class="ev-body">
+          <strong>Dump</strong>
+          <span>JSON/CSV/SQL export of the final data state</span>
+        </div>
+      </li>
+      <li>
+        <div class="ev-icon green">±</div>
+        <div class="ev-body">
+          <strong>File diff</strong>
+          <span><code>git diff</code>, spec runner output — shows exactly what changed</span>
+        </div>
+      </li>
+      <li>
+        <div class="ev-icon amber">⬡</div>
+        <div class="ev-body">
+          <strong>Command output</strong>
+          <span>Only if it's the only option — unit tests, architecture checks, lint</span>
+        </div>
+      </li>
+      <li>
+        <div class="ev-icon red">✕</div>
+        <div class="ev-body">
+          <strong>Server logs</strong>
+          <span>Ephemeral — don't prove the final state of the system</span>
+        </div>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Adapting -->
+  <section id="adapting">
+    <h2>Adapting to your project</h2>
+    <table>
+      <tr><th>File</th><th>Rule</th></tr>
+      <tr><td>goal.md</td><td>Don't touch. If the objective changes, it's a new task.</td></tr>
+      <tr><td>plan.md</td><td>Rewrite when the real solution diverges from the original.</td></tr>
+      <tr><td>tasks.md</td><td>Add, remove, reorder as work progresses.</td></tr>
+      <tr><td>evidence/</td><td>Playwright traces, dumps and diffs — not logs.</td></tr>
+    </table>
+  </section>
+
+  <!-- New skill -->
+  <section id="new-skill">
+    <h2>Adding a new skill</h2>
+    <p>Skills are plain Markdown files. Create one, install, done.</p>
+<pre><code class="language-bash">vim commands/my-skill.md
+./install.sh --force
+# available as /my-skill in Claude Code</code></pre>
+    <p>The skill file describes when to use it, what questions to ask, and what to generate. No code needed.</p>
+  </section>
+
+</main>
+
+<script>
+  hljs.highlightAll();
+
+  // Active nav link on scroll
+  const sections = document.querySelectorAll('section[id]');
+  const navLinks = document.querySelectorAll('nav a');
+
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => a.classList.remove('active'));
+        const link = document.querySelector(`nav a[href="#${entry.target.id}"]`);
+        if (link) link.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+
+  sections.forEach(s => observer.observe(s));
+</script>
+
+</body>
+</html>
