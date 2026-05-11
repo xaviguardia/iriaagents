@@ -42,10 +42,17 @@ cd iriaagents
 
 ![Flujo de /new-task](docs/flow.svg)
 
-El skill conduce una conversación de 7 preguntas. **La tercera es la más importante** — y no avanza si la respuesta es vaga:
+El skill conduce una conversación de 7 preguntas. El núcleo está en las dos primeras:
 
-> *¿Cómo se verifica que el trabajo está terminado?*  
-> *Dame los comandos exactos con la salida esperada.*
+- **¿Qué hay que conseguir?** — el objetivo, expresado como estado final observable.
+- **¿Cómo se demuestra que está conseguido?** — los comandos exactos con la salida esperada.
+
+Pensar estas dos preguntas juntas es el acto que centra el trabajo. Al articular el objetivo *y* la prueba que lo confirma, queda claro qué hay que construir y qué criterio decidirá si está bien construido. Ese par es el contrato: no cambia.
+
+Lo que sí cambia es el **cómo** llegar hasta ahí — la tecnología elegida, el orden de los pasos, las decisiones de diseño. Eso se adapta a cada proyecto y evoluciona con lo que se aprende al ejecutar. Pero el **qué** queda fijado desde el principio.
+
+> Si la respuesta a "¿cómo se demuestra?" es vaga, el skill no avanza.  
+> Sin verificación ejecutable concreta no existe objetivo válido.
 
 Con las respuestas genera `tasks/<nombre>/` adaptado al proyecto. Si el repo usa GitFlow (rama `develop`), crea la rama `feature/<nombre>` y el worktree separado automáticamente.
 
