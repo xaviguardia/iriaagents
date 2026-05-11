@@ -1,107 +1,117 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 340" width="860" height="340" font-family="ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 300" width="840" height="300"
+     font-family="'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif">
   <defs>
-    <filter id="shadow">
-      <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="#00000018"/>
-    </filter>
-    <marker id="arrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#6366f1"/>
+    <marker id="arr" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#6366f1"/>
+    </marker>
+    <marker id="arrG" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <polygon points="0 0, 8 3, 0 6" fill="#10b981"/>
     </marker>
   </defs>
 
-  <rect width="860" height="340" rx="16" fill="#f8fafc"/>
+  <rect width="840" height="300" rx="16" fill="#f1f5f9"/>
+  <text x="420" y="30" fill="#1e293b" font-size="14" font-weight="700"
+        text-anchor="middle" letter-spacing="0.5">Cómo funciona /new-task</text>
 
-  <!-- Title -->
-  <text x="430" y="32" fill="#1e293b" font-size="15" font-weight="700" text-anchor="middle" letter-spacing="1">/new-task — cómo funciona</text>
+  <!-- ── COL 1: Conversación ── -->
+  <rect x="20" y="48" width="240" height="232" rx="12" fill="white"/>
+  <rect x="20" y="48" width="240" height="36" rx="12" fill="#6366f1"/>
+  <rect x="20" y="72" width="240" height="12" fill="#6366f1"/>
+  <text x="140" y="71" fill="white" font-size="12" font-weight="600" text-anchor="middle">7 preguntas</text>
 
-  <!-- LEFT: Conversation panel -->
-  <rect x="20" y="50" width="270" height="270" rx="12" fill="white" filter="url(#shadow)"/>
-  <rect x="20" y="50" width="270" height="36" rx="12" fill="#6366f1"/>
-  <rect x="20" y="74" width="270" height="12" fill="#6366f1"/>
-  <text x="155" y="73" fill="white" font-size="12" font-weight="600" text-anchor="middle">7 preguntas</text>
+  <!-- Bubbles -->
+  <rect x="32" y="97"  width="150" height="20" rx="10" fill="#e0e7ff"/>
+  <text x="42" y="111" fill="#4338ca" font-size="10" font-weight="500">P1  ¿Qué construir?</text>
 
-  <!-- Chat bubbles -->
-  <!-- P1 -->
-  <rect x="35" y="100" width="160" height="24" rx="10" fill="#e0e7ff"/>
-  <text x="45" y="116" fill="#4338ca" font-size="10" font-weight="600">P1 ¿Qué construir?</text>
-  <!-- P2 -->
-  <rect x="35" y="132" width="175" height="24" rx="10" fill="#e0e7ff"/>
-  <text x="45" y="148" fill="#4338ca" font-size="10" font-weight="600">P2 ¿Estado actual?</text>
-  <!-- P3 HIGHLIGHTED -->
-  <rect x="32" y="162" width="240" height="32" rx="10" fill="#4f46e5"/>
-  <text x="44" y="178" fill="white" font-size="10" font-weight="700">★ P3 ¿Cómo se verifica?</text>
-  <text x="44" y="190" fill="#c7d2fe" font-size="9">← la más importante</text>
-  <!-- P4 -->
-  <rect x="35" y="202" width="170" height="24" rx="10" fill="#e0e7ff"/>
-  <text x="45" y="218" fill="#4338ca" font-size="10" font-weight="600">P4 ¿En qué proyecto?</text>
-  <!-- P5 -->
-  <rect x="35" y="234" width="155" height="24" rx="10" fill="#e0e7ff"/>
-  <text x="45" y="250" fill="#4338ca" font-size="10" font-weight="600">P5 ¿Entorno especial?</text>
-  <!-- P6 -->
-  <rect x="35" y="266" width="165" height="24" rx="10" fill="#e0e7ff"/>
-  <text x="45" y="282" fill="#4338ca" font-size="10" font-weight="600">P6 ¿Reglas de código?</text>
-  <!-- P7 -->
-  <rect x="35" y="298" width="140" height="14" rx="7" fill="#e0e7ff"/>
-  <text x="45" y="309" fill="#4338ca" font-size="9" font-weight="600">P7 ¿Qué runner?</text>
+  <rect x="32" y="123" width="165" height="20" rx="10" fill="#e0e7ff"/>
+  <text x="42" y="137" fill="#4338ca" font-size="10" font-weight="500">P2  ¿Estado actual?</text>
 
-  <!-- Arrow center -->
-  <line x1="300" y1="185" x2="370" y2="185" stroke="#6366f1" stroke-width="2.5" marker-end="url(#arrow)"/>
-  <text x="335" y="178" fill="#6366f1" font-size="10" text-anchor="middle" font-weight="600">genera</text>
+  <!-- P3 highlighted -->
+  <rect x="29" y="149" width="222" height="32" rx="10" fill="#4f46e5"/>
+  <text x="40" y="163" fill="white" font-size="10" font-weight="700">★  P3  ¿Cómo se verifica?</text>
+  <text x="40" y="177" fill="#c7d2fe" font-size="9">     ← la más importante</text>
 
-  <!-- CENTER: File tree panel -->
-  <rect x="380" y="50" width="220" height="270" rx="12" fill="white" filter="url(#shadow)"/>
-  <rect x="380" y="50" width="220" height="36" rx="12" fill="#1e293b"/>
-  <rect x="380" y="74" width="220" height="12" fill="#1e293b"/>
-  <text x="490" y="73" fill="white" font-size="12" font-weight="600" text-anchor="middle">tasks/mi-tarea/</text>
+  <rect x="32" y="189" width="162" height="20" rx="10" fill="#e0e7ff"/>
+  <text x="42" y="203" fill="#4338ca" font-size="10" font-weight="500">P4  ¿En qué proyecto?</text>
 
-  <!-- goal.md - special -->
-  <rect x="393" y="100" width="194" height="28" rx="6" fill="#4f46e5"/>
-  <text x="403" y="113" fill="white" font-size="11" font-weight="700">📄 goal.md</text>
-  <text x="403" y="124" fill="#c7d2fe" font-size="9">NO TOCAR · el contrato</text>
+  <rect x="32" y="215" width="148" height="20" rx="10" fill="#e0e7ff"/>
+  <text x="42" y="229" fill="#4338ca" font-size="10" font-weight="500">P5  ¿Entorno?</text>
 
-  <!-- Other files: living -->
-  <text x="403" y="148" fill="#64748b" font-size="10">📄 plan.md</text>
-  <rect x="510" y="138" width="56" height="14" rx="7" fill="#fef3c7"/>
-  <text x="538" y="149" fill="#92400e" font-size="8" text-anchor="middle" font-weight="600">vivo</text>
+  <rect x="32" y="241" width="156" height="20" rx="10" fill="#e0e7ff"/>
+  <text x="42" y="255" fill="#4338ca" font-size="10" font-weight="500">P6  ¿Reglas de código?</text>
 
-  <text x="403" y="168" fill="#64748b" font-size="10">📄 tasks.md</text>
-  <rect x="510" y="158" width="56" height="14" rx="7" fill="#fef3c7"/>
-  <text x="538" y="169" fill="#92400e" font-size="8" text-anchor="middle" font-weight="600">vivo</text>
+  <rect x="32" y="265" width="132" height="10" rx="5" fill="#e0e7ff"/>
+  <text x="42" y="273" fill="#4338ca" font-size="9">P7  ¿Runner?</text>
 
-  <text x="403" y="188" fill="#64748b" font-size="10">📄 coding-rules.md</text>
-  <text x="403" y="208" fill="#64748b" font-size="10">📄 AGENT.md</text>
-  <text x="403" y="228" fill="#64748b" font-size="10">📄 PROMPT.md</text>
-  <text x="403" y="248" fill="#64748b" font-size="10">📄 task01-slug.md</text>
-  <text x="403" y="268" fill="#64748b" font-size="10">📁 evidence/</text>
-  <text x="403" y="288" fill="#64748b" font-size="10">📁 scripts/</text>
-  <text x="403" y="308" fill="#10b981" font-size="10" font-weight="600">▶ run-claude.sh</text>
+  <!-- Arrow 1 -->
+  <line x1="268" y1="164" x2="308" y2="164" stroke="#6366f1" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="288" y="157" fill="#6366f1" font-size="9" font-weight="600" text-anchor="middle">genera</text>
 
-  <!-- Arrow right -->
-  <line x1="610" y1="185" x2="680" y2="185" stroke="#10b981" stroke-width="2.5" marker-end="url(#arrowGreen)"/>
-  <defs>
-    <marker id="arrowGreen" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-      <polygon points="0 0, 10 3.5, 0 7" fill="#10b981"/>
-    </marker>
-  </defs>
-  <text x="645" y="178" fill="#10b981" font-size="10" text-anchor="middle" font-weight="600">ejecuta</text>
+  <!-- ── COL 2: File tree ── -->
+  <rect x="316" y="48" width="222" height="232" rx="12" fill="white"/>
+  <rect x="316" y="48" width="222" height="36" rx="12" fill="#1e293b"/>
+  <rect x="316" y="72" width="222" height="12" fill="#1e293b"/>
+  <text x="427" y="71" fill="white" font-size="12" font-weight="600" text-anchor="middle">tasks/mi-tarea/</text>
 
-  <!-- RIGHT: Result panel -->
-  <rect x="690" y="50" width="150" height="270" rx="12" fill="white" filter="url(#shadow)"/>
-  <rect x="690" y="50" width="150" height="36" rx="12" fill="#065f46"/>
-  <rect x="690" y="74" width="150" height="12" fill="#065f46"/>
-  <text x="765" y="73" fill="white" font-size="12" font-weight="600" text-anchor="middle">resultado</text>
+  <!-- goal.md: locked -->
+  <rect x="326" y="96" width="202" height="28" rx="6" fill="#4f46e5"/>
+  <!-- lock icon small -->
+  <g transform="translate(332,100) scale(0.75)">
+    <path fill="white"
+      d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3h-.75a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h12
+         a3 3 0 0 0 3-3V12.75a3 3 0 0 0-3-3h-.75v-3C17.25 3.851 14.899 1.5 12 1.5Zm3.75
+         8.25v-3a3.75 3.75 0 1 0-7.5 0v3h7.5Z"/>
+  </g>
+  <text x="352" y="108" fill="white" font-size="11" font-weight="700">goal.md</text>
+  <text x="352" y="120" fill="#c7d2fe" font-size="9">NO TOCAR · el contrato</text>
 
-  <!-- Terminal-style output -->
-  <rect x="700" y="100" width="130" height="200" rx="6" fill="#0f172a"/>
-  <text x="710" y="120" fill="#10b981" font-size="9" font-weight="600">$ run-suite.sh</text>
-  <text x="710" y="138" fill="#64748b" font-size="8">running specs...</text>
-  <text x="710" y="154" fill="#10b981" font-size="8">PASS lc_001</text>
-  <text x="710" y="168" fill="#10b981" font-size="8">PASS lc_002</text>
-  <text x="710" y="182" fill="#10b981" font-size="8">PASS lc_003</text>
-  <text x="710" y="196" fill="#64748b" font-size="8">...</text>
-  <text x="710" y="215" fill="#f8fafc" font-size="9" font-weight="700">PASS: 53</text>
-  <text x="710" y="229" fill="#ef4444" font-size="9" font-weight="700">FAIL: 0</text>
-  <rect x="700" y="243" width="130" height="2" fill="#1e293b"/>
-  <text x="765" y="262" fill="#10b981" font-size="11" font-weight="700" text-anchor="middle">✓ DONE</text>
-  <text x="765" y="278" fill="#64748b" font-size="8" text-anchor="middle">objetivo conseguido</text>
-  <text x="765" y="292" fill="#64748b" font-size="8" text-anchor="middle">tal como se definió</text>
+  <!-- Living files -->
+  <text x="332" y="145" fill="#64748b" font-size="11">📄 plan.md</text>
+  <rect x="396" y="133" width="36" height="16" rx="8" fill="#fef3c7"/>
+  <text x="414" y="145" fill="#92400e" font-size="8" text-anchor="middle" font-weight="600">vivo</text>
+
+  <text x="332" y="165" fill="#64748b" font-size="11">📄 tasks.md</text>
+  <rect x="396" y="153" width="36" height="16" rx="8" fill="#fef3c7"/>
+  <text x="414" y="165" fill="#92400e" font-size="8" text-anchor="middle" font-weight="600">vivo</text>
+
+  <text x="332" y="185" fill="#94a3b8" font-size="10">📄 coding-rules.md</text>
+  <text x="332" y="203" fill="#94a3b8" font-size="10">📄 AGENT.md</text>
+  <text x="332" y="221" fill="#94a3b8" font-size="10">📄 PROMPT.md</text>
+  <text x="332" y="239" fill="#94a3b8" font-size="10">📄 task01-slug.md</text>
+  <text x="332" y="257" fill="#94a3b8" font-size="10">📁 evidence/</text>
+
+  <rect x="326" y="263" width="202" height="10" rx="0" fill="none"/>
+  <text x="332" y="273" fill="#10b981" font-size="11" font-weight="600">▶ run-claude.sh</text>
+
+  <!-- Arrow 2 -->
+  <line x1="546" y1="164" x2="586" y2="164" stroke="#10b981" stroke-width="2" marker-end="url(#arrG)"/>
+  <text x="566" y="157" fill="#10b981" font-size="9" font-weight="600" text-anchor="middle">ejecuta</text>
+
+  <!-- ── COL 3: Result terminal ── -->
+  <rect x="594" y="48" width="226" height="232" rx="12" fill="#0f172a"/>
+  <rect x="594" y="48" width="226" height="36" rx="12" fill="#1e293b"/>
+  <rect x="594" y="72" width="226" height="12" fill="#1e293b"/>
+  <!-- Terminal dots -->
+  <circle cx="614" cy="64" r="5" fill="#ef4444"/>
+  <circle cx="630" cy="64" r="5" fill="#f59e0b"/>
+  <circle cx="646" cy="64" r="5" fill="#10b981"/>
+  <text x="707" y="71" fill="#94a3b8" font-size="10" text-anchor="middle">terminal</text>
+
+  <text x="610" y="102" fill="#10b981" font-size="10" font-weight="600">$ bash run-suite.sh</text>
+  <text x="610" y="120" fill="#64748b" font-size="9">running specs...</text>
+  <text x="610" y="138" fill="#10b981" font-size="9">✓ PASS  lc_form_baseline_001</text>
+  <text x="610" y="154" fill="#10b981" font-size="9">✓ PASS  lc_form_textbox_001</text>
+  <text x="610" y="170" fill="#10b981" font-size="9">✓ PASS  lc_form_de_cursor_001</text>
+  <text x="610" y="186" fill="#64748b" font-size="9">  ... 50 more ...</text>
+
+  <line x1="602" y1="198" x2="812" y2="198" stroke="#1e293b" stroke-width="1.5"/>
+
+  <text x="610" y="216" fill="#e2e8f0" font-size="11" font-weight="700">PASS: 53</text>
+  <text x="610" y="234" fill="#ef4444" font-size="11" font-weight="700">FAIL:  0</text>
+  <text x="610" y="252" fill="#64748b" font-size="10">TOTAL: 53</text>
+
+  <rect x="602" y="262" width="212" height="10" rx="0" fill="none"/>
+  <circle cx="707" cy="267" r="0"/>
+  <text x="707" y="272" fill="#10b981" font-size="13" font-weight="700"
+        text-anchor="middle">✓ objetivo conseguido</text>
 </svg>

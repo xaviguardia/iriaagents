@@ -1,57 +1,68 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 220" width="820" height="220" font-family="ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace">
-  <defs>
-    <linearGradient id="leftGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#4f46e5;stop-opacity:1"/>
-      <stop offset="100%" style="stop-color:#6366f1;stop-opacity:1"/>
-    </linearGradient>
-    <linearGradient id="rightGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#d97706;stop-opacity:1"/>
-      <stop offset="100%" style="stop-color:#f59e0b;stop-opacity:1"/>
-    </linearGradient>
-    <filter id="shadow">
-      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#00000022"/>
-    </filter>
-  </defs>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 840 220" width="840" height="220"
+     font-family="'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif">
 
   <!-- Background -->
-  <rect width="820" height="220" rx="16" fill="#f8fafc"/>
+  <rect width="840" height="220" rx="16" fill="#f1f5f9"/>
 
-  <!-- Left panel: INMUTABLE -->
-  <rect x="20" y="20" width="360" height="180" rx="12" fill="url(#leftGrad)" filter="url(#shadow)"/>
+  <!-- ── LEFT CARD: INMUTABLE ── -->
+  <rect x="20" y="20" width="375" height="180" rx="14" fill="#4f46e5"/>
 
-  <!-- Lock icon -->
-  <rect x="155" y="52" width="50" height="38" rx="5" fill="white" opacity="0.95"/>
-  <rect x="163" y="64" width="34" height="22" rx="3" fill="#4f46e5"/>
-  <circle cx="180" cy="75" r="5" fill="white"/>
-  <rect x="178" y="75" width="4" height="8" rx="2" fill="white"/>
-  <path d="M165 52 Q165 38 180 38 Q195 38 195 52" fill="none" stroke="white" stroke-width="6" stroke-linecap="round"/>
+  <!-- Icon circle -->
+  <circle cx="90" cy="95" r="34" fill="white" fill-opacity="0.15"/>
+  <!-- Heroicons: lock-closed (solid, 24×24) — scaled ×2.5, centered at (90,95) -->
+  <g transform="translate(60,65) scale(2.5)">
+    <path fill="white"
+      d="M12 1.5a5.25 5.25 0 0 0-5.25 5.25v3h-.75a3 3 0 0 0-3 3v6.75a3 3 0 0 0 3 3h12
+         a3 3 0 0 0 3-3V12.75a3 3 0 0 0-3-3h-.75v-3C17.25 3.851 14.899 1.5 12 1.5Zm3.75
+         8.25v-3a3.75 3.75 0 1 0-7.5 0v3h7.5Z"/>
+  </g>
 
-  <!-- Left text -->
-  <text x="200" y="72" fill="white" font-size="22" font-weight="700" opacity="0.95">Objetivo</text>
-  <text x="200" y="96" fill="white" font-size="22" font-weight="700" opacity="0.95">+ Tests</text>
-  <rect x="40" y="112" width="320" height="1" fill="white" opacity="0.2"/>
-  <text x="200" y="140" fill="white" font-size="12" font-weight="600" text-anchor="middle" letter-spacing="3" opacity="0.85">INMUTABLE · EL CONTRATO</text>
-  <text x="200" y="162" fill="white" font-size="12" text-anchor="middle" opacity="0.7">No se toca una vez acordado</text>
-  <text x="200" y="180" fill="white" font-size="12" text-anchor="middle" opacity="0.7">Define qué significa "hecho"</text>
+  <!-- Title -->
+  <text x="145" y="82" fill="white" font-size="22" font-weight="700">Objetivo + Tests</text>
 
-  <!-- Center divider with vs -->
-  <circle cx="410" cy="110" r="22" fill="#1e293b"/>
-  <text x="410" y="115" fill="white" font-size="13" font-weight="700" text-anchor="middle">vs</text>
+  <!-- Badge -->
+  <rect x="145" y="93" width="225" height="22" rx="11" fill="white" fill-opacity="0.18"/>
+  <text x="257" y="108" fill="white" font-size="10" font-weight="700"
+        text-anchor="middle" letter-spacing="2">INMUTABLE · EL CONTRATO</text>
 
-  <!-- Right panel: MUTABLE -->
-  <rect x="440" y="20" width="360" height="180" rx="12" fill="url(#rightGrad)" filter="url(#shadow)"/>
+  <!-- Descriptions -->
+  <text x="145" y="137" fill="white" font-size="13" fill-opacity="0.85">No se toca una vez acordado</text>
+  <text x="145" y="158" fill="white" font-size="13" fill-opacity="0.85">Define qué significa "hecho"</text>
 
-  <!-- Rotating arrows icon -->
-  <path d="M570 88 A22 22 0 1 1 548 66" fill="none" stroke="white" stroke-width="5" stroke-linecap="round"/>
-  <polygon points="548,55 548,70 563,70" fill="white"/>
-  <path d="M590 88 A22 22 0 1 0 612 66" fill="none" stroke="white" stroke-width="5" stroke-linecap="round"/>
-  <polygon points="612,55 612,70 597,70" fill="white"/>
+  <!-- Divider -->
+  <line x1="145" y1="123" x2="380" y2="123" stroke="white" stroke-opacity="0.2" stroke-width="1"/>
 
-  <!-- Right text -->
-  <text x="630" y="72" fill="white" font-size="22" font-weight="700" opacity="0.95">Plan</text>
-  <text x="630" y="96" fill="white" font-size="22" font-weight="700" opacity="0.95">+ Tareas</text>
-  <rect x="460" y="112" width="320" height="1" fill="white" opacity="0.2"/>
-  <text x="620" y="140" fill="white" font-size="12" font-weight="600" text-anchor="middle" letter-spacing="3" opacity="0.85">MUTABLE · LA ORIENTACIÓN</text>
-  <text x="620" y="162" fill="white" font-size="12" text-anchor="middle" opacity="0.7">Se espera que evolucione</text>
-  <text x="620" y="180" fill="white" font-size="12" text-anchor="middle" opacity="0.7">Refleja lo que has aprendido al ejecutar</text>
+  <!-- ── VS BUBBLE ── -->
+  <circle cx="420" cy="110" r="24" fill="#1e293b"/>
+  <text x="420" y="116" fill="white" font-size="14" font-weight="700" text-anchor="middle">vs</text>
+
+  <!-- ── RIGHT CARD: MUTABLE ── -->
+  <rect x="445" y="20" width="375" height="180" rx="14" fill="#d97706"/>
+
+  <!-- Icon circle -->
+  <circle cx="515" cy="95" r="34" fill="white" fill-opacity="0.15"/>
+  <!-- Heroicons: arrow-path (outline, 24×24) — scaled ×2.5, centered at (515,95) -->
+  <g transform="translate(485,65) scale(2.5)">
+    <path fill="none" stroke="white" stroke-width="1.5"
+          stroke-linecap="round" stroke-linejoin="round"
+          vector-effect="non-scaling-stroke"
+      d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0
+         3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1
+         13.803-3.7l3.181 3.182m0-4.991v4.99"/>
+  </g>
+
+  <!-- Title -->
+  <text x="570" y="82" fill="white" font-size="22" font-weight="700">Plan + Tareas</text>
+
+  <!-- Badge -->
+  <rect x="570" y="93" width="220" height="22" rx="11" fill="white" fill-opacity="0.18"/>
+  <text x="680" y="108" fill="white" font-size="10" font-weight="700"
+        text-anchor="middle" letter-spacing="2">MUTABLE · LA ORIENTACIÓN</text>
+
+  <!-- Descriptions -->
+  <text x="570" y="137" fill="white" font-size="13" fill-opacity="0.85">Se espera que evolucione</text>
+  <text x="570" y="158" fill="white" font-size="13" fill-opacity="0.85">Refleja lo aprendido al ejecutar</text>
+
+  <!-- Divider -->
+  <line x1="570" y1="123" x2="805" y2="123" stroke="white" stroke-opacity="0.2" stroke-width="1"/>
 </svg>
