@@ -149,13 +149,37 @@ Los tests no dicen cómo implementar. Dicen qué tiene que pasar. Eso deja espac
 
 Cuando la arquitectura, el glosario o las dependencias importan, el objetivo no es "verificarlo una vez" — es **hacer imposible la fuga**. La restricción se codifica como una regla ejecutable que corre en cada cambio.
 
+El resultado siempre es el mismo: cero violaciones. Si alguien introduce una fuga, el check falla antes de llegar a revisión.
+
+**newwingest** — migración VFP9/VB6 → Java + React + Python. Un solo comando de gate:
+
 ```bash
-./check-arch.sh     # 0 violaciones de capas hexagonales
-./check-glossary.sh # 0 términos no autorizados en dominio
-npm run lint        # 0 imports prohibidos
+./scripts/verify.sh
+# frontend: lint + build + unit tests
+# backend: Checkstyle + PMD + tests
+# iria: ruff + unit tests
+# === All checks passed ===
 ```
 
-El resultado siempre es el mismo: cero violaciones. Si alguien introduce una fuga, el check falla antes de llegar a revisión.
+Tres capas. Un comando. Si cualquiera falla, no hay merge.
+
+**i18n como regla** — ningún string hardcodeado en rutas vigiladas. La regla corre en CI:
+
+```bash
+./scripts/check_frontend_i18n_debt.sh
+# 0 violations in guarded paths
+```
+
+No se revisa en code review. Se detecta automáticamente.
+
+**Glosario como código** — los términos del dominio viven en Apicurio Registry y se exportan como JAR Maven. El build del backend depende del JAR. Si el glosario no está cargado y exportado, el build falla:
+
+```bash
+./scripts/ci-export-glossary.sh   # carga glosario → exporta JAR
+./mvnw verify                     # usa el JAR; falla si no existe
+```
+
+El vocabulario del dominio tiene la misma trazabilidad que el código.
 
 ---
 
