@@ -145,6 +145,18 @@ A veces una parte del plan es una pregunta previa: ¿esto se puede hacer aquí? 
 
 Los tests no dicen cómo implementar. Dicen qué tiene que pasar. Eso deja espacio para doblar la arquitectura a las restricciones reales sin tocar el contrato.
 
+### Las restricciones se convierten en reglas
+
+Cuando la arquitectura, el glosario o las dependencias importan, el objetivo no es "verificarlo una vez" — es **hacer imposible la fuga**. La restricción se codifica como una regla ejecutable que corre en cada cambio.
+
+```bash
+./check-arch.sh     # 0 violaciones de capas hexagonales
+./check-glossary.sh # 0 términos no autorizados en dominio
+npm run lint        # 0 imports prohibidos
+```
+
+El resultado siempre es el mismo: cero violaciones. Si alguien introduce una fuga, el check falla antes de llegar a revisión.
+
 ---
 
 ## Adaptar al proyecto
