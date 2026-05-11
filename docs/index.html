@@ -25,6 +25,37 @@
       --code-bg:  #0f172a;
       --sidebar-w: 260px;
       --content-max: 720px;
+      /* nav */
+      --nav-bg:   #ffffff;
+      --nav-border: #e2e8f0;
+    }
+
+    html[data-theme="dark"] {
+      --dark:    #e2e8f0;
+      --mid:     #94a3b8;
+      --muted:   #64748b;
+      --surface: #0f172a;
+      --white:   #1e293b;
+      --border:  #334155;
+      --indigo-l: #1e1b4b;
+      --green-l:  #022c22;
+      --nav-bg:   #1e293b;
+      --nav-border: #334155;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      html:not([data-theme="light"]) {
+        --dark:    #e2e8f0;
+        --mid:     #94a3b8;
+        --muted:   #64748b;
+        --surface: #0f172a;
+        --white:   #1e293b;
+        --border:  #334155;
+        --indigo-l: #1e1b4b;
+        --green-l:  #022c22;
+        --nav-bg:   #1e293b;
+        --nav-border: #334155;
+      }
     }
 
     html { scroll-behavior: smooth; }
@@ -67,11 +98,38 @@
       width: var(--sidebar-w);
       height: 100vh;
       overflow-y: auto;
-      background: var(--white);
-      border-right: 1px solid var(--border);
+      background: var(--nav-bg);
+      border-right: 1px solid var(--nav-border);
       padding: 2rem 0 2rem;
       display: flex;
       flex-direction: column;
+    }
+
+    .theme-toggle {
+      margin: auto 1.5rem 0;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .theme-toggle button {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 0.3rem 0.75rem;
+      font-size: 0.78rem;
+      color: var(--mid);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: background 0.15s, color 0.15s;
+      font-family: inherit;
+    }
+    .theme-toggle button:hover {
+      background: var(--indigo-l);
+      color: var(--indigo);
     }
 
     .nav-logo {
@@ -374,6 +432,13 @@
     <li><a href="#adapting">Adapting to your project</a></li>
     <li><a href="#new-skill">Adding a skill</a></li>
   </ul>
+
+  <div class="theme-toggle">
+    <button id="theme-btn" onclick="toggleTheme()">
+      <span id="theme-icon">🌙</span>
+      <span id="theme-label">Dark mode</span>
+    </button>
+  </div>
 </nav>
 
 <!-- Main -->
@@ -766,7 +831,35 @@ Execute tasks in order (task01 → taskNN). For each:
 <script>
   hljs.highlightAll();
 
-  // Active nav link on scroll
+  // ── Dark mode ──
+  function getTheme() {
+    const stored = localStorage.getItem('theme');
+    if (stored) return stored;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    const icon  = document.getElementById('theme-icon');
+    const label = document.getElementById('theme-label');
+    if (theme === 'dark') {
+      icon.textContent  = '☀️';
+      label.textContent = 'Light mode';
+    } else {
+      icon.textContent  = '🌙';
+      label.textContent = 'Dark mode';
+    }
+    localStorage.setItem('theme', theme);
+  }
+
+  function toggleTheme() {
+    const current = document.documentElement.getAttribute('data-theme') || getTheme();
+    applyTheme(current === 'dark' ? 'light' : 'dark');
+  }
+
+  applyTheme(getTheme());
+
+  // ── Active nav link on scroll ──
   const sections = document.querySelectorAll('section[id]');
   const navLinks = document.querySelectorAll('nav a');
 
