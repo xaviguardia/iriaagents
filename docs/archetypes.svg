@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 860 420" width="860" height="420" font-family="ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace">
+  <defs>
+    <filter id="cardShadow">
+      <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="#00000015"/>
+    </filter>
+  </defs>
+
+  <rect width="860" height="420" rx="16" fill="#f8fafc"/>
+  <text x="430" y="32" fill="#1e293b" font-size="15" font-weight="700" text-anchor="middle" letter-spacing="1">5 arquetipos de tarea donde goal+tests-first funciona</text>
+
+  <!-- Card 1: Divergencias -->
+  <rect x="20" y="50" width="248" height="168" rx="12" fill="white" filter="url(#cardShadow)"/>
+  <rect x="20" y="50" width="248" height="8" rx="12" fill="#ef4444"/>
+  <rect x="20" y="54" width="248" height="4" fill="#ef4444"/>
+  <text x="42" y="88" font-size="28">🔍</text>
+  <text x="80" y="82" fill="#1e293b" font-size="13" font-weight="700">Divergencias</text>
+  <text x="80" y="98" fill="#64748b" font-size="11">sistemáticas</text>
+  <text x="30" y="122" fill="#64748b" font-size="10">N casos incorrectos → 0.</text>
+  <text x="30" y="138" fill="#64748b" font-size="10">Cada caso tiene su spec</text>
+  <text x="30" y="154" fill="#64748b" font-size="10">y su salida esperada.</text>
+  <rect x="28" y="165" width="212" height="42" rx="6" fill="#0f172a"/>
+  <text x="38" y="181" fill="#10b981" font-size="8">$ node run-spec.js caso.prg</text>
+  <text x="38" y="197" fill="#f8fafc" font-size="8">✓ PASS  B21 B22 B33...</text>
+
+  <!-- Card 2: Conformance -->
+  <rect x="306" y="50" width="248" height="168" rx="12" fill="white" filter="url(#cardShadow)"/>
+  <rect x="306" y="50" width="248" height="8" rx="12" fill="#6366f1"/>
+  <rect x="306" y="54" width="248" height="4" fill="#6366f1"/>
+  <text x="328" y="88" font-size="28">✅</text>
+  <text x="366" y="82" fill="#1e293b" font-size="13" font-weight="700">Conformance</text>
+  <text x="366" y="98" fill="#64748b" font-size="11">testing</text>
+  <text x="316" y="122" fill="#64748b" font-size="10">Suite que captura el sistema</text>
+  <text x="316" y="138" fill="#64748b" font-size="10">de referencia y verifica que</text>
+  <text x="316" y="154" fill="#64748b" font-size="10">la implementación lo replica.</text>
+  <rect x="314" y="165" width="232" height="42" rx="6" fill="#0f172a"/>
+  <text x="324" y="181" fill="#10b981" font-size="8">$ bash run-suite.sh</text>
+  <text x="324" y="197" fill="#f8fafc" font-size="8">PASS: 53  FAIL: 0  TOTAL: 53</text>
+
+  <!-- Card 3: Migración -->
+  <rect x="592" y="50" width="248" height="168" rx="12" fill="white" filter="url(#cardShadow)"/>
+  <rect x="592" y="50" width="248" height="8" rx="12" fill="#10b981"/>
+  <rect x="592" y="54" width="248" height="4" fill="#10b981"/>
+  <text x="614" y="88" font-size="28">🔄</text>
+  <text x="652" y="82" fill="#1e293b" font-size="13" font-weight="700">Migración</text>
+  <text x="652" y="98" fill="#64748b" font-size="11">de legado</text>
+  <text x="602" y="122" fill="#64748b" font-size="10">VB6/VFP9/COBOL/PL1 →</text>
+  <text x="602" y="138" fill="#64748b" font-size="10">stack moderno. El test es</text>
+  <text x="602" y="154" fill="#64748b" font-size="10">equivalencia de salidas.</text>
+  <rect x="600" y="165" width="232" height="42" rx="6" fill="#0f172a"/>
+  <text x="610" y="181" fill="#10b981" font-size="8">$ diff &lt;(legacy in) &lt;(modern in)</text>
+  <text x="610" y="197" fill="#f8fafc" font-size="8">  (sin diferencias)  ✓</text>
+
+  <!-- Card 4: Interpretación -->
+  <rect x="163" y="246" width="248" height="154" rx="12" fill="white" filter="url(#cardShadow)"/>
+  <rect x="163" y="246" width="248" height="8" rx="12" fill="#f59e0b"/>
+  <rect x="163" y="250" width="248" height="4" fill="#f59e0b"/>
+  <text x="185" y="284" font-size="28">⚙️</text>
+  <text x="223" y="278" fill="#1e293b" font-size="13" font-weight="700">Infraestructura</text>
+  <text x="223" y="294" fill="#64748b" font-size="11">de interpretación</text>
+  <text x="173" y="318" fill="#64748b" font-size="10">Intérprete, transpiler o runtime.</text>
+  <text x="173" y="334" fill="#64748b" font-size="10">Cobertura medida en specs.</text>
+  <rect x="171" y="347" width="232" height="42" rx="6" fill="#0f172a"/>
+  <text x="181" y="363" fill="#10b981" font-size="8">$ ./coverage.sh</text>
+  <text x="181" y="379" fill="#f8fafc" font-size="8">tokens: 1606/1606  100% ✓</text>
+
+  <!-- Card 5: Nuevas features -->
+  <rect x="449" y="246" width="248" height="154" rx="12" fill="white" filter="url(#cardShadow)"/>
+  <rect x="449" y="246" width="248" height="8" rx="12" fill="#8b5cf6"/>
+  <rect x="449" y="250" width="248" height="4" fill="#8b5cf6"/>
+  <text x="471" y="284" font-size="28">✨</text>
+  <text x="509" y="278" fill="#1e293b" font-size="13" font-weight="700">Nueva</text>
+  <text x="509" y="294" fill="#64748b" font-size="11">funcionalidad</text>
+  <text x="459" y="318" fill="#64748b" font-size="10">Comportamiento nuevo en un</text>
+  <text x="459" y="334" fill="#64748b" font-size="10">sistema en producción.</text>
+  <rect x="457" y="347" width="232" height="42" rx="6" fill="#0f172a"/>
+  <text x="467" y="363" fill="#10b981" font-size="8">$ playwright test e2e/flujo.spec</text>
+  <text x="467" y="379" fill="#f8fafc" font-size="8">5 passed (5)  ✓</text>
+
+  <!-- Bottom note -->
+  <text x="430" y="412" fill="#94a3b8" font-size="10" text-anchor="middle">En todos los casos: el test es la salida observable del sistema, no la estructura del código.</text>
+</svg>

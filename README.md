@@ -1,21 +1,26 @@
 # iriaagents
 
-Framework de tareas para agentes de código. Su función principal es forzar la definición del **objetivo verificable** antes de ejecutar cualquier trabajo, y servir de base adaptable para cada proyecto.
+> Framework de tareas para agentes de código.  
+> Una conversación de 7 preguntas que fuerza la definición del **objetivo verificable** antes de ejecutar cualquier trabajo.
 
-## Principio central
+---
 
-```
-Objetivo + tests que lo demuestran  →  inmutable (el contrato)
-Plan + tareas                        →  mutable   (la orientación)
-```
+## El principio que lo gobierna todo
 
-El plan puede cambiar. Las tareas pueden reordenarse, añadirse o eliminarse. Lo que no cambia es la respuesta a: **¿qué comandos ejecutamos al final para demostrar que lo conseguimos?**
+![Principio: inmutable vs mutable](docs/principle.svg)
 
-El skill `/new-task` no te da una estructura rígida — te da la conversación que fuerza ese anclaje antes de escribir una sola línea de código.
+El plan puede cambiar. Las tareas pueden reordenarse, añadirse o eliminarse.  
+Lo que **no cambia** es la respuesta a:
+
+> *¿Qué comandos ejecutamos al final para demostrar que lo conseguimos?*
+
+`goal.md` es el único archivo que no se toca una vez acordado. El resto evoluciona con lo que aprendes al ejecutar.
 
 ---
 
 ## Instalación
+
+![Instalación en 3 pasos](docs/install.svg)
 
 ```bash
 git clone https://github.com/xaviguardia/iriaagents
@@ -23,7 +28,7 @@ cd iriaagents
 ./install.sh
 ```
 
-Escribe `~/.claude/iriaagents_path` (para localizar templates sin paths hardcodeados) y crea symlinks en `~/.claude/commands/`. Desde ese momento `/new-task` está disponible en Claude Code en cualquier proyecto.
+`install.sh` escribe `~/.claude/iriaagents_path` (para que los skills encuentren los templates sin paths hardcodeados) y crea symlinks en `~/.claude/commands/`. Desde ese momento `/new-task` está disponible en cualquier proyecto.
 
 ```bash
 ./install.sh --list       # qué skills están instalados
@@ -33,143 +38,103 @@ Escribe `~/.claude/iriaagents_path` (para localizar templates sin paths hardcode
 
 ---
 
-## Para qué tipo de tareas funciona
+## Cómo funciona `/new-task`
 
-Tras aplicar esta técnica en más de 40 proyectos reales, los arquetipos donde más valor aporta son:
+![Flujo de /new-task](docs/flow.svg)
 
-### 1. Corrección sistemática de divergencias
+El skill conduce una conversación de 7 preguntas. **La tercera es la más importante** — y no avanza si la respuesta es vaga:
 
-Un sistema conocido produce resultados incorrectos en N casos documentados. El objetivo es llevar esos N casos a cero con evidencia por caso.
+> *¿Cómo se verifica que el trabajo está terminado?*  
+> *Dame los comandos exactos con la salida esperada.*
 
-**Tests típicos:**
-```bash
-node run-spec.js specs/caso-001.prg   # salida esperada: "OK"
-grep -r "FIXED" report/divergences/  # todos tienen estado final
-```
-
-**Proyectos:** corrección de 40 divergencias VFP9→JS (strings, fechas, arrays, OOP, macros, errores, DBF); fixes en intérpretes PL/I, COBOL, CICS.
+Con las respuestas genera `tasks/<nombre>/` adaptado al proyecto. Si el repo usa GitFlow (rama `develop`), crea la rama `feature/<nombre>` y el worktree separado automáticamente.
 
 ---
 
-### 2. Conformance testing — especificación como contrato
+## Para qué tipo de tareas
 
-Construir una suite de specs que capture el comportamiento exacto de un sistema de referencia y verificar que la implementación alternativa lo replica.
+Tras aplicarlo en más de 40 proyectos reales, estos son los 5 arquetipos donde más valor aporta:
 
-**Tests típicos:**
+![5 arquetipos de tarea](docs/archetypes.svg)
+
+### 1 · Corrección sistemática de divergencias
+
+Un sistema produce resultados incorrectos en N casos documentados. El objetivo es llevarlos a cero, con evidencia por caso.
+
 ```bash
-bash run-suite.sh
+node run-spec.js specs/B21-strtran.prg   # → OK
+grep -r "FIXED" report/divergences/      # → todos tienen estado final
+```
+
+**Proyectos reales:** 40 divergencias VFP9→JS (strings, fechas, arrays, OOP, macros, DBF); fixes en intérpretes PL/I, COBOL, CICS.
+
+---
+
+### 2 · Conformance testing
+
+Construir una suite que capture el comportamiento exacto de un sistema de referencia y verificar que la implementación alternativa lo replica.
+
+```bash
+bash run-lifecycle-suite.sh
 # PASS: 53   FAIL: 0   TOTAL: 53
 ```
 
-**Proyectos:** 53 specs de lifecycle VFP9 Form/Control/DataEnvironment; suite de conformance del corpus VFP9 (1606 programas); golden master pipeline WinGest8 (102h, 5 tracks); equivalencia COBOL→Rust en nuhost.
+**Proyectos reales:** 53 specs lifecycle VFP9 Form/Control/DataEnvironment; corpus VFP9 1606 programas; golden master pipeline WinGest8 (102h, 5 tracks); equivalencia COBOL→Rust.
 
 ---
 
-### 3. Migración de sistemas legados
+### 3 · Migración de sistemas legados
 
-Convertir un sistema existente (VB6, VFP9, COBOL, PL/I, JCL) a un stack moderno preservando el comportamiento observable. El test es la equivalencia de salidas, no la similitud del código.
+Convertir VB6, VFP9, COBOL, PL/I o JCL a stack moderno preservando el comportamiento observable. El test no es la similitud del código — es la equivalencia de salidas.
 
-**Tests típicos:**
 ```bash
 diff <(run-legacy input.dat) <(run-modern input.dat)   # sin diferencias
-./e2e-suite.sh                                          # N/N specs en verde
+./e2e-suite.sh                                          # N/N en verde
 ```
 
-**Proyectos:** VFP9→Java (newwingest, abina con 24 specs E2E); VB6→Java+React (ekoN ERP); COBOL/PL/I→Rust con event-sourcing (nuhost); pipeline Iria (F1-F8) para modernización de mainframe.
+**Proyectos reales:** VFP9→Java (newwingest); VB6→Java+React (abina, 24 specs E2E); COBOL/PL1→Rust con event-sourcing (nuhost); pipeline Iria F1-F8 para mainframe.
 
 ---
 
-### 4. Construcción de infraestructura de interpretación
+### 4 · Infraestructura de interpretación
 
-Implementar un intérprete, transpiler o runtime para un lenguaje existente. El contrato es la cobertura del lenguaje medida en specs que pasan.
+Implementar un intérprete, transpiler o runtime para un lenguaje existente. La cobertura se mide en specs que pasan, no en líneas de código.
 
-**Tests típicos:**
 ```bash
 node interpreter/run-spec.js corpus/programa.prg   # sin runtime errors
 ./coverage.sh                                       # N% tokens cubiertos
 ```
 
-**Proyectos:** intérprete VFP9 JS (corpus completo, lifecycle, OOP, SQL, DBF); intérprete PL/I (100% ECMA-50); intérprete CICS+TCP gateway contra Hercules/MVS real; pipeline JCL.
+**Proyectos reales:** intérprete VFP9 JS (corpus completo, lifecycle, OOP, SQL, DBF); intérprete PL/I (100% ECMA-50); gateway CICS+TCP contra Hercules/MVS real; pipeline JCL.
 
 ---
 
-### 5. Nuevas funcionalidades en sistemas en producción
+### 5 · Nuevas funcionalidades en producción
 
-Añadir capacidades a un sistema existente donde el criterio de éxito es un comportamiento nuevo demostrable, no "que el PR pase CI".
+Añadir capacidades a un sistema existente. El criterio es el comportamiento nuevo demostrable, no que el PR pase CI.
 
-**Tests típicos:**
 ```bash
 ./health.sh --symbols STRTRAN        # nueva flag funciona
-curl -s /api/nuevo-endpoint | jq .   # respuesta correcta
 playwright test e2e/nuevo-flujo.spec # flujo de usuario completo
+curl -s /api/nuevo | jq .status      # "ok"
 ```
 
-**Proyectos:** flags `--symbols`/`--tokens` en conformance tooling; dark mode en frontend VFP; dashboard de observabilidad (token tracking, burndown, LLM proxy); TMS Obsly Verba (editor, MT, memoria de traducción); SDUI visual editor Trazz.
+**Proyectos reales:** flags `--symbols`/`--tokens` en conformance tooling; dark mode VFP frontend; dashboard Obsly (token tracking, burndown, LLM proxy); TMS Obsly Verba (editor, MT, memoria); SDUI visual editor Trazz.
 
 ---
 
-## Cómo funciona
+## El plan cambia. El objetivo no.
 
-`/new-task` conduce una conversación de 7 preguntas. La más importante es la tercera:
+Tres ejemplos de cómo evolucionó el trabajo una vez definido el contrato:
 
-> **¿Cómo se verifica que el trabajo está terminado?**  
-> Dame los comandos exactos que demostrarán que lo lograste.
+**Lifecycle VFP9 (0 → 53/53 PASS)**  
+El plan inicial era "arreglar el orden Load→Init→Activate". Al ejecutar emergieron 8 capas adicionales no planificadas: `traceEvent` no era callable desde VFP, los métodos VFP perdían frente a funciones nativas, `DataEnvironment.Destroy` tenía que dispararse *después* del `Unload`... El plan se reescribió cinco veces. Los tests: ni una coma.
 
-Si la respuesta es vaga, el skill sigue preguntando hasta tener comandos concretos. Sin verificación ejecutable no se avanza.
+**Wave-1 bugfix (40 divergencias cerradas)**  
+Las tareas se agruparon por bucket (strings, fechas, OOP...) pero el orden de ejecución fue distinto al planeado — las dependencias solo se veían al ejecutar. B25 se movió a wave-2 porque dependía del parser. El plan lo absorbió; el objetivo no.
 
-Con las respuestas genera un directorio `tasks/<nombre>/` adaptado al proyecto:
-
-```
-tasks/mi-tarea/
-├── goal.md          ← objetivo + criterio de éxito ejecutable  ← NO TOCAR
-├── plan.md          ← diseño inicial                           ← vivo, evoluciona
-├── tasks.md         ← tabla de tareas atómicas                 ← vivo, evoluciona
-├── coding-rules.md  ← restricciones del proyecto
-├── AGENT.md         ← instrucciones para el agente
-├── PROMPT.md        ← prompt de arranque de sesión
-├── task01-slug.md   ← descripción de cada tarea
-├── evidence/        ← outputs capturados (diffs, trazas, logs)
-├── scripts/         ← scripts reutilizables
-└── run-claude.sh    ← arranca la sesión
-```
-
-**`goal.md` es el único archivo que no debe modificarse una vez acordado.** El resto evoluciona con el trabajo.
-
-Si el proyecto usa GitFlow (rama `develop`), el skill crea la rama `feature/<nombre>` y un worktree separado automáticamente.
-
----
-
-## Ejemplos de cómo el plan cambia pero el objetivo no
-
-### Lifecycle VFP9 — 0 → 53/53 specs
-
-**Objetivo y tests (no cambiaron):**
-```bash
-bash tasks/language-proof-lifecycle/scripts/run-lifecycle-suite.sh
-# PASS: 53   FAIL: 0   TOTAL: 53
-```
-
-**Lo que no estaba en el plan inicial y emergió al ejecutar:**
-- `traceEvent` no era callable desde VFP — globalEnv JS no se consultaba
-- Los métodos VFP perdían frente a funciones nativas en `_callMethod`
-- `DataEnvironment.Destroy` tenía que dispararse *después* del `Unload`, no antes
-- Runtime `AddObject`: `THIS.Name` incorrecto dentro de `Init` — el nombre se asignaba después de ejecutarlo
-- `trace-base.prg` se eliminaba en el preprocesador en vez de inyectarse inline
-
-El plan se reescribió cinco veces. El objetivo y los tests: ni una coma.
-
----
-
-### Wave-1 bugfix — 40 divergencias cerradas
-
-**Objetivo y tests (no cambiaron):**
-```bash
-node interpreter/run-spec.js specs/Bxx-nombre.prg
-grep -r "FIXED\|TRIAGED" report/divergences/
-```
-
-**Lo que cambió durante la ejecución:**
-Las tareas se agruparon por bucket (strings, fechas, arrays, OOP, macros, errores, DBF) pero el orden de ejecución real fue distinto — algunas dependencias solo se veían al ejecutar. B25 se movió a wave-2 porque dependía del parser. El plan lo absorbió; el objetivo no.
+**Conformance tooling (flags `--symbols`/`--tokens`)**  
+La tarea inicial era solo `--symbols`. Al implementarlo apareció la necesidad natural de `--tokens`. Se añadió como subtarea no planificada. El objetivo creció; los tests de verificación crecieron con él.
 
 ---
 
@@ -177,28 +142,32 @@ Las tareas se agruparon por bucket (strings, fechas, arrays, OOP, macros, errore
 
 El directorio generado es una base, no una jaula:
 
-- Reescribir `plan.md` cuando la solución real es distinta a la propuesta
-- Añadir o eliminar `taskNN-*.md` durante la ejecución
-- Guardar en `evidence/` los outputs que demuestran el avance
-- **No tocar `goal.md`** — si el objetivo cambia, es una tarea nueva
+| Archivo | Qué hacer |
+|---------|-----------|
+| `goal.md` | **No tocar.** Si el objetivo cambia, es una tarea nueva. |
+| `plan.md` | Reescribir cuando la solución real difiere de la propuesta. |
+| `tasks.md` | Añadir, eliminar o reordenar según avanza el trabajo. |
+| `evidence/` | Guardar outputs clave: diffs, trazas, logs, capturas. |
+| `taskNN-*.md` | Añadir los que emerjan; borrar los que no apliquen. |
 
 ---
 
 ## Añadir nuevos skills
 
 ```bash
-# Crea el skill en el repo
+# 1. Crea el skill en el repo
 vim commands/mi-skill.md
 
-# Instala el symlink
+# 2. Instala el symlink
 ./install.sh --force
 
-# Disponible en Claude Code como /mi-skill
+# 3. Disponible en Claude Code
+/mi-skill
 ```
 
 ---
 
 ## Requisitos
 
-- Claude Code CLI
+- [Claude Code](https://claude.ai/code) CLI instalado
 - Git (para worktrees y actualizaciones)

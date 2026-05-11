@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 820 120" width="820" height="120" font-family="ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,monospace">
+  <defs>
+    <marker id="arr" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#6366f1"/>
+    </marker>
+    <filter id="s">
+      <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#00000018"/>
+    </filter>
+  </defs>
+
+  <rect width="820" height="120" rx="14" fill="#f8fafc"/>
+
+  <!-- Step 1 -->
+  <rect x="20" y="20" width="190" height="80" rx="10" fill="white" filter="url(#s)"/>
+  <circle cx="50" cy="44" r="14" fill="#6366f1"/>
+  <text x="50" y="49" fill="white" font-size="13" font-weight="700" text-anchor="middle">1</text>
+  <text x="75" y="40" fill="#1e293b" font-size="11" font-weight="700">Clona el repo</text>
+  <rect x="28" y="54" width="174" height="36" rx="6" fill="#0f172a"/>
+  <text x="38" y="68" fill="#10b981" font-size="9">$ git clone</text>
+  <text x="38" y="82" fill="#94a3b8" font-size="8">  github.com/xaviguardia/iriaagents</text>
+
+  <!-- Arrow -->
+  <line x1="218" y1="60" x2="248" y2="60" stroke="#6366f1" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- Step 2 -->
+  <rect x="256" y="20" width="190" height="80" rx="10" fill="white" filter="url(#s)"/>
+  <circle cx="286" cy="44" r="14" fill="#6366f1"/>
+  <text x="286" y="49" fill="white" font-size="13" font-weight="700" text-anchor="middle">2</text>
+  <text x="311" y="40" fill="#1e293b" font-size="11" font-weight="700">Instala</text>
+  <rect x="264" y="54" width="174" height="36" rx="6" fill="#0f172a"/>
+  <text x="274" y="68" fill="#10b981" font-size="9">$ cd iriaagents</text>
+  <text x="274" y="82" fill="#10b981" font-size="9">$ ./install.sh</text>
+
+  <!-- Arrow -->
+  <line x1="454" y1="60" x2="484" y2="60" stroke="#6366f1" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- Step 3 -->
+  <rect x="492" y="20" width="190" height="80" rx="10" fill="white" filter="url(#s)"/>
+  <circle cx="522" cy="44" r="14" fill="#6366f1"/>
+  <text x="522" y="49" fill="white" font-size="13" font-weight="700" text-anchor="middle">3</text>
+  <text x="547" y="40" fill="#1e293b" font-size="11" font-weight="700">Listo en Claude Code</text>
+  <rect x="500" y="54" width="174" height="36" rx="6" fill="#0f172a"/>
+  <text x="510" y="72" fill="#a78bfa" font-size="11" font-weight="700">/new-task</text>
+
+  <!-- Arrow -->
+  <line x1="690" y1="60" x2="720" y2="60" stroke="#10b981" stroke-width="2" marker-end="url(#arrG)"/>
+  <defs>
+    <marker id="arrG" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
+      <polygon points="0 0, 10 3.5, 0 7" fill="#10b981"/>
+    </marker>
+  </defs>
+
+  <!-- Done badge -->
+  <rect x="728" y="38" width="72" height="44" rx="10" fill="#065f46" filter="url(#s)"/>
+  <text x="764" y="57" fill="#10b981" font-size="16" text-anchor="middle">✓</text>
+  <text x="764" y="74" fill="white" font-size="9" text-anchor="middle" font-weight="600">operativo</text>
+</svg>
