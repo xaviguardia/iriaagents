@@ -1,20 +1,23 @@
 # iriaagents
 
-> Framework de tareas para agentes de código.  
-> Una conversación de 7 preguntas que fuerza la definición del **objetivo verificable** antes de ejecutar cualquier trabajo.
+> La receta es centrarse en el objetivo.
+
+Más de 20 proyectos terminados en 2026 usando la misma técnica: definir primero qué hay que conseguir y cómo demostrar que está conseguido. El resto — el plan, los pasos, las decisiones técnicas — se adapta sobre la marcha.
 
 ---
 
-## El principio que lo gobierna todo
+## La idea
 
 ![Principio: inmutable vs mutable](docs/principle.svg)
 
-El plan puede cambiar. Las tareas pueden reordenarse, añadirse o eliminarse.  
-Lo que **no cambia** es la respuesta a:
+Antes de escribir código, responde dos preguntas:
 
-> *¿Qué comandos ejecutamos al final para demostrar que lo conseguimos?*
+1. **¿Qué hay que conseguir?**
+2. **¿Cómo sabremos que está hecho?** — el comando exacto con la salida esperada.
 
-`goal.md` es el único archivo que no se toca una vez acordado. El resto evoluciona con lo que aprendes al ejecutar.
+Esas dos respuestas son el contrato. No cambian.
+
+Todo lo demás — cómo llegar, qué tecnología usar, en qué orden — evoluciona con lo que aprendes al ejecutar. Si la respuesta a la segunda pregunta es vaga, no existe objetivo real todavía.
 
 ---
 
@@ -28,12 +31,12 @@ cd iriaagents
 ./install.sh
 ```
 
-`install.sh` escribe `~/.claude/iriaagents_path` (para que los skills encuentren los templates sin paths hardcodeados) y crea symlinks en `~/.claude/commands/`. Desde ese momento `/new-task` está disponible en cualquier proyecto.
+Crea symlinks en `~/.claude/commands/`. Desde ese momento `/new-task` está disponible en Claude Code.
 
 ```bash
-./install.sh --list       # qué skills están instalados
+./install.sh --list       # skills instalados
 ./install.sh --force      # actualizar tras git pull
-./install.sh --uninstall  # limpieza completa
+./install.sh --uninstall  # desinstalar
 ```
 
 ---
@@ -42,139 +45,120 @@ cd iriaagents
 
 ![Flujo de /new-task](docs/flow.svg)
 
-El skill conduce una conversación de 7 preguntas. El núcleo está en las dos primeras:
+Una conversación de 7 preguntas. Las dos primeras son el núcleo:
 
-- **¿Qué hay que conseguir?** — el objetivo, expresado como estado final observable.
-- **¿Cómo se demuestra que está conseguido?** — los comandos exactos con la salida esperada.
+- **¿Qué hay que conseguir?**
+- **¿Cómo se demuestra que está conseguido?**
 
-Pensar estas dos preguntas juntas es el acto que centra el trabajo. Al articular el objetivo *y* la prueba que lo confirma, queda claro qué hay que construir y qué criterio decidirá si está bien construido. Ese par es el contrato: no cambia.
-
-Lo que sí cambia es el **cómo** llegar hasta ahí — la tecnología elegida, el orden de los pasos, las decisiones de diseño. Eso se adapta a cada proyecto y evoluciona con lo que se aprende al ejecutar. Pero el **qué** queda fijado desde el principio.
-
-> Si la respuesta a "¿cómo se demuestra?" es vaga, el skill no avanza.  
-> Sin verificación ejecutable concreta no existe objetivo válido.
-
-Con las respuestas genera `tasks/<nombre>/` adaptado al proyecto. Si el repo usa GitFlow (rama `develop`), crea la rama `feature/<nombre>` y el worktree separado automáticamente.
+El skill no avanza si la segunda respuesta es vaga. Una vez acordadas, genera `tasks/<nombre>/` con todo lo necesario para arrancar. Si el proyecto usa GitFlow crea la rama `feature/<nombre>` y el worktree automáticamente.
 
 ---
 
-## Para qué tipo de tareas
+## Dónde lo hemos usado
 
-Tras aplicarlo en más de 40 proyectos reales, estos son los 5 arquetipos donde más valor aporta:
+Más de 20 proyectos terminados en 2026. Cinco patrones que se repiten:
 
 ![5 arquetipos de tarea](docs/archetypes.svg)
 
-### 1 · Corrección sistemática de divergencias
+### Arreglar N casos que fallan
 
-Un sistema produce resultados incorrectos en N casos documentados. El objetivo es llevarlos a cero, con evidencia por caso.
+Tienes una lista de casos incorrectos. El objetivo es llevarlos a cero.
 
 ```bash
-node run-spec.js specs/B21-strtran.prg   # → OK
-grep -r "FIXED" report/divergences/      # → todos tienen estado final
+node run-spec.js specs/B21.prg   # → PASS
+grep "FIXED" report/divergences/ # → todos cerrados
 ```
 
-**Proyectos reales:** 40 divergencias VFP9→JS (strings, fechas, arrays, OOP, macros, DBF); fixes en intérpretes PL/I, COBOL, CICS.
+40 bugs VFP9→JS cerrados. Fixes en intérpretes PL/I, COBOL y CICS.
 
 ---
 
-### 2 · Conformance testing
+### Verificar que dos sistemas se comportan igual
 
-Construir una suite que capture el comportamiento exacto de un sistema de referencia y verificar que la implementación alternativa lo replica.
+Construyes una suite de tests contra el sistema original. La implementación nueva tiene que pasar esa misma suite.
 
 ```bash
-bash run-lifecycle-suite.sh
-# PASS: 53   FAIL: 0   TOTAL: 53
+bash run-suite.sh
+# PASS: 53   FAIL: 0
 ```
 
-**Proyectos reales:** 53 specs lifecycle VFP9 Form/Control/DataEnvironment; corpus VFP9 1606 programas; golden master pipeline WinGest8 (102h, 5 tracks); equivalencia COBOL→Rust.
+53 escenarios de ciclo de vida VFP9. Pipeline golden master WinGest8. Equivalencia COBOL→Rust.
 
 ---
 
-### 3 · Migración de sistemas legados
+### Convertir un sistema antiguo a tecnología moderna
 
-Convertir VB6, VFP9, COBOL, PL/I o JCL a stack moderno preservando el comportamiento observable. El test no es la similitud del código — es la equivalencia de salidas.
+El código cambia completamente. El comportamiento no. El test es comparar salidas, no leer código.
 
 ```bash
-diff <(run-legacy input.dat) <(run-modern input.dat)   # sin diferencias
-./e2e-suite.sh                                          # N/N en verde
+diff <(run-legacy input.dat) <(run-modern input.dat)  # sin diferencias
+./e2e-suite.sh                                         # todo verde
 ```
 
-**Proyectos reales:** VFP9→Java (newwingest); VB6→Java+React (abina, 24 specs E2E); COBOL/PL1→Rust con event-sourcing (nuhost); pipeline Iria F1-F8 para mainframe.
+VFP9→Java, VB6→React, COBOL/PL1→Rust, mainframe→cloud.
 
 ---
 
-### 4 · Infraestructura de interpretación
+### Construir un intérprete o runtime
 
-Implementar un intérprete, transpiler o runtime para un lenguaje existente. La cobertura se mide en specs que pasan, no en líneas de código.
+Implementas soporte para un lenguaje. La cobertura se mide en programas que ejecutan correctamente.
 
 ```bash
-node interpreter/run-spec.js corpus/programa.prg   # sin runtime errors
-./coverage.sh                                       # N% tokens cubiertos
+./coverage.sh   # 1606/1606 programas  100%
 ```
 
-**Proyectos reales:** intérprete VFP9 JS (corpus completo, lifecycle, OOP, SQL, DBF); intérprete PL/I (100% ECMA-50); gateway CICS+TCP contra Hercules/MVS real; pipeline JCL.
+Intérprete VFP9 JS, intérprete PL/I (ECMA-50), gateway CICS+TCP, pipeline JCL.
 
 ---
 
-### 5 · Nuevas funcionalidades en producción
+### Añadir una funcionalidad nueva
 
-Añadir capacidades a un sistema existente. El criterio es el comportamiento nuevo demostrable, no que el PR pase CI.
+El sistema existe y funciona. Añades algo. El test prueba el comportamiento nuevo, no la estructura del código.
 
 ```bash
-./health.sh --symbols STRTRAN        # nueva flag funciona
-playwright test e2e/nuevo-flujo.spec # flujo de usuario completo
-curl -s /api/nuevo | jq .status      # "ok"
+./health.sh --symbols STRTRAN        # nueva opción funciona
+playwright test e2e/nuevo-flujo.spec # flujo completo verde
 ```
 
-**Proyectos reales:** flags `--symbols`/`--tokens` en conformance tooling; dark mode VFP frontend; dashboard Obsly (token tracking, burndown, LLM proxy); TMS Obsly Verba (editor, MT, memoria); SDUI visual editor Trazz.
+Flags de filtrado en conformance tooling. Dark mode. Dashboard de tokens. Editor de traducciones. Visual editor SDUI.
 
 ---
 
 ## El plan cambia. El objetivo no.
 
-Tres ejemplos de cómo evolucionó el trabajo una vez definido el contrato:
+**Lifecycle VFP9 — 0 a 53/53 PASS**
+El plan inicial era arreglar el orden de tres eventos. Al ejecutar aparecieron ocho problemas que nadie había visto antes. El plan se reescribió cinco veces. Los tests: ni una coma.
 
-**Lifecycle VFP9 (0 → 53/53 PASS)**  
-El plan inicial era "arreglar el orden Load→Init→Activate". Al ejecutar emergieron 8 capas adicionales no planificadas: `traceEvent` no era callable desde VFP, los métodos VFP perdían frente a funciones nativas, `DataEnvironment.Destroy` tenía que dispararse *después* del `Unload`... El plan se reescribió cinco veces. Los tests: ni una coma.
+**40 bugs cerrados**
+Las tareas estaban agrupadas por tipo. El orden de ejecución real fue completamente distinto — las dependencias solo se ven al ejecutar. El plan lo absorbió. El objetivo no se tocó.
 
-**Wave-1 bugfix (40 divergencias cerradas)**  
-Las tareas se agruparon por bucket (strings, fechas, OOP...) pero el orden de ejecución fue distinto al planeado — las dependencias solo se veían al ejecutar. B25 se movió a wave-2 porque dependía del parser. El plan lo absorbió; el objetivo no.
-
-**Conformance tooling (flags `--symbols`/`--tokens`)**  
-La tarea inicial era solo `--symbols`. Al implementarlo apareció la necesidad natural de `--tokens`. Se añadió como subtarea no planificada. El objetivo creció; los tests de verificación crecieron con él.
+**Flags `--symbols` y `--tokens`**
+La tarea era solo `--symbols`. Al implementarlo apareció la necesidad obvia de `--tokens`. Se añadió sobre la marcha. El objetivo creció. Los tests crecieron con él.
 
 ---
 
 ## Adaptar al proyecto
 
-El directorio generado es una base, no una jaula:
-
-| Archivo | Qué hacer |
-|---------|-----------|
-| `goal.md` | **No tocar.** Si el objetivo cambia, es una tarea nueva. |
-| `plan.md` | Reescribir cuando la solución real difiere de la propuesta. |
-| `tasks.md` | Añadir, eliminar o reordenar según avanza el trabajo. |
-| `evidence/` | Guardar outputs clave: diffs, trazas, logs, capturas. |
-| `taskNN-*.md` | Añadir los que emerjan; borrar los que no apliquen. |
+| Archivo | Regla |
+|---------|-------|
+| `goal.md` | No tocar. Si el objetivo cambia, es una tarea nueva. |
+| `plan.md` | Reescribir cuando la solución real difiere. |
+| `tasks.md` | Añadir, eliminar, reordenar según avanza. |
+| `evidence/` | Guardar diffs, logs y capturas que demuestran el avance. |
 
 ---
 
-## Añadir nuevos skills
+## Añadir un skill nuevo
 
 ```bash
-# 1. Crea el skill en el repo
 vim commands/mi-skill.md
-
-# 2. Instala el symlink
 ./install.sh --force
-
-# 3. Disponible en Claude Code
-/mi-skill
+# disponible como /mi-skill en Claude Code
 ```
 
 ---
 
 ## Requisitos
 
-- [Claude Code](https://claude.ai/code) CLI instalado
-- Git (para worktrees y actualizaciones)
+- [Claude Code](https://claude.ai/code)
+- Git
