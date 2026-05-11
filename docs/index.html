@@ -11,50 +11,53 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --indigo:   #4f46e5;
-      --indigo-l: #e0e7ff;
-      --green:    #10b981;
-      --green-l:  #d1fae5;
-      --amber:    #d97706;
-      --dark:     #1e293b;
-      --mid:      #475569;
-      --muted:    #94a3b8;
-      --surface:  #f8fafc;
-      --white:    #ffffff;
-      --border:   #e2e8f0;
-      --code-bg:  #0f172a;
+      --indigo:    #4f46e5;
+      --indigo-l:  #e0e7ff;
+      --green:     #10b981;
+      --green-l:   #d1fae5;
+      --amber:     #d97706;
+      /* text */
+      --text:      #1e293b;
+      --mid:       #475569;
+      --muted:     #94a3b8;
+      /* surfaces */
+      --surface:   #f8fafc;
+      --card-bg:   #ffffff;
+      --border:    #e2e8f0;
+      --code-bg:   #0f172a;
+      /* mutable card */
+      --mutable-bg:   #fef3c7;
+      --mutable-text: #78350f;
+      /* sidebar */
       --sidebar-w: 260px;
       --content-max: 720px;
-      /* nav */
-      --nav-bg:   #ffffff;
-      --nav-border: #e2e8f0;
     }
 
     html[data-theme="dark"] {
-      --dark:    #e2e8f0;
-      --mid:     #94a3b8;
-      --muted:   #64748b;
-      --surface: #0f172a;
-      --white:   #1e293b;
-      --border:  #334155;
-      --indigo-l: #1e1b4b;
-      --green-l:  #022c22;
-      --nav-bg:   #1e293b;
-      --nav-border: #334155;
+      --indigo-l:  #1e1b4b;
+      --green-l:   #052e16;
+      --text:      #e2e8f0;
+      --mid:       #94a3b8;
+      --muted:     #64748b;
+      --surface:   #0f172a;
+      --card-bg:   #1e293b;
+      --border:    #334155;
+      --mutable-bg:   #292524;
+      --mutable-text: #fcd34d;
     }
 
     @media (prefers-color-scheme: dark) {
       html:not([data-theme="light"]) {
-        --dark:    #e2e8f0;
-        --mid:     #94a3b8;
-        --muted:   #64748b;
-        --surface: #0f172a;
-        --white:   #1e293b;
-        --border:  #334155;
-        --indigo-l: #1e1b4b;
-        --green-l:  #022c22;
-        --nav-bg:   #1e293b;
-        --nav-border: #334155;
+        --indigo-l:  #1e1b4b;
+        --green-l:   #052e16;
+        --text:      #e2e8f0;
+        --mid:       #94a3b8;
+        --muted:     #64748b;
+        --surface:   #0f172a;
+        --card-bg:   #1e293b;
+        --border:    #334155;
+        --mutable-bg:   #292524;
+        --mutable-text: #fcd34d;
       }
     }
 
@@ -64,7 +67,7 @@
       font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       font-size: 16px;
       line-height: 1.7;
-      color: var(--dark);
+      color: var(--text);
       background: var(--surface);
       display: flex;
       min-height: 100vh;
@@ -78,7 +81,7 @@
     }
     .github-corner svg {
       fill: var(--indigo);
-      color: var(--white);
+      color: #ffffff;
       width: 80px; height: 80px;
     }
     .github-corner .octo-arm { transform-origin: 130px 106px; }
@@ -98,8 +101,8 @@
       width: var(--sidebar-w);
       height: 100vh;
       overflow-y: auto;
-      background: var(--nav-bg);
-      border-right: 1px solid var(--nav-border);
+      background: var(--card-bg);
+      border-right: 1px solid var(--border);
       padding: 2rem 0 2rem;
       display: flex;
       flex-direction: column;
@@ -189,7 +192,7 @@
       border-radius: 16px;
       padding: 2.5rem 2.5rem 2rem;
       margin-bottom: 3rem;
-      color: var(--white);
+      color: #ffffff;
     }
     .hero h1 {
       font-size: 2rem;
@@ -223,7 +226,7 @@
     h2 {
       font-size: 1.4rem;
       font-weight: 700;
-      color: var(--dark);
+      color: var(--text);
       margin-bottom: 1rem;
       padding-bottom: 0.5rem;
       border-bottom: 2px solid var(--border);
@@ -232,7 +235,7 @@
     h3 {
       font-size: 1.05rem;
       font-weight: 700;
-      color: var(--dark);
+      color: var(--text);
       margin: 1.5rem 0 0.5rem;
     }
 
@@ -270,8 +273,8 @@
       border-radius: 12px;
       padding: 1.25rem;
     }
-    .contract-card.immutable { background: var(--indigo); color: var(--white); }
-    .contract-card.mutable   { background: #fef3c7; color: var(--dark); }
+    .contract-card.immutable { background: var(--indigo); color: #ffffff; }
+    .contract-card.mutable   { background: var(--mutable-bg); color: var(--mutable-text); }
     .contract-card h4 { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1.5px; opacity: 0.7; margin-bottom: 0.4rem; }
     .contract-card p  { font-size: 0.9rem; margin: 0; }
     .contract-card.immutable p { color: rgba(255,255,255,0.9); }
@@ -284,7 +287,7 @@
       margin: 1.25rem 0;
     }
     .archetype-card {
-      background: var(--white);
+      background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 12px;
       padding: 1.1rem 1.25rem;
@@ -294,7 +297,7 @@
     .archetype-card:nth-child(3) { border-top-color: #f59e0b; }
     .archetype-card:nth-child(4) { border-top-color: #ef4444; }
     .archetype-card:nth-child(5) { border-top-color: #8b5cf6; }
-    .archetype-card h4 { font-size: 0.9rem; font-weight: 700; color: var(--dark); margin-bottom: 0.25rem; }
+    .archetype-card h4 { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 0.25rem; }
     .archetype-card p  { font-size: 0.82rem; color: var(--mid); margin: 0; }
 
     /* ── TABLE ── */
@@ -326,7 +329,7 @@
       padding: 1rem 1.25rem;
       margin: 1.25rem 0;
       font-size: 0.9rem;
-      color: var(--dark);
+      color: var(--text);
     }
     .callout strong { color: #065f46; }
 
@@ -342,7 +345,7 @@
       display: flex;
       align-items: flex-start;
       gap: 1rem;
-      background: var(--white);
+      background: var(--card-bg);
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: 0.9rem 1.1rem;
@@ -351,13 +354,13 @@
       flex-shrink: 0;
       width: 28px; height: 28px;
       background: var(--indigo);
-      color: var(--white);
+      color: #ffffff;
       border-radius: 50%;
       display: flex; align-items: center; justify-content: center;
       font-size: 0.8rem;
       font-weight: 700;
     }
-    .step-body h4 { font-size: 0.9rem; font-weight: 700; color: var(--dark); margin-bottom: 0.15rem; }
+    .step-body h4 { font-size: 0.9rem; font-weight: 700; color: var(--text); margin-bottom: 0.15rem; }
     .step-body p  { font-size: 0.82rem; color: var(--mid); margin: 0; }
 
     /* ── EVIDENCE TYPES ── */
@@ -379,7 +382,7 @@
     .ev-icon.green { background: var(--green-l); }
     .ev-icon.amber { background: #fef3c7; }
     .ev-icon.red   { background: #fee2e2; }
-    .ev-body strong { display: block; font-weight: 600; color: var(--dark); }
+    .ev-body strong { display: block; font-weight: 600; color: var(--text); }
     .ev-body span   { color: var(--mid); font-size: 0.82rem; }
 
     /* ── RESPONSIVE ── */
@@ -516,8 +519,8 @@ cd iriaagents
     <h2>/new-task</h2>
     <p>A conversation of 7 questions. The two that matter most:</p>
     <ul style="padding-left:1.25rem; color: var(--mid); margin-bottom:1rem;">
-      <li style="margin-bottom:0.4rem"><strong style="color:var(--dark)">What needs to be achieved?</strong></li>
-      <li><strong style="color:var(--dark)">How do we prove it's done?</strong> — exact commands, expected output</li>
+      <li style="margin-bottom:0.4rem"><strong style="color:var(--text)">What needs to be achieved?</strong></li>
+      <li><strong style="color:var(--text)">How do we prove it's done?</strong> — exact commands, expected output</li>
     </ul>
     <p>The skill won't advance if the second answer is vague. Once agreed, it generates <code>tasks/&lt;name&gt;/</code> with everything needed to start.</p>
 
