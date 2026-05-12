@@ -33,7 +33,7 @@ cd iriaagents
 ./install.sh
 ```
 
-Creates symlinks in `~/.claude/commands/`. From that point `/new-task` is available in Claude Code.
+Creates symlinks in `~/.claude/commands/`. From that point `/new-task`, `/close-task` and `/coach` are available in Claude Code.
 
 ```bash
 ./install.sh --list       # installed skills
@@ -53,6 +53,16 @@ A conversation of 7 questions. The two that matter most:
 - **How do we prove it's done?**
 
 The skill won't advance if the second answer is vague. Once agreed, it generates `tasks/<name>/` with everything needed to start. If the project uses GitFlow it creates the `feature/<name>` branch and worktree automatically.
+
+---
+
+## `/coach` — AI usage feedback
+
+Requires [`obsly-ai`](https://ai.obsly.io) installed (`pipx install obsly-ai`).
+
+Runs `iria-monitor coach`, reads the output and translates the weakest signal into a single iriaagents action: which `goal.md` to fix, when to use `/close-task`, or why sessions are going off-track.
+
+One problem. One action.
 
 ---
 

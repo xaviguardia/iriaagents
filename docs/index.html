@@ -417,6 +417,7 @@
     <li><a href="#install">Installation</a></li>
     <li><a href="#new-task">/new-task</a></li>
     <li><a href="#close-task">/close-task</a></li>
+    <li><a href="#coach">/coach</a></li>
   </ul>
 
   <span class="nav-section">Patterns</span>
@@ -553,6 +554,21 @@ cd iriaagents
 # Marks tasks.md as DONE</code></pre>
     <div class="callout">
       The verdict comes from <code>goal.md</code>, not the plan. If the tests pass, the task is done — regardless of how many times the plan changed along the way.
+    </div>
+  </section>
+
+  <!-- /coach -->
+  <section id="coach">
+    <h2>/coach</h2>
+    <p>Reads your AI usage metrics via <code>iria-monitor coach</code> (<a href="https://ai.obsly.io" target="_blank">obsly-ai</a>) and translates the weakest signal into a single iriaagents action.</p>
+<pre><code class="language-bash"># Requires: pipx install obsly-ai
+/coach
+
+# Runs iria-monitor coach
+# Reads coach.json
+# Returns: one problem, one action</code></pre>
+    <div class="callout">
+      The coach maps your session patterns to iriaagents vocabulary: when sessions go off-track it means missing <code>goal.md</code>; when nothing ships it means missing <code>/close-task</code>; when there are too many course-changes it means the verification criterion was vague from the start.
     </div>
   </section>
 
