@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>iriaagents — Focus on the objective</title>
+  <title>iriaagents — El objetivo es lo que manda</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
@@ -396,7 +396,7 @@
 <body>
 
 <!-- Fork me ribbon -->
-<a href="https://github.com/xaviguardia/iriaagents" class="github-corner" aria-label="Fork me on GitHub">
+<a href="https://github.com/xaviguardia/iriaagents" class="github-corner" aria-label="Ver en GitHub">
   <svg viewBox="0 0 250 250" aria-hidden="true">
     <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
     <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2" fill="currentColor" class="octo-arm"></path>
@@ -408,39 +408,39 @@
 <nav>
   <div class="nav-logo">
     <h1>iriaagents</h1>
-    <p>Claude Code skills</p>
+    <p>Skills para Claude Code</p>
   </div>
 
-  <span class="nav-section">Getting started</span>
+  <span class="nav-section">Para empezar</span>
   <ul>
-    <li><a href="#idea">The idea</a></li>
-    <li><a href="#install">Installation</a></li>
+    <li><a href="#idea">La idea</a></li>
+    <li><a href="#install">Instalación</a></li>
     <li><a href="#new-task">/new-task</a></li>
     <li><a href="#close-task">/close-task</a></li>
     <li><a href="#coach">/coach</a></li>
   </ul>
 
-  <span class="nav-section">Patterns</span>
+  <span class="nav-section">Patrones</span>
   <ul>
-    <li><a href="#archetypes">5 archetypes</a></li>
-    <li><a href="#plan-vs-goal">Plan vs objective</a></li>
-    <li><a href="#coding-rules">Coding rules</a></li>
-    <li><a href="#architecture">Architecture</a></li>
+    <li><a href="#archetypes">5 arquetipos</a></li>
+    <li><a href="#plan-vs-goal">Plan vs objetivo</a></li>
+    <li><a href="#coding-rules">Reglas de codificación</a></li>
+    <li><a href="#architecture">Arquitectura</a></li>
     <li><a href="#tests">Tests</a></li>
-    <li><a href="#evidence">Evidence</a></li>
+    <li><a href="#evidence">Evidencia</a></li>
   </ul>
 
-  <span class="nav-section">Reference</span>
+  <span class="nav-section">Referencia</span>
   <ul>
-    <li><a href="#templates">Templates</a></li>
-    <li><a href="#adapting">Adapting to your project</a></li>
-    <li><a href="#new-skill">Adding a skill</a></li>
+    <li><a href="#templates">Plantillas</a></li>
+    <li><a href="#adapting">Adaptar al proyecto</a></li>
+    <li><a href="#new-skill">Añadir un skill</a></li>
   </ul>
 
   <div class="theme-toggle">
     <button id="theme-btn" onclick="toggleTheme()">
       <span id="theme-icon">🌙</span>
-      <span id="theme-label">Dark mode</span>
+      <span id="theme-label">Modo oscuro</span>
     </button>
   </div>
 </nav>
@@ -451,58 +451,58 @@
   <!-- Hero -->
   <div class="hero">
     <h1>iriaagents</h1>
-    <p class="tagline">The recipe is to focus on the objective.</p>
+    <p class="tagline">La receta es centrarse en el objetivo.</p>
     <div class="badges">
-      <span class="badge">✓ 20+ projects shipped</span>
-      <span class="badge">✓ Claude Code skills</span>
-      <span class="badge">✓ Works with GitFlow</span>
+      <span class="badge">✓ 20+ proyectos entregados</span>
+      <span class="badge">✓ Skills para Claude Code</span>
+      <span class="badge">✓ Compatible con GitFlow</span>
     </div>
   </div>
 
-  <!-- The idea -->
+  <!-- La idea -->
   <section id="idea">
-    <h2>The idea</h2>
-    <p>Before writing code, answer two questions:</p>
+    <h2>La idea</h2>
+    <p>Antes de escribir código, responde dos preguntas:</p>
     <div class="contract-box">
       <div class="contract-card immutable">
-        <h4>Immutable · The contract</h4>
-        <p><strong>What needs to be achieved?</strong><br>And: how will we know it's done? The exact command with the expected output.</p>
+        <h4>Inmutable · El contrato</h4>
+        <p><strong>¿Qué hay que conseguir?</strong><br>Y: ¿cómo sabremos que está terminado? El comando exacto con la salida esperada.</p>
       </div>
       <div class="contract-card mutable">
-        <h4>Mutable · The orientation</h4>
-        <p><strong>Plan + tasks.</strong><br>Expected to evolve. Reflects what you learn while executing.</p>
+        <h4>Mutable · La orientación</h4>
+        <p><strong>Plan + tareas.</strong><br>Se espera que evolucione. Refleja lo que aprendes mientras ejecutas.</p>
       </div>
     </div>
-    <p>Those two answers are the contract. They don't change.</p>
-    <p>Everything else — how to get there, which technology, in what order — adapts as you execute. If the answer to the second question is vague, there's no real objective yet.</p>
+    <p>Esas dos respuestas son el contrato. No cambian.</p>
+    <p>Todo lo demás — cómo llegar, qué tecnología, en qué orden — se adapta mientras ejecutas. Si la respuesta a la segunda pregunta es vaga, aún no hay un objetivo real.</p>
     <div class="callout">
-      <strong>Key rule:</strong> Without an executable verification criterion, there is no valid objective. The skill won't generate files until this is clear.
+      <strong>Regla clave:</strong> Sin criterio de verificación ejecutable no existe objetivo válido. El skill no genera archivos hasta que esto esté claro.
     </div>
   </section>
 
-  <!-- Installation -->
+  <!-- Instalación -->
   <section id="install">
-    <h2>Installation</h2>
+    <h2>Instalación</h2>
     <div class="install-steps">
       <div class="install-step">
         <div class="step-num">1</div>
         <div class="step-body">
-          <h4>Clone</h4>
-          <p>Get the repo from GitHub</p>
+          <h4>Clona</h4>
+          <p>Descarga el repo de GitHub</p>
         </div>
       </div>
       <div class="install-step">
         <div class="step-num">2</div>
         <div class="step-body">
-          <h4>Install</h4>
-          <p>Creates symlinks in <code>~/.claude/commands/</code> and saves the repo path</p>
+          <h4>Instala</h4>
+          <p>Crea symlinks en <code>~/.claude/commands/</code> y guarda la ruta del repo</p>
         </div>
       </div>
       <div class="install-step">
         <div class="step-num">3</div>
         <div class="step-body">
-          <h4>Use</h4>
-          <p>Type <code>/new-task</code> in any Claude Code session</p>
+          <h4>Usa</h4>
+          <p>Escribe <code>/new-task</code> en cualquier sesión de Claude Code</p>
         </div>
       </div>
     </div>
@@ -510,150 +510,150 @@
 cd iriaagents
 ./install.sh
 
-./install.sh --list       # installed skills
-./install.sh --force      # update after git pull
-./install.sh --uninstall  # uninstall</code></pre>
+./install.sh --list       # skills instalados
+./install.sh --force      # actualizar tras git pull
+./install.sh --uninstall  # desinstalar</code></pre>
   </section>
 
   <!-- /new-task -->
   <section id="new-task">
     <h2>/new-task</h2>
-    <p>A conversation of 7 questions. The two that matter most:</p>
+    <p>Una conversación de 7 preguntas. Las dos que más importan:</p>
     <ul style="padding-left:1.25rem; color: var(--mid); margin-bottom:1rem;">
-      <li style="margin-bottom:0.4rem"><strong style="color:var(--text)">What needs to be achieved?</strong></li>
-      <li><strong style="color:var(--text)">How do we prove it's done?</strong> — exact commands, expected output</li>
+      <li style="margin-bottom:0.4rem"><strong style="color:var(--text)">¿Qué hay que conseguir?</strong></li>
+      <li><strong style="color:var(--text)">¿Cómo se demuestra que está terminado?</strong> — comandos exactos, salida esperada</li>
     </ul>
-    <p>The skill won't advance if the second answer is vague. Once agreed, it generates <code>tasks/&lt;name&gt;/</code> with everything needed to start.</p>
+    <p>El skill no avanza si la segunda respuesta es vaga. Una vez acordado, genera <code>tasks/&lt;nombre&gt;/</code> con todo lo necesario para empezar.</p>
 
-    <h3>Generated files</h3>
+    <h3>Archivos generados</h3>
     <table>
-      <tr><th>File</th><th>Purpose</th></tr>
-      <tr><td>goal.md</td><td>The contract — do not modify during execution</td></tr>
-      <tr><td>plan.md</td><td>Living document — rewrite when the solution diverges</td></tr>
-      <tr><td>tasks.md</td><td>Living document — add, remove, reorder as work progresses</td></tr>
-      <tr><td>AGENT.md</td><td>Agent instructions</td></tr>
-      <tr><td>PROMPT.md</td><td>Initial prompt</td></tr>
-      <tr><td>evidence/</td><td>Captures that prove progress</td></tr>
-      <tr><td>run-claude.sh</td><td>Launch script</td></tr>
+      <tr><th>Archivo</th><th>Propósito</th></tr>
+      <tr><td>goal.md</td><td>El contrato — no modificar durante la ejecución</td></tr>
+      <tr><td>plan.md</td><td>Documento vivo — reescribir cuando la solución se desvía</td></tr>
+      <tr><td>tasks.md</td><td>Documento vivo — añadir, eliminar, reordenar según avanza el trabajo</td></tr>
+      <tr><td>AGENT.md</td><td>Instrucciones para el agente</td></tr>
+      <tr><td>PROMPT.md</td><td>Prompt inicial</td></tr>
+      <tr><td>evidence/</td><td>Capturas que demuestran el progreso</td></tr>
+      <tr><td>run-claude.sh</td><td>Script de lanzamiento</td></tr>
     </table>
 
-    <h3>GitFlow support</h3>
-    <p>If the project has a <code>develop</code> branch, the skill automatically creates a <code>feature/&lt;name&gt;</code> branch and worktree. Work stays isolated until the objective is achieved.</p>
+    <h3>Compatibilidad con GitFlow</h3>
+    <p>Si el proyecto tiene rama <code>develop</code>, el skill crea automáticamente una rama <code>feature/&lt;nombre&gt;</code> y un worktree. El trabajo queda aislado hasta que se consigue el objetivo.</p>
   </section>
 
   <!-- /close-task -->
   <section id="close-task">
     <h2>/close-task</h2>
-    <p>The complement to <code>/new-task</code>. Closes the loop: runs the verification commands from <code>goal.md</code>, captures evidence, documents what changed from the original plan, and marks DONE.</p>
-<pre><code class="language-bash"># Inside a task directory:
+    <p>El complemento de <code>/new-task</code>. Cierra el ciclo: ejecuta los comandos de verificación del <code>goal.md</code>, captura evidencia, documenta qué cambió respecto al plan original y marca como DONE.</p>
+<pre><code class="language-bash"># Dentro del directorio de la tarea:
 /close-task
 
-# Runs goal.md verification commands
-# Captures evidence/close-2026-05-11.md
-# Asks: what changed from the plan?
-# Marks tasks.md as DONE</code></pre>
+# Ejecuta los comandos de verificación del goal.md
+# Captura evidence/close-2026-05-11.md
+# Pregunta: ¿qué cambió respecto al plan?
+# Marca tasks.md como DONE</code></pre>
     <div class="callout">
-      The verdict comes from <code>goal.md</code>, not the plan. If the tests pass, the task is done — regardless of how many times the plan changed along the way.
+      El veredicto lo da <code>goal.md</code>, no el plan. Si los tests pasan, la tarea está terminada — independientemente de cuántas veces cambió el plan.
     </div>
   </section>
 
   <!-- /coach -->
   <section id="coach">
     <h2>/coach</h2>
-    <p>Reads your AI usage metrics via <code>iria-monitor coach</code> (<a href="https://ai.obsly.io" target="_blank">obsly-ai</a>) and translates the weakest signal into a single iriaagents action.</p>
-<pre><code class="language-bash"># Requires: pipx install obsly-ai
+    <p>Lee tus métricas de uso de IA con <code>iria-monitor coach</code> (<a href="https://ai.obsly.io" target="_blank">obsly-ai</a>) y traduce la señal más débil en una acción concreta de iriaagents.</p>
+<pre><code class="language-bash"># Requiere: pipx install obsly-ai
 /coach
 
-# Runs iria-monitor coach
-# Reads coach.json
-# Returns: one problem, one action</code></pre>
+# Ejecuta iria-monitor coach
+# Lee coach.json
+# Resultado: un problema, una acción</code></pre>
     <div class="callout">
-      The coach maps your session patterns to iriaagents vocabulary: when sessions go off-track it means missing <code>goal.md</code>; when nothing ships it means missing <code>/close-task</code>; when there are too many course-changes it means the verification criterion was vague from the start.
+      El coach mapea los patrones de tus sesiones al vocabulario iriaagents: sesiones off-track significan <code>goal.md</code> ausente; nada entregado significa <code>/close-task</code> ausente; demasiados cambios de rumbo significan que el criterio de verificación era vago desde el principio.
     </div>
   </section>
 
-  <!-- Archetypes -->
+  <!-- Arquetipos -->
   <section id="archetypes">
-    <h2>5 archetypes</h2>
-    <p>20+ projects shipped. Five patterns that repeat:</p>
+    <h2>5 arquetipos</h2>
+    <p>20+ proyectos entregados. Cinco patrones que se repiten:</p>
     <div class="archetype-grid">
       <div class="archetype-card">
-        <h4>Fix N failing cases</h4>
-        <p>You have a list of incorrect cases. The objective is to bring them to zero. Each case has its spec and expected output.</p>
+        <h4>Corregir N casos fallidos</h4>
+        <p>Tienes una lista de casos incorrectos. El objetivo es llevarlos a cero. Cada caso tiene su spec y la salida esperada.</p>
       </div>
       <div class="archetype-card">
-        <h4>Conformance testing</h4>
-        <p>Suite that captures the reference system and verifies the new implementation replicates it exactly.</p>
+        <h4>Tests de conformidad</h4>
+        <p>Suite que captura el sistema de referencia y verifica que la nueva implementación lo replica exactamente.</p>
       </div>
       <div class="archetype-card">
-        <h4>Legacy migration</h4>
-        <p>VB6/VFP9/COBOL/PL1 → modern stack. The test is output equivalence, not code review.</p>
+        <h4>Migración de legacy</h4>
+        <p>VB6/VFP9/COBOL/PL1 → stack moderno. El test es equivalencia de salida, no revisión de código.</p>
       </div>
       <div class="archetype-card">
-        <h4>Interpreter / runtime</h4>
-        <p>Implement language support. Coverage measured in programs that run correctly, not lines of code.</p>
+        <h4>Intérprete / runtime</h4>
+        <p>Implementa soporte de lenguaje. La cobertura se mide en programas que ejecutan correctamente, no en líneas de código.</p>
       </div>
       <div class="archetype-card">
-        <h4>New functionality</h4>
-        <p>The system exists and works. You add something. The test proves the new observable behaviour.</p>
+        <h4>Nueva funcionalidad</h4>
+        <p>El sistema existe y funciona. Añades algo. El test prueba el nuevo comportamiento observable.</p>
       </div>
     </div>
   </section>
 
-  <!-- Plan vs goal -->
+  <!-- Plan vs objetivo -->
   <section id="plan-vs-goal">
-    <h2>The plan changes. The objective doesn't.</h2>
+    <h2>El plan cambia. El objetivo no.</h2>
 
-    <h3>VFP9 Lifecycle — 0 to 53/53 PASS</h3>
-    <p>The initial plan was to fix the order of three events. While executing, eight previously unseen problems appeared. The plan was rewritten five times. The tests: not a comma changed.</p>
+    <h3>VFP9 Lifecycle — de 0 a 53/53 PASS</h3>
+    <p>El plan inicial era corregir el orden de tres eventos. Durante la ejecución aparecieron ocho problemas nuevos. El plan se reescribió cinco veces. Los tests: ni una coma cambió.</p>
 
-    <h3>40 bugs closed</h3>
-    <p>The tasks were grouped by type. The actual execution order was completely different — dependencies only become visible when you run things. The plan absorbed it. The objective was never touched.</p>
+    <h3>40 bugs cerrados</h3>
+    <p>Las tareas estaban agrupadas por tipo. El orden de ejecución real fue completamente distinto — las dependencias solo se ven cuando ejecutas. El plan lo absorbió. El objetivo nunca se tocó.</p>
 
-    <h3><code>--symbols</code> and <code>--tokens</code> flags</h3>
-    <p>The task was only <code>--symbols</code>. While implementing it, the obvious need for <code>--tokens</code> appeared. It was added on the fly. The objective grew. The tests grew with it.</p>
+    <h3>Flags <code>--symbols</code> y <code>--tokens</code></h3>
+    <p>La tarea era solo <code>--symbols</code>. Al implementarlo, apareció la necesidad obvia de <code>--tokens</code>. Se añadió sobre la marcha. El objetivo creció. Los tests crecieron con él.</p>
   </section>
 
-  <!-- Coding rules -->
+  <!-- Reglas de codificación -->
   <section id="coding-rules">
-    <h2>Coding rules</h2>
-    <p>Every task carries a <code>coding-rules.md</code> — the non-negotiable constraints the agent must follow while working. These aren't style preferences. They're the rules that prevent the agent from introducing patterns that will break the system, conflict with the architecture, or create debt that nobody asked for.</p>
+    <h2>Reglas de codificación</h2>
+    <p>Cada tarea lleva un <code>coding-rules.md</code> — las restricciones no negociables que el agente debe seguir mientras trabaja. No son preferencias de estilo. Son las reglas que evitan que el agente introduzca patrones que rompan el sistema, conflicten con la arquitectura o generen deuda que nadie pidió.</p>
 
-    <h3>What goes in coding-rules.md</h3>
+    <h3>Qué va en coding-rules.md</h3>
     <table>
-      <tr><th>Category</th><th>Examples</th></tr>
-      <tr><td>Language / framework</td><td>Java 21, no Lombok, records over POJOs</td></tr>
-      <tr><td>Test framework</td><td>JUnit 5 + AssertJ only, no Mockito on domain</td></tr>
-      <tr><td>Naming</td><td>Ports are interfaces suffixed <code>Port</code>, adapters suffixed <code>PersistenceAdapter</code></td></tr>
-      <tr><td>Prohibited patterns</td><td>No <code>Map&lt;String,Object&gt;</code> in public APIs, no hardcoded strings in guarded paths</td></tr>
-      <tr><td>Architecture constraints</td><td>Application layer must not import from <code>..persistence..</code></td></tr>
+      <tr><th>Categoría</th><th>Ejemplos</th></tr>
+      <tr><td>Lenguaje / framework</td><td>Java 21, sin Lombok, records en lugar de POJOs</td></tr>
+      <tr><td>Framework de tests</td><td>Solo JUnit 5 + AssertJ, sin Mockito en el dominio</td></tr>
+      <tr><td>Nomenclatura</td><td>Los puertos son interfaces con sufijo <code>Port</code>, los adaptadores con sufijo <code>PersistenceAdapter</code></td></tr>
+      <tr><td>Patrones prohibidos</td><td>Sin <code>Map&lt;String,Object&gt;</code> en APIs públicas, sin strings hardcodeados en rutas protegidas</td></tr>
+      <tr><td>Restricciones de arquitectura</td><td>La capa de aplicación no puede importar de <code>..persistence..</code></td></tr>
     </table>
 
-    <h3>Why it matters</h3>
-    <p>Without coding rules, the agent optimises for making the tests pass — which is correct — but may choose patterns that violate the architecture or the team's conventions. The rules are the guard rail that keeps the solution inside the boundaries of the system.</p>
+    <h3>Por qué importa</h3>
+    <p>Sin reglas de codificación, el agente optimiza para que los tests pasen — lo cual es correcto — pero puede elegir patrones que violan la arquitectura o las convenciones del equipo. Las reglas son la barrera que mantiene la solución dentro de los límites del sistema.</p>
 
     <div class="callout">
-      <strong>Rule:</strong> If a coding rule conflicts with making a test pass, the rule wins. Fix the rule or fix the test — don't silently bypass either.
+      <strong>Regla:</strong> Si una regla de codificación conflicta con hacer pasar un test, la regla gana. Arregla la regla o arregla el test — no esquives ninguno de los dos en silencio.
     </div>
 
-    <h3>Automating the rules</h3>
-    <p>The best coding rules are the ones that enforce themselves. If a rule can be expressed as a linter, an ArchUnit test, or a CI check — do it. A rule in a markdown file can be ignored. A rule that breaks the build cannot.</p>
-<pre><code class="language-bash"># Rule: no Map in public APIs → enforced by ArchUnit
-# Rule: no hardcoded strings → enforced by check_frontend_i18n_debt.sh
-# Rule: ports must be interfaces → enforced by HexagonalArchitectureTest</code></pre>
+    <h3>Automatizar las reglas</h3>
+    <p>Las mejores reglas de codificación son las que se aplican solas. Si una regla se puede expresar como un linter, un test ArchUnit o una verificación en CI — hazlo. Una regla en un archivo markdown se puede ignorar. Una regla que rompe el build, no.</p>
+<pre><code class="language-bash"># Regla: sin Map en APIs públicas → aplicada por ArchUnit
+# Regla: sin strings hardcodeados → aplicada por check_frontend_i18n_debt.sh
+# Regla: los puertos deben ser interfaces → aplicada por HexagonalArchitectureTest</code></pre>
   </section>
 
-  <!-- Architecture -->
+  <!-- Arquitectura -->
   <section id="architecture">
-    <h2>Architecture</h2>
-    <p>Once you have the tests, the question changes. It's no longer "how do we build this?" — it's "can this system even do this?"</p>
-    <p>Sometimes part of the plan is a prior question: can this be done here? A one-afternoon spike that answers yes or no. If yes, the tests are already written — the architecture adapts to the system's constraints. The tests don't say how to implement. They say what has to happen.</p>
+    <h2>Arquitectura</h2>
+    <p>Una vez que tienes los tests, la pregunta cambia. Ya no es "¿cómo construimos esto?" — es "¿puede este sistema siquiera hacer esto?"</p>
+    <p>A veces parte del plan es una pregunta previa: ¿se puede hacer aquí? Un spike de una tarde que responde sí o no. Si sí, los tests ya están escritos — la arquitectura se adapta a las restricciones del sistema. Los tests no dicen cómo implementar. Dicen qué tiene que ocurrir.</p>
 
-    <h3>Constraints become rules</h3>
-    <p>When architecture matters, the objective isn't to verify it once — it's to make leaks impossible. The constraint becomes an executable rule that runs on every change. Zero violations. If someone introduces a leak, the check fails before reaching review.</p>
+    <h3>Las restricciones se convierten en reglas</h3>
+    <p>Cuando la arquitectura importa, el objetivo no es verificarla una vez — es hacer las filtraciones imposibles. La restricción se convierte en una regla ejecutable que corre en cada cambio. Cero violaciones. Si alguien introduce una filtración, la verificación falla antes de llegar a la revisión.</p>
 
-    <h3>Hexagonal architecture — ArchUnit</h3>
-    <p>Architecture rules defined in code, verified on every build. No controller touches the domain. No application class bypasses a port to reach a repository directly. Ports are always interfaces.</p>
+    <h3>Arquitectura hexagonal — ArchUnit</h3>
+    <p>Reglas de arquitectura definidas en código, verificadas en cada build. Ningún controlador toca el dominio. Ninguna clase de aplicación bypasea un puerto para acceder directamente a un repositorio. Los puertos son siempre interfaces.</p>
 <pre><code class="language-java">@ArchTest
 static final ArchRule aplicacion_no_accede_repositorios_directamente =
     noClasses()
@@ -667,16 +667,16 @@ static final ArchRule aplicacion_no_accede_repositorios_directamente =
 # aplicacion_no_accede_repositorios_directamente ✓
 # controllers_should_not_access_domain ✓</code></pre>
     <div class="callout-warn callout">
-      <strong>It's not a diagram.</strong> If someone introduces a bypass, the build fails.
+      <strong>No es un diagrama.</strong> Si alguien introduce un bypass, el build falla.
     </div>
 
-    <h3>Glossary as code — Apicurio + Maven JAR</h3>
-    <p>Domain terms live in Apicurio Registry, exported as a Maven JAR. The backend build depends on the JAR. If the glossary is inconsistent, the build fails.</p>
-<pre><code class="language-bash">./scripts/ci-export-glossary.sh   # load glossary → export JAR
-./mvnw verify                     # uses the JAR; fails if missing</code></pre>
+    <h3>Glosario como código — Apicurio + Maven JAR</h3>
+    <p>Los términos del dominio viven en Apicurio Registry, exportados como un Maven JAR. El build del backend depende del JAR. Si el glosario es inconsistente, el build falla.</p>
+<pre><code class="language-bash">./scripts/ci-export-glossary.sh   # carga el glosario → exporta JAR
+./mvnw verify                     # usa el JAR; falla si no existe</code></pre>
 
-    <h3>i18n as a rule</h3>
-    <p>No hardcoded strings in guarded paths. Detected automatically in CI — not in code review.</p>
+    <h3>i18n como regla</h3>
+    <p>Sin strings hardcodeados en rutas protegidas. Detectado automáticamente en CI — no en revisión de código.</p>
 <pre><code class="language-bash">./scripts/check_frontend_i18n_debt.sh
 # 0 violations in guarded paths</code></pre>
   </section>
@@ -684,165 +684,165 @@ static final ArchRule aplicacion_no_accede_repositorios_directamente =
   <!-- Tests -->
   <section id="tests">
     <h2>Tests</h2>
-    <p>The test is the objective made concrete. Not "it works" — the exact command and the exact output that proves it.</p>
+    <p>El test es el objetivo hecho concreto. No "que funcione" — el comando exacto y la salida exacta que lo demuestra.</p>
 
-    <h3>What a good test looks like</h3>
-    <p>A test in <code>goal.md</code> has three parts: the command, the expected output or criterion, and nothing else.</p>
-<pre><code class="language-bash"># Good — concrete and executable
+    <h3>Cómo es un buen test</h3>
+    <p>Un test en <code>goal.md</code> tiene tres partes: el comando, la salida esperada o criterio, y nada más.</p>
+<pre><code class="language-bash"># Bueno — concreto y ejecutable
 bash run-suite.sh
 # PASS: 53   FAIL: 0   TOTAL: 53
 
-# Bad — not a test
-"The lifecycle events fire in the right order"</code></pre>
+# Malo — no es un test
+"Los eventos del ciclo de vida se disparan en el orden correcto"</code></pre>
 
-    <h3>Tests by archetype</h3>
+    <h3>Tests por arquetipo</h3>
     <table>
-      <tr><th>Archetype</th><th>Test form</th></tr>
-      <tr><td>Fix N failing cases</td><td><code>node run-spec.js B21.prg → PASS</code></td></tr>
-      <tr><td>Conformance</td><td><code>bash run-suite.sh → PASS: N FAIL: 0</code></td></tr>
-      <tr><td>Migration</td><td><code>diff &lt;(legacy in) &lt;(modern in) → no output</code></td></tr>
-      <tr><td>Interpreter</td><td><code>./coverage.sh → 1606/1606 100%</code></td></tr>
-      <tr><td>New feature</td><td><code>playwright test e2e/flow.spec → N passed</code></td></tr>
-      <tr><td>Architecture</td><td><code>./mvnw verify → BUILD SUCCESS, 0 violations</code></td></tr>
+      <tr><th>Arquetipo</th><th>Forma del test</th></tr>
+      <tr><td>Corregir N casos fallidos</td><td><code>node run-spec.js B21.prg → PASS</code></td></tr>
+      <tr><td>Conformidad</td><td><code>bash run-suite.sh → PASS: N FAIL: 0</code></td></tr>
+      <tr><td>Migración</td><td><code>diff &lt;(legacy in) &lt;(modern in) → sin salida</code></td></tr>
+      <tr><td>Intérprete</td><td><code>./coverage.sh → 1606/1606 100%</code></td></tr>
+      <tr><td>Nueva funcionalidad</td><td><code>playwright test e2e/flow.spec → N passed</code></td></tr>
+      <tr><td>Arquitectura</td><td><code>./mvnw verify → BUILD SUCCESS, 0 violations</code></td></tr>
     </table>
 
-    <h3>Tests don't change. The plan does.</h3>
-    <p>Once the test is in <code>goal.md</code> it is frozen. If the implementation takes a completely different path, the test stays the same. If the test needs to change, it's a new task — not a revision of the current one.</p>
+    <h3>Los tests no cambian. El plan sí.</h3>
+    <p>Una vez que el test está en <code>goal.md</code> queda congelado. Si la implementación toma un camino completamente distinto, el test permanece igual. Si el test necesita cambiar, es una tarea nueva — no una revisión de la actual.</p>
 
     <div class="callout">
-      <strong>If the test is vague, the objective doesn't exist yet.</strong> The skill won't generate files until there's a concrete, runnable verification criterion.
+      <strong>Si el test es vago, el objetivo todavía no existe.</strong> El skill no genera archivos hasta que haya un criterio de verificación concreto y ejecutable.
     </div>
   </section>
 
-  <!-- Evidence -->
+  <!-- Evidencia -->
   <section id="evidence">
-    <h2>Evidence must be reproducible</h2>
-    <p>Logs don't count. Evidence has to be verifiable after the fact. In order of preference:</p>
+    <h2>La evidencia debe ser reproducible</h2>
+    <p>Los logs no cuentan. La evidencia tiene que ser verificable a posteriori. En orden de preferencia:</p>
     <ul class="evidence-list">
       <li>
         <div class="ev-icon green">▶</div>
         <div class="ev-body">
-          <strong>Playwright trace or screenshot</strong>
-          <span>For UI flows — records the full interaction, reproducible on any machine</span>
+          <strong>Traza Playwright o captura de pantalla</strong>
+          <span>Para flujos de UI — registra la interacción completa, reproducible en cualquier máquina</span>
         </div>
       </li>
       <li>
         <div class="ev-icon green">⬇</div>
         <div class="ev-body">
           <strong>Dump</strong>
-          <span>JSON/CSV/SQL export of the final data state</span>
+          <span>Export JSON/CSV/SQL del estado final de los datos</span>
         </div>
       </li>
       <li>
         <div class="ev-icon green">±</div>
         <div class="ev-body">
-          <strong>File diff</strong>
-          <span><code>git diff</code>, spec runner output — shows exactly what changed</span>
+          <strong>Diff de archivos</strong>
+          <span><code>git diff</code>, salida del spec runner — muestra exactamente qué cambió</span>
         </div>
       </li>
       <li>
         <div class="ev-icon amber">⬡</div>
         <div class="ev-body">
-          <strong>Command output</strong>
-          <span>Only if it's the only option — unit tests, architecture checks, lint</span>
+          <strong>Salida de comando</strong>
+          <span>Solo si es la única opción — tests unitarios, verificaciones de arquitectura, lint</span>
         </div>
       </li>
       <li>
         <div class="ev-icon red">✕</div>
         <div class="ev-body">
-          <strong>Server logs</strong>
-          <span>Ephemeral — don't prove the final state of the system</span>
+          <strong>Logs de servidor</strong>
+          <span>Efímeros — no demuestran el estado final del sistema</span>
         </div>
       </li>
     </ul>
   </section>
 
-  <!-- Templates -->
+  <!-- Plantillas -->
   <section id="templates">
-    <h2>Templates</h2>
-    <p>Every file generated by <code>/new-task</code> comes from a template in <code>templates/</code>. All <code>{{PLACEHOLDERS}}</code> are resolved during generation — no placeholder is left unfilled.</p>
+    <h2>Plantillas</h2>
+    <p>Cada archivo generado por <code>/new-task</code> proviene de una plantilla en <code>templates/</code>. Todos los <code>{{PLACEHOLDERS}}</code> se resuelven durante la generación — ningún placeholder queda sin rellenar.</p>
 
     <h3>goal.md</h3>
-    <p>The contract. Current state, problem, objective, and the exact verification commands. <strong>Never modified during execution.</strong></p>
+    <p>El contrato. Estado actual, problema, objetivo y los comandos de verificación exactos. <strong>Nunca se modifica durante la ejecución.</strong></p>
 <pre><code class="language-markdown"># {{TITLE}}
-## Current state
-| Metric | Value |
-|--------|-------|
+## Estado actual
+| Métrica | Valor |
+|---------|-------|
 | {{METRIC_1}} | {{VALUE_1}} |
 
-## Objective
+## Objetivo
 {{OBJECTIVE}}
 
-## Success criterion (VERIFIABLE)
+## Criterio de éxito (VERIFICABLE)
 ```bash
 {{VERIFICATION_1}}    # {{EXPECTED_OUTPUT_1}}
 {{VERIFICATION_2}}    # {{EXPECTED_OUTPUT_2}}
 ```</code></pre>
 
     <h3>coding-rules.md</h3>
-    <p>Non-negotiable constraints for the agent. Language, test framework, naming, prohibited patterns, architecture constraints. If a rule conflicts with making a test pass — fix the rule or fix the test, don't bypass either.</p>
-<pre><code class="language-markdown"># Coding rules — {{TITLE}}
+    <p>Restricciones no negociables para el agente. Lenguaje, framework de tests, nomenclatura, patrones prohibidos, restricciones de arquitectura. Si una regla conflicta con hacer pasar un test — arregla la regla o arregla el test, no esquives ninguno.</p>
+<pre><code class="language-markdown"># Reglas de codificación — {{TITLE}}
 
-## 1. Don't break anything
-Every change must leave existing tests green.
+## 1. No romper nada
+Cada cambio debe dejar los tests existentes en verde.
 
 {{SPECIFIC_RULES}}
 
-## Global prohibitions
+## Prohibiciones globales
 {{GLOBAL_PROHIBITIONS}}</code></pre>
 
     <h3>AGENT.md</h3>
-    <p>Agent instructions. Defines the role, the reading order (goal → plan → coding-rules), execution protocol, when to stop and report, and absolute prohibitions.</p>
-<pre><code class="language-markdown">## Before starting
-Read in order — no code until these are read:
-1. goal.md — problem, current state, success criterion
-2. plan.md — task sequence and dependencies
-3. coding-rules.md — style rules
+    <p>Instrucciones para el agente. Define el rol, el orden de lectura (goal → plan → coding-rules), el protocolo de ejecución, cuándo parar e informar, y las prohibiciones absolutas.</p>
+<pre><code class="language-markdown">## Antes de empezar
+Lee en orden — sin código hasta haber leído esto:
+1. goal.md — problema, estado actual, criterio de éxito
+2. plan.md — secuencia de tareas y dependencias
+3. coding-rules.md — reglas de estilo
 
-## Prohibitions
-- NO git commit or git push
-- NO marking DONE without running the verifiable criterion
-- NO invented workarounds — stop and report instead</code></pre>
+## Prohibiciones
+- NO git commit ni git push
+- NO marcar como DONE sin ejecutar el criterio verificable
+- NO workarounds inventados — parar e informar en su lugar</code></pre>
 
     <h3>PROMPT.md</h3>
-    <p>The launch prompt — copy-paste into Claude Code or Codex to start the agent. Contains the role, file reading order, execution loop, and stop conditions.</p>
-<pre><code class="language-markdown">You are the agent that {{ROLE_ONE_LINE}}.
+    <p>El prompt de lanzamiento — pega en Claude Code o Codex para arrancar el agente. Contiene el rol, el orden de lectura de archivos, el bucle de ejecución y las condiciones de parada.</p>
+<pre><code class="language-markdown">Eres el agente que {{ROLE_ONE_LINE}}.
 
-Read these files BEFORE making any changes:
+Lee estos archivos ANTES de hacer cualquier cambio:
 1. tasks/{{NAME}}/goal.md
 2. tasks/{{NAME}}/plan.md
 3. tasks/{{NAME}}/coding-rules.md
 
-Execute tasks in order (task01 → taskNN). For each:
-1. Read taskNN-*.md in full
-2. Follow instructions step by step
-3. Run the verifiable criterion
-4. Only if it passes, mark DONE in tasks.md</code></pre>
+Ejecuta las tareas en orden (task01 → taskNN). Para cada una:
+1. Lee taskNN-*.md completo
+2. Sigue las instrucciones paso a paso
+3. Ejecuta el criterio verificable
+4. Solo si pasa, marca como DONE en tasks.md</code></pre>
 
-    <h3>plan.md and tasks.md</h3>
-    <p>Living documents. Expected to change. <code>plan.md</code> describes the approach; rewrite it when the real solution diverges. <code>tasks.md</code> tracks progress; add, remove, reorder as work evolves. Neither is the contract — <code>goal.md</code> is.</p>
+    <h3>plan.md y tasks.md</h3>
+    <p>Documentos vivos. Se espera que cambien. <code>plan.md</code> describe el enfoque; reescríbelo cuando la solución real se desvía. <code>tasks.md</code> hace seguimiento del progreso; añade, elimina, reordena según avanza el trabajo. Ninguno es el contrato — <code>goal.md</code> lo es.</p>
   </section>
 
-  <!-- Adapting -->
+  <!-- Adaptar al proyecto -->
   <section id="adapting">
-    <h2>Adapting to your project</h2>
+    <h2>Adaptar al proyecto</h2>
     <table>
-      <tr><th>File</th><th>Rule</th></tr>
-      <tr><td>goal.md</td><td>Don't touch. If the objective changes, it's a new task.</td></tr>
-      <tr><td>plan.md</td><td>Rewrite when the real solution diverges from the original.</td></tr>
-      <tr><td>tasks.md</td><td>Add, remove, reorder as work progresses.</td></tr>
-      <tr><td>evidence/</td><td>Playwright traces, dumps and diffs — not logs.</td></tr>
+      <tr><th>Archivo</th><th>Regla</th></tr>
+      <tr><td>goal.md</td><td>No tocar. Si el objetivo cambia, es una tarea nueva.</td></tr>
+      <tr><td>plan.md</td><td>Reescribir cuando la solución real se desvía del original.</td></tr>
+      <tr><td>tasks.md</td><td>Añadir, eliminar, reordenar según avanza el trabajo.</td></tr>
+      <tr><td>evidence/</td><td>Trazas Playwright, dumps y diffs — no logs.</td></tr>
     </table>
   </section>
 
-  <!-- New skill -->
+  <!-- Añadir un skill -->
   <section id="new-skill">
-    <h2>Adding a new skill</h2>
-    <p>Skills are plain Markdown files. Create one, install, done.</p>
-<pre><code class="language-bash">vim commands/my-skill.md
+    <h2>Añadir un nuevo skill</h2>
+    <p>Los skills son archivos Markdown simples. Crea uno, instala, listo.</p>
+<pre><code class="language-bash">vim commands/mi-skill.md
 ./install.sh --force
-# available as /my-skill in Claude Code</code></pre>
-    <p>The skill file describes when to use it, what questions to ask, and what to generate. No code needed.</p>
+# disponible como /mi-skill en Claude Code</code></pre>
+    <p>El archivo del skill describe cuándo usarlo, qué preguntas hacer y qué generar. Sin código.</p>
   </section>
 
 </main>
@@ -863,10 +863,10 @@ Execute tasks in order (task01 → taskNN). For each:
     const label = document.getElementById('theme-label');
     if (theme === 'dark') {
       icon.textContent  = '☀️';
-      label.textContent = 'Light mode';
+      label.textContent = 'Modo claro';
     } else {
       icon.textContent  = '🌙';
-      label.textContent = 'Dark mode';
+      label.textContent = 'Modo oscuro';
     }
     localStorage.setItem('theme', theme);
   }
