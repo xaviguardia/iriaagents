@@ -1,5 +1,261 @@
 # iriaagents
 
+[🇬🇧 English below](#english)
+
+---
+
+> La receta es centrarse en el objetivo.
+
+20+ proyectos entregados en 2026 con la misma técnica: define qué hay que conseguir y cómo demostrar que está terminado — antes de escribir una sola línea de código. Todo lo demás — el plan, los pasos, las decisiones técnicas — se adapta mientras ejecutas.
+
+**[→ Leer el manual](https://xaviguardia.github.io/iriaagents)**
+
+---
+
+## La idea
+
+![Principio: inmutable vs mutable](docs/principle.svg)
+
+Antes de escribir código, responde dos preguntas:
+
+1. **¿Qué hay que conseguir?**
+2. **¿Cómo sabremos que está terminado?** — el comando exacto con la salida esperada.
+
+Esas dos respuestas son el contrato. No cambian.
+
+Todo lo demás — cómo llegar, qué tecnología usar, en qué orden — evoluciona con lo que aprendes mientras ejecutas. Si la respuesta a la segunda pregunta es vaga, aún no hay un objetivo real.
+
+---
+
+## Instalación
+
+![Instalación en 3 pasos](docs/install.svg)
+
+```bash
+git clone https://github.com/xaviguardia/iriaagents
+cd iriaagents
+./install.sh
+```
+
+Crea symlinks en `~/.claude/commands/`. A partir de ahí `/new-task`, `/close-task` y `/coach` están disponibles en Claude Code.
+
+```bash
+./install.sh --list       # skills instalados
+./install.sh --force      # actualizar tras git pull
+./install.sh --uninstall  # desinstalar
+```
+
+---
+
+## Cómo funciona `/new-task`
+
+![Flujo de /new-task](docs/flow.svg)
+
+Una conversación de 7 preguntas. Las dos que más importan:
+
+- **¿Qué hay que conseguir?**
+- **¿Cómo se demuestra que está terminado?**
+
+El skill no avanza si la segunda respuesta es vaga. Una vez acordado, genera `tasks/<nombre>/` con todo lo necesario para empezar. Si el proyecto usa GitFlow crea la rama `feature/<nombre>` y el worktree automáticamente.
+
+---
+
+## `/coach` — feedback de uso de IA
+
+Requiere [`obsly-ai`](https://ai.obsly.io) instalado (`pipx install obsly-ai`).
+
+Ejecuta `iria-monitor coach`, lee el resultado y traduce la señal más débil en una acción concreta de iriaagents: qué `goal.md` corregir, cuándo usar `/close-task`, o por qué las sesiones se van de madre.
+
+Un problema. Una acción.
+
+---
+
+## Dónde lo hemos usado
+
+20+ proyectos entregados en 2026. Cinco patrones que se repiten:
+
+![5 arquetipos de tarea](docs/archetypes.svg)
+
+### Corregir N casos fallidos
+
+Tienes una lista de casos incorrectos. El objetivo es llevarlos a cero.
+
+```bash
+node run-spec.js specs/B21.prg   # → PASS
+grep "FIXED" report/divergences/ # → todos cerrados
+```
+
+40 bugs VFP9→JS cerrados. Fixes en intérpretes PL/I, COBOL y CICS.
+
+---
+
+### Verificar que dos sistemas se comportan igual
+
+Construyes una suite de tests contra el sistema de referencia. La nueva implementación tiene que pasar la misma suite.
+
+```bash
+bash run-suite.sh
+# PASS: 53   FAIL: 0
+```
+
+53 escenarios de ciclo de vida VFP9. Pipeline golden master WinGest8. Equivalencia COBOL→Rust.
+
+---
+
+### Migrar un sistema legacy a tecnología moderna
+
+El código cambia completamente. El comportamiento no. El test es comparar salidas, no leer código.
+
+```bash
+diff <(run-legacy input.dat) <(run-modern input.dat)  # sin diferencias
+./e2e-suite.sh                                         # todo verde
+```
+
+VFP9→Java, VB6→React, COBOL/PL1→Rust, mainframe→cloud.
+
+---
+
+### Construir un intérprete o runtime
+
+Implementas soporte para un lenguaje. La cobertura se mide en programas que ejecutan correctamente.
+
+```bash
+./coverage.sh   # 1606/1606 programas  100%
+```
+
+Intérprete JS de VFP9, intérprete PL/I (ECMA-50), gateway CICS+TCP, pipeline JCL.
+
+---
+
+### Añadir nueva funcionalidad
+
+El sistema existe y funciona. Añades algo. El test prueba el nuevo comportamiento, no la estructura del código.
+
+```bash
+./health.sh --symbols STRTRAN        # nueva opción funciona
+playwright test e2e/new-flow.spec    # flujo completo verde
+```
+
+Flags de filtrado en tooling de conformidad. Modo oscuro. Dashboard de tokens. Editor de traducciones. Editor visual SDUI.
+
+---
+
+## El plan cambia. El objetivo no.
+
+**VFP9 Lifecycle — de 0 a 53/53 PASS**
+El plan inicial era corregir el orden de tres eventos. Durante la ejecución aparecieron ocho problemas nuevos. El plan se reescribió cinco veces. Los tests: ni una coma cambió.
+
+**40 bugs cerrados**
+Las tareas estaban agrupadas por tipo. El orden de ejecución real fue completamente distinto — las dependencias solo se ven cuando ejecutas. El plan lo absorbió. El objetivo nunca se tocó.
+
+**Flags `--symbols` y `--tokens`**
+La tarea era solo `--symbols`. Al implementarlo, apareció la necesidad obvia de `--tokens`. Se añadió sobre la marcha. El objetivo creció. Los tests crecieron con él.
+
+---
+
+## Cuando la arquitectura importa
+
+Una vez que tienes los tests, la pregunta cambia. Ya no es "¿cómo construimos esto?" — es "¿puede este sistema siquiera hacer esto?"
+
+A veces parte del plan es una pregunta previa: ¿se puede hacer aquí? Un spike de una tarde que responde sí o no. Si sí, los tests ya están escritos — la arquitectura se adapta a las restricciones del sistema. Si no, el objetivo cambia antes de invertir semanas.
+
+Los tests no dicen cómo implementar. Dicen qué tiene que ocurrir. Eso deja margen para adaptar la arquitectura a restricciones reales sin tocar el contrato.
+
+### Las restricciones se convierten en reglas
+
+Cuando la arquitectura, el glosario o las dependencias importan, el objetivo no es "verificarlo una vez" — es **hacer las filtraciones imposibles**. La restricción se codifica como una regla ejecutable que corre en cada cambio.
+
+El resultado siempre es el mismo: cero violaciones. Si alguien introduce una filtración, la verificación falla antes de llegar a la revisión.
+
+**newwingest** — migración VFP9/VB6 → Java + React + Python. Un único comando de validación:
+
+```bash
+./scripts/verify.sh
+# frontend: lint + build + unit tests
+# backend: Checkstyle + PMD + tests
+# iria: ruff + unit tests
+# === All checks passed ===
+```
+
+Tres capas. Un comando. Si alguno falla, sin merge.
+
+**Arquitectura hexagonal como test** — ArchUnit verifica que ningún controlador toca el dominio, que los puertos son interfaces y que la aplicación nunca bypasea un puerto para acceder directamente a un repositorio. 20+ reglas por módulo, dentro del build normal:
+
+```bash
+./mvnw verify
+# HexagonalArchitectureTest: pedcli, albcli, prepro, cartera... ✓
+# aplicacion_no_accede_repositorios_directamente ✓
+# controllers_should_not_access_domain ✓
+```
+
+No es un diagrama. Si alguien introduce un bypass, el build falla.
+
+**i18n como regla** — sin strings hardcodeados en rutas protegidas. La regla corre en CI:
+
+```bash
+./scripts/check_frontend_i18n_debt.sh
+# 0 violations in guarded paths
+```
+
+No se revisa en code review. Se detecta automáticamente.
+
+**Glosario como código** — los términos del dominio viven en Apicurio Registry y se exportan como un Maven JAR. El build del backend depende del JAR. Si el glosario no está cargado y exportado, el build falla:
+
+```bash
+./scripts/ci-export-glossary.sh   # carga el glosario → exporta JAR
+./mvnw verify                     # usa el JAR; falla si no existe
+```
+
+El vocabulario del dominio tiene la misma trazabilidad que el código.
+
+---
+
+## La evidencia debe ser reproducible
+
+Los logs no cuentan. La evidencia tiene que ser verificable a posteriori:
+
+- **Traza Playwright o captura de pantalla** — para flujos de UI
+- **Dump** — export JSON/CSV/SQL del estado final
+- **Diff de archivos** — `git diff`, salida del spec runner
+- **Salida de comando** — solo si es la única opción (tests unitarios, verificaciones de arquitectura, lint)
+
+Los logs de servidor son efímeros y no demuestran el estado final del sistema.
+
+---
+
+## Adaptar al proyecto
+
+| Archivo | Regla |
+|---------|-------|
+| `goal.md` | No tocar. Si el objetivo cambia, es una tarea nueva. |
+| `plan.md` | Reescribir cuando la solución real se desvía. |
+| `tasks.md` | Añadir, eliminar, reordenar según avanza el trabajo. |
+| `evidence/` | Trazas Playwright, dumps y diffs — no logs. |
+
+---
+
+## Añadir un nuevo skill
+
+```bash
+vim commands/mi-skill.md
+./install.sh --force
+# disponible como /mi-skill en Claude Code
+```
+
+---
+
+## Requisitos
+
+- [Claude Code](https://claude.ai/code)
+- Git
+
+---
+
+---
+
+<a name="english"></a>
+# iriaagents — English
+
 > The recipe is to focus on the objective.
 
 20+ projects shipped in 2026 using the same technique: define what you need to achieve and how to prove it's done — before writing a single line of code. Everything else — the plan, the steps, the technical decisions — adapts as you execute.
@@ -9,8 +265,6 @@
 ---
 
 ## The idea
-
-![Principle: immutable vs mutable](docs/principle.svg)
 
 Before writing code, answer two questions:
 
@@ -24,8 +278,6 @@ Everything else — how to get there, which technology to use, in what order —
 ---
 
 ## Installation
-
-![Installation in 3 steps](docs/install.svg)
 
 ```bash
 git clone https://github.com/xaviguardia/iriaagents
@@ -44,8 +296,6 @@ Creates symlinks in `~/.claude/commands/`. From that point `/new-task`, `/close-
 ---
 
 ## How `/new-task` works
-
-![/new-task flow](docs/flow.svg)
 
 A conversation of 7 questions. The two that matter most:
 
@@ -69,8 +319,6 @@ One problem. One action.
 ## Where we've used it
 
 20+ projects shipped in 2026. Five patterns that repeat:
-
-![5 task archetypes](docs/archetypes.svg)
 
 ### Fix N failing cases
 
@@ -146,63 +394,6 @@ The tasks were grouped by type. The actual execution order was completely differ
 
 **`--symbols` and `--tokens` flags**
 The task was only `--symbols`. While implementing it, the obvious need for `--tokens` appeared. It was added on the fly. The objective grew. The tests grew with it.
-
----
-
-## When architecture matters
-
-Once you have the tests, the question changes. It's no longer "how do we build this?" — it's "can this system even do this?"
-
-Sometimes part of the plan is a prior question: can this be done here? A one-afternoon spike that answers yes or no. If yes, the tests are already written — the architecture adapts to the system's constraints. If no, the objective changes before investing weeks.
-
-The tests don't say how to implement. They say what has to happen. That leaves room to bend the architecture to real constraints without touching the contract.
-
-### Constraints become rules
-
-When architecture, glossary or dependencies matter, the objective isn't to "verify it once" — it's to **make leaks impossible**. The constraint is encoded as an executable rule that runs on every change.
-
-The result is always the same: zero violations. If someone introduces a leak, the check fails before reaching review.
-
-**newwingest** — VFP9/VB6 → Java + React + Python migration. A single gate command:
-
-```bash
-./scripts/verify.sh
-# frontend: lint + build + unit tests
-# backend: Checkstyle + PMD + tests
-# iria: ruff + unit tests
-# === All checks passed ===
-```
-
-Three layers. One command. If any fails, no merge.
-
-**Hexagonal architecture as a test** — ArchUnit verifies that no controller touches the domain, that ports are interfaces, and that the application never bypasses a port to hit a repository directly. 20+ rules per module, inside the normal build:
-
-```bash
-./mvnw verify
-# HexagonalArchitectureTest: pedcli, albcli, prepro, cartera... ✓
-# aplicacion_no_accede_repositorios_directamente ✓
-# controllers_should_not_access_domain ✓
-```
-
-It's not a diagram. If someone introduces a bypass, the build fails.
-
-**i18n as a rule** — no hardcoded strings in guarded paths. The rule runs in CI:
-
-```bash
-./scripts/check_frontend_i18n_debt.sh
-# 0 violations in guarded paths
-```
-
-Not reviewed in code review. Detected automatically.
-
-**Glossary as code** — domain terms live in Apicurio Registry and are exported as a Maven JAR. The backend build depends on the JAR. If the glossary isn't loaded and exported, the build fails:
-
-```bash
-./scripts/ci-export-glossary.sh   # load glossary → export JAR
-./mvnw verify                     # uses the JAR; fails if missing
-```
-
-The domain vocabulary has the same traceability as code.
 
 ---
 
