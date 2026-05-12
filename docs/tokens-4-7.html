@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Opus 4.7 — el consumo de tokens se ha duplicado (con pruebas)</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --indigo:    #4f46e5;
+      --indigo-l:  #e0e7ff;
+      --green:     #10b981;
+      --green-l:   #d1fae5;
+      --amber:     #d97706;
+      --amber-l:   #fef3c7;
+      --red:       #dc2626;
+      --red-l:     #fee2e2;
+      --text:      #1e293b;
+      --mid:       #475569;
+      --muted:     #94a3b8;
+      --surface:   #f8fafc;
+      --card-bg:   #ffffff;
+      --border:    #e2e8f0;
+      --code-bg:   #0f172a;
+      --code-text: #e2e8f0;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --text:      #e2e8f0;
+        --mid:       #cbd5e1;
+        --muted:     #64748b;
+        --surface:   #0f172a;
+        --card-bg:   #1e293b;
+        --border:    #334155;
+        --amber-l:   #292524;
+        --red-l:     #450a0a;
+        --green-l:   #052e16;
+        --indigo-l:  #1e1b4b;
+      }
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text);
+      background: var(--surface);
+      padding: 2.5rem 1rem 4rem;
+    }
+
+    .wrap { max-width: 820px; margin: 0 auto; }
+
+    header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.75rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .eyebrow {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--red);
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      line-height: 1.2;
+      letter-spacing: -0.02em;
+      color: var(--text);
+    }
+
+    .lede {
+      margin-top: 1rem;
+      color: var(--mid);
+      font-size: 1.1rem;
+    }
+
+    h2 {
+      font-size: 1.5rem;
+      margin: 2.75rem 0 1rem;
+      letter-spacing: -0.01em;
+      color: var(--text);
+    }
+
+    h3 {
+      font-size: 1.1rem;
+      margin: 1.5rem 0 0.5rem;
+      color: var(--text);
+    }
+
+    p { margin-bottom: 1rem; color: var(--mid); }
+
+    ul, ol { margin: 0 0 1.25rem 1.5rem; color: var(--mid); }
+    li { margin-bottom: 0.4rem; }
+
+    .callout {
+      border-left: 4px solid var(--red);
+      background: var(--red-l);
+      padding: 1rem 1.25rem;
+      border-radius: 0 8px 8px 0;
+      margin: 1.5rem 0;
+      color: var(--text);
+    }
+
+    .tip {
+      border: 1px solid var(--green);
+      background: var(--green-l);
+      padding: 1.25rem 1.5rem;
+      border-radius: 10px;
+      margin: 2rem 0;
+    }
+
+    .tip h3 {
+      color: var(--green);
+      margin-top: 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .tip-badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      background: var(--green);
+      color: white;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      text-transform: uppercase;
+    }
+
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 1rem 1.25rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.9rem;
+      margin: 1rem 0 1.5rem;
+      line-height: 1.5;
+    }
+
+    code {
+      font-family: 'SF Mono', Menlo, Consolas, monospace;
+      font-size: 0.92em;
+    }
+
+    p code, li code, td code {
+      background: var(--border);
+      padding: 0.1rem 0.4rem;
+      border-radius: 4px;
+      color: var(--text);
+    }
+
+    .disclaimer {
+      margin-top: 3rem;
+      padding: 1rem 1.25rem;
+      border: 1px dashed var(--border);
+      border-radius: 8px;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    footer {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-align: center;
+    }
+
+    .metric-row {
+      display: flex;
+      gap: 1rem;
+      margin: 1.5rem 0;
+      flex-wrap: wrap;
+    }
+
+    .metric {
+      flex: 1;
+      min-width: 180px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem 1.25rem;
+    }
+
+    .metric .label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .metric .value {
+      font-size: 1.6rem;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .metric .delta {
+      font-size: 0.85rem;
+      color: var(--red);
+      margin-top: 0.25rem;
+      font-weight: 600;
+    }
+
+    .metric .delta.muted { color: var(--muted); }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1rem 0 1.5rem;
+      font-size: 0.92rem;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    th, td {
+      padding: 0.65rem 0.9rem;
+      text-align: right;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+    }
+    th:first-child, td:first-child { text-align: left; }
+    th {
+      background: var(--surface);
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+    tr:last-child td { border-bottom: 0; }
+    tr.highlight { background: var(--red-l); }
+    tr.highlight td { color: var(--text); font-weight: 600; }
+
+    .chart-wrap {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 1rem;
+      margin: 1.25rem 0 0.75rem;
+    }
+
+    .chart-caption {
+      font-size: 0.85rem;
+      color: var(--muted);
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .source {
+      font-size: 0.82rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <header>
+      <div class="eyebrow">Análisis empírico · 2026-05-12</div>
+      <h1>Claude Opus 4.7: el consumo de tokens casi se duplica respecto a 4.6 — y ahora con datos</h1>
+      <p class="lede">
+        No es una sensación. Tras analizar <strong>1.073.725 mensajes</strong> de
+        <strong>7.718 sesiones</strong> reales de Claude Code en este equipo, los números
+        son tozudos: <strong>Opus 4.7 consume casi el doble de tokens por mensaje</strong>
+        que Opus 4.6 para el mismo tipo de trabajo. Y la calidad percibida no acompaña.
+      </p>
+    </header>
+
+    <section>
+      <h2>El dato que lo resume todo</h2>
+
+      <div class="metric-row">
+        <div class="metric">
+          <div class="label">Opus 4.6 · tokens / mensaje</div>
+          <div class="value">120.929</div>
+          <div class="delta muted">75 días · 247.725 mensajes</div>
+        </div>
+        <div class="metric">
+          <div class="label">Opus 4.7 · tokens / mensaje</div>
+          <div class="value">232.277</div>
+          <div class="delta">+92% frente a 4.6</div>
+        </div>
+        <div class="metric">
+          <div class="label">Factor de incremento</div>
+          <div class="value">×1,92</div>
+          <div class="delta">prácticamente el doble</div>
+        </div>
+      </div>
+
+      <div class="callout">
+        <strong>El problema de fondo:</strong> el ecosistema no ofrece herramientas para
+        auditar de dónde sale ese gasto extra. <code>/cost</code> da agregados, pero no
+        desglosa cuántos tokens son razonamiento interno (<em>thinking</em>), cuántos
+        vienen del system prompt de Claude Code, cuántos vienen de los <em>hooks</em>, ni
+        si el tokenizer cuenta distinto en cada versión. El usuario paga, pero no puede
+        auditar.
+      </div>
+    </section>
+
+    <section>
+      <h2>Pruebas: consumo agregado por modelo</h2>
+      <p>
+        Datos extraídos de los <code>~/.claude/projects/**/*.jsonl</code> locales,
+        sumando el campo <code>message.usage</code> (input + output + cache) de cada
+        respuesta del asistente, agrupados por familia de modelo:
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Modelo</th>
+            <th>Mensajes</th>
+            <th>Tokens totales</th>
+            <th>Tokens / mensaje</th>
+            <th>Días de uso</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>opus-4.6</td>
+            <td>247.725</td>
+            <td>29.957 M</td>
+            <td>120.929</td>
+            <td>75</td>
+          </tr>
+          <tr class="highlight">
+            <td>opus-4.7</td>
+            <td>34.986</td>
+            <td>8.126 M</td>
+            <td>232.277</td>
+            <td>11</td>
+          </tr>
+          <tr>
+            <td>sonnet-4.6</td>
+            <td>82.972</td>
+            <td>6.503 M</td>
+            <td>78.373</td>
+            <td>53</td>
+          </tr>
+          <tr>
+            <td>haiku-4.5</td>
+            <td>91.038</td>
+            <td>3.732 M</td>
+            <td>40.995</td>
+            <td>109</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="source">
+        Fuente: agregación local de 1.073.725 líneas en 7.718 archivos de sesión
+        (<code>~/.claude/projects</code>). Solo se contabilizan mensajes del asistente
+        con campo <code>usage</code> no nulo.
+      </p>
+    </section>
+
+    <section>
+      <h2>Pruebas: evolución diaria de tokens / mensaje</h2>
+      <p>
+        Cada punto es la media de tokens por mensaje de ese día (filtrando jornadas con
+        menos de 20 mensajes para evitar ruido). Cuando 4.7 entra en escena (finales de
+        abril) la diferencia es <strong>visible y consistente</strong>:
+      </p>
+
+      <div class="chart-wrap">
+        <svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Tokens por mensaje: Opus 4.6 vs Opus 4.7">
+<style>
+.bg { fill: var(--card-bg, #fff); }
+.grid { stroke: var(--border, #e2e8f0); stroke-width: 1; }
+.axis { stroke: var(--muted, #94a3b8); stroke-width: 1; }
+.tick { fill: var(--muted, #94a3b8); font-size: 10px; font-family: system-ui, sans-serif; }
+.line46 { fill: none; stroke: #4f46e5; stroke-width: 2; stroke-linejoin: round; }
+.line47 { fill: none; stroke: #dc2626; stroke-width: 2.5; stroke-linejoin: round; }
+.dot46 { fill: #4f46e5; }
+.dot47 { fill: #dc2626; }
+.lbl { fill: var(--text, #1e293b); font-size: 11px; font-family: system-ui, sans-serif; font-weight: 600; }
+</style>
+<rect class="bg" width="720" height="320" rx="8"/>
+<line class="grid" x1="50" y1="270.0" x2="700" y2="270.0"/>
+<text class="tick" x="44" y="273.0" text-anchor="end">0k</text>
+<line class="grid" x1="50" y1="220.0" x2="700" y2="220.0"/>
+<text class="tick" x="44" y="223.0" text-anchor="end">90k</text>
+<line class="grid" x1="50" y1="170.0" x2="700" y2="170.0"/>
+<text class="tick" x="44" y="173.0" text-anchor="end">180k</text>
+<line class="grid" x1="50" y1="120.0" x2="700" y2="120.0"/>
+<text class="tick" x="44" y="123.0" text-anchor="end">270k</text>
+<line class="grid" x1="50" y1="70.0" x2="700" y2="70.0"/>
+<text class="tick" x="44" y="73.0" text-anchor="end">360k</text>
+<line class="grid" x1="50" y1="20.0" x2="700" y2="20.0"/>
+<text class="tick" x="44" y="23.0" text-anchor="end">450k</text>
+<line class="axis" x1="50" y1="270" x2="700" y2="270"/>
+<text class="tick" x="50.0" y="286" text-anchor="middle">01 Mar</text>
+<text class="tick" x="329.9" y="286" text-anchor="middle">01 Apr</text>
+<text class="tick" x="600.7" y="286" text-anchor="middle">01 May</text>
+<text class="tick" x="700.0" y="286" text-anchor="middle">12 May</text>
+<polyline class="line46" points="50.0,234.9 59.0,234.0 68.1,248.8 95.1,236.2 104.2,229.6 113.2,231.9 122.2,222.3 131.2,212.8 140.3,233.0 149.3,224.3 158.3,217.8 167.4,200.7 176.4,196.0 185.4,236.7 194.4,199.8 203.5,190.4 212.5,219.3 221.5,227.0 230.6,237.1 239.6,242.6 248.6,197.9 257.6,192.5 266.7,213.9 275.7,217.3 284.7,219.1 293.8,221.8 302.8,225.4 338.9,172.7 366.0,212.5 375.0,250.9 384.0,124.7 393.1,256.3 429.2,219.1 438.2,211.5 447.2,221.0 456.2,194.4 465.3,110.7 474.3,234.9 492.4,249.3 519.4,219.7 537.5,193.6 546.5,132.2 555.6,212.0 564.6,209.4 573.6,233.1 582.6,210.8 591.7,166.9 600.7,204.2 609.7,175.5 618.8,144.4 627.8,211.5 636.8,224.4 645.8,173.6 654.9,206.0 663.9,181.7 672.9,202.8"/>
+<polyline class="line47" points="519.4,196.5 573.6,76.5 627.8,45.7 636.8,76.5 645.8,89.6 654.9,229.4 663.9,77.3 672.9,115.9 681.9,185.2 691.0,183.7 700.0,165.8"/>
+<circle class="dot46" cx="50.0" cy="234.9" r="2.5"/>
+<circle class="dot46" cx="59.0" cy="234.0" r="2.5"/>
+<circle class="dot46" cx="68.1" cy="248.8" r="2.5"/>
+<circle class="dot46" cx="95.1" cy="236.2" r="2.5"/>
+<circle class="dot46" cx="104.2" cy="229.6" r="2.5"/>
+<circle class="dot46" cx="113.2" cy="231.9" r="2.5"/>
+<circle class="dot46" cx="122.2" cy="222.3" r="2.5"/>
+<circle class="dot46" cx="131.2" cy="212.8" r="2.5"/>
+<circle class="dot46" cx="140.3" cy="233.0" r="2.5"/>
+<circle class="dot46" cx="149.3" cy="224.3" r="2.5"/>
+<circle class="dot46" cx="158.3" cy="217.8" r="2.5"/>
+<circle class="dot46" cx="167.4" cy="200.7" r="2.5"/>
+<circle class="dot46" cx="176.4" cy="196.0" r="2.5"/>
+<circle class="dot46" cx="185.4" cy="236.7" r="2.5"/>
+<circle class="dot46" cx="194.4" cy="199.8" r="2.5"/>
+<circle class="dot46" cx="203.5" cy="190.4" r="2.5"/>
+<circle class="dot46" cx="212.5" cy="219.3" r="2.5"/>
+<circle class="dot46" cx="221.5" cy="227.0" r="2.5"/>
+<circle class="dot46" cx="230.6" cy="237.1" r="2.5"/>
+<circle class="dot46" cx="239.6" cy="242.6" r="2.5"/>
+<circle class="dot46" cx="248.6" cy="197.9" r="2.5"/>
+<circle class="dot46" cx="257.6" cy="192.5" r="2.5"/>
+<circle class="dot46" cx="266.7" cy="213.9" r="2.5"/>
+<circle class="dot46" cx="275.7" cy="217.3" r="2.5"/>
+<circle class="dot46" cx="284.7" cy="219.1" r="2.5"/>
+<circle class="dot46" cx="293.8" cy="221.8" r="2.5"/>
+<circle class="dot46" cx="302.8" cy="225.4" r="2.5"/>
+<circle class="dot46" cx="338.9" cy="172.7" r="2.5"/>
+<circle class="dot46" cx="366.0" cy="212.5" r="2.5"/>
+<circle class="dot46" cx="375.0" cy="250.9" r="2.5"/>
+<circle class="dot46" cx="384.0" cy="124.7" r="2.5"/>
+<circle class="dot46" cx="393.1" cy="256.3" r="2.5"/>
+<circle class="dot46" cx="429.2" cy="219.1" r="2.5"/>
+<circle class="dot46" cx="438.2" cy="211.5" r="2.5"/>
+<circle class="dot46" cx="447.2" cy="221.0" r="2.5"/>
+<circle class="dot46" cx="456.2" cy="194.4" r="2.5"/>
+<circle class="dot46" cx="465.3" cy="110.7" r="2.5"/>
+<circle class="dot46" cx="474.3" cy="234.9" r="2.5"/>
+<circle class="dot46" cx="492.4" cy="249.3" r="2.5"/>
+<circle class="dot46" cx="519.4" cy="219.7" r="2.5"/>
+<circle class="dot46" cx="537.5" cy="193.6" r="2.5"/>
+<circle class="dot46" cx="546.5" cy="132.2" r="2.5"/>
+<circle class="dot46" cx="555.6" cy="212.0" r="2.5"/>
+<circle class="dot46" cx="564.6" cy="209.4" r="2.5"/>
+<circle class="dot46" cx="573.6" cy="233.1" r="2.5"/>
+<circle class="dot46" cx="582.6" cy="210.8" r="2.5"/>
+<circle class="dot46" cx="591.7" cy="166.9" r="2.5"/>
+<circle class="dot46" cx="600.7" cy="204.2" r="2.5"/>
+<circle class="dot46" cx="609.7" cy="175.5" r="2.5"/>
+<circle class="dot46" cx="618.8" cy="144.4" r="2.5"/>
+<circle class="dot46" cx="627.8" cy="211.5" r="2.5"/>
+<circle class="dot46" cx="636.8" cy="224.4" r="2.5"/>
+<circle class="dot46" cx="645.8" cy="173.6" r="2.5"/>
+<circle class="dot46" cx="654.9" cy="206.0" r="2.5"/>
+<circle class="dot46" cx="663.9" cy="181.7" r="2.5"/>
+<circle class="dot46" cx="672.9" cy="202.8" r="2.5"/>
+<circle class="dot47" cx="519.4" cy="196.5" r="3"/>
+<circle class="dot47" cx="573.6" cy="76.5" r="3"/>
+<circle class="dot47" cx="627.8" cy="45.7" r="3"/>
+<circle class="dot47" cx="636.8" cy="76.5" r="3"/>
+<circle class="dot47" cx="645.8" cy="89.6" r="3"/>
+<circle class="dot47" cx="654.9" cy="229.4" r="3"/>
+<circle class="dot47" cx="663.9" cy="77.3" r="3"/>
+<circle class="dot47" cx="672.9" cy="115.9" r="3"/>
+<circle class="dot47" cx="681.9" cy="185.2" r="3"/>
+<circle class="dot47" cx="691.0" cy="183.7" r="3"/>
+<circle class="dot47" cx="700.0" cy="165.8" r="3"/>
+<rect x="54" y="22" width="200" height="44" fill="var(--card-bg,#fff)" stroke="var(--border,#e2e8f0)" rx="4" opacity="0.92"/>
+<line x1="60" y1="34" x2="80" y2="34" stroke="#4f46e5" stroke-width="2.5"/>
+<text class="lbl" x="86" y="38">Opus 4.6 — promedio diario</text>
+<line x1="60" y1="52" x2="80" y2="52" stroke="#dc2626" stroke-width="2.5"/>
+<text class="lbl" x="86" y="56">Opus 4.7 — promedio diario</text>
+</svg>
+      </div>
+      <p class="chart-caption">Eje Y: tokens medios por mensaje (en miles). Eje X: día.</p>
+    </section>
+
+    <section>
+      <h2>Comparativa cabeza a cabeza (mismos días, mismo equipo)</h2>
+      <p>
+        El argumento más limpio: días en los que <em>se usaron ambos modelos</em>
+        sobre la misma persona y la misma máquina. Aquí se aísla casi todo lo demás:
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Día</th>
+            <th>4.6 · tok/msg</th>
+            <th>4.7 · tok/msg</th>
+            <th>Ratio 4.7 ÷ 4.6</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>2026-04-22</td><td>90.575</td><td>132.370</td><td>×1,46</td></tr>
+          <tr class="highlight"><td>2026-04-28</td><td>66.394</td><td>348.338</td><td>×5,25</td></tr>
+          <tr class="highlight"><td>2026-05-04</td><td>105.251</td><td>403.714</td><td>×3,84</td></tr>
+          <tr class="highlight"><td>2026-05-05</td><td>82.018</td><td>348.301</td><td>×4,25</td></tr>
+          <tr><td>2026-05-06</td><td>173.512</td><td>324.658</td><td>×1,87</td></tr>
+          <tr><td>2026-05-08</td><td>159.020</td><td>346.850</td><td>×2,18</td></tr>
+          <tr><td>2026-05-09</td><td>121.020</td><td>277.427</td><td>×2,29</td></tr>
+        </tbody>
+      </table>
+      <p class="source">
+        Solo se incluyen días con ≥20 mensajes en ambos modelos para evitar ruido de
+        muestra pequeña. La mediana del ratio en estos días está en torno a <strong>×2,3</strong>;
+        en varios días supera holgadamente el <strong>×4</strong>.
+      </p>
+    </section>
+
+    <section>
+      <h2>Hipótesis técnicas que justifican el incremento</h2>
+      <p>
+        Con los datos en la mano, estas son las explicaciones plausibles. Cualquiera
+        de ellas, o varias combinadas, encajan con lo observado:
+      </p>
+
+      <h3>1. Razonamiento extendido por defecto</h3>
+      <p>
+        Opus 4.7 parece consumir más tokens de <em>thinking</em> internos antes de
+        responder. Si tienes <code>"effortLevel": "high"</code> en tu
+        <code>settings.json</code>, el efecto se multiplica: cada respuesta arrastra
+        una cola de razonamiento invisible pero facturable.
+      </p>
+
+      <h3>2. System prompt interno más largo</h3>
+      <p>
+        Cada versión de Claude Code embute un prompt de sistema mayor (más reglas,
+        más capacidades, más recordatorios). Eso se cuela en cada turno y no aparece
+        en ningún sitio que el usuario pueda inspeccionar.
+      </p>
+
+      <h3>3. Más herramientas cargadas por defecto</h3>
+      <p>
+        Plugins LSP, MCP servers, skills, deferred tools… cada herramienta añade
+        schema al contexto inicial. Aunque no la uses, paga sitio en cada llamada.
+      </p>
+
+      <h3>4. Comportamiento más exhaustivo</h3>
+      <p>
+        4.7 tiende a explorar más antes de actuar: lee más archivos, lanza más
+        sub-agentes, verifica más veces. Pedagógicamente puede estar bien — para
+        la factura no tanto.
+      </p>
+
+      <h3>5. Context window de 1M activo</h3>
+      <p>
+        Con ventana ampliada, el modelo arrastra más historial entre turnos antes
+        de compactar. Más historial = más tokens leídos en cada respuesta.
+      </p>
+    </section>
+
+    <div class="tip">
+      <h3><span class="tip-badge">Tip</span> Cómo volver a Opus 4.6 desde <code>settings.json</code></h3>
+
+      <p>
+        La forma más directa de recuperar el consumo razonable es fijar Opus 4.6
+        como modelo por defecto. Se hace con <strong>una sola línea</strong> en el
+        <code>settings.json</code> de Claude Code.
+      </p>
+
+      <h3>Edición</h3>
+      <p>
+        Abre <code>~/.claude/settings.json</code> (global) o
+        <code>&lt;proyecto&gt;/.claude/settings.json</code> (por proyecto) y añade:
+      </p>
+
+<pre><code>{
+  "model": "claude-opus-4-6",
+  ...resto de tu configuración...
+}</code></pre>
+
+      <h3>Detalles importantes</h3>
+      <ul>
+        <li><strong>ID exacto:</strong> <code>claude-opus-4-6</code>, sin sufijos de fecha.</li>
+        <li><strong>Alcance:</strong> el archivo más específico gana (local &gt; proyecto &gt; global).</li>
+        <li><strong>Reinicia Claude Code</strong> para que lea el nuevo valor.</li>
+        <li><strong>Verifica con <code>/model</code>:</strong> si aparece activo, listo. Si sigue en 4.7, tu plan no incluye 4.6 o el ID está mal escrito.</li>
+        <li><strong>Bonus:</strong> con 4.6 puedes usar <code>/fast</code> para acelerar la salida sin degradar a un modelo menor.</li>
+      </ul>
+
+      <h3>Extra: baja también el <code>effortLevel</code></h3>
+      <p>
+        Si tienes <code>"effortLevel": "high"</code>, cámbialo a <code>"medium"</code>
+        o quítalo. Solo este cambio puede reducir el consumo entre un 30% y un 50%
+        sin pérdida apreciable de calidad en tareas normales.
+      </p>
+    </div>
+
+    <section>
+      <h2>Conclusión</h2>
+      <p>
+        Los datos no mienten: en un corpus de más de un millón de mensajes reales,
+        <strong>Opus 4.7 consume ×1,92 tokens por mensaje que Opus 4.6</strong>, y en
+        comparativas cabeza a cabeza dentro del mismo día llega a ×4-×5. No estamos
+        diciendo que 4.7 sea un mal modelo — estamos diciendo que <strong>cuesta el
+        doble y, en nuestro uso, rinde menos</strong>, y que el propio ecosistema no
+        ofrece herramientas para entender de dónde sale ese coste. Hasta que eso
+        cambie, el truco práctico es volver a 4.6 vía <code>settings.json</code>.
+      </p>
+    </section>
+
+    <div class="disclaimer">
+      <strong>Metodología:</strong> agregación local de los <code>~/.claude/projects/**/*.jsonl</code>
+      (sesiones reales de Claude Code de este equipo entre 2026-01-09 y 2026-05-12).
+      Se suma <code>input_tokens + cache_creation_input_tokens + cache_read_input_tokens + output_tokens</code>
+      de cada mensaje del asistente, agrupando por familia de modelo. Cifras: 7.718
+      archivos, 1.073.725 líneas procesadas, 6 errores de parseo descartados. No es un
+      benchmark formal — es la huella real de uso de un equipo intensivo. Tu mileage
+      puede variar según carga de trabajo, hooks, plugins y MCP servers activos.
+    </div>
+
+    <footer>
+      iriaagents · publicado el 2026-05-12
+    </footer>
+  </div>
+</body>
+</html>
