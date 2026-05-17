@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reconciliado con Opus 4.7 — /loop, RTK y Codex 5.5</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:          #07070b;
+      --bg-elev-1:   #0e0e15;
+      --bg-elev-2:   #15151f;
+      --border:      #2a2a3a;
+      --border-soft: #1c1c28;
+      --text:        #f5f1e8;
+      --mid:         #b8b3a7;
+      --muted:       #6b6760;
+      --gold:        #c9a961;
+      --gold-soft:   #8a7340;
+      --gold-glow:   rgba(201, 169, 97, 0.12);
+      --jade:        #6bbf8a;
+      --jade-soft:   rgba(107, 191, 138, 0.1);
+      --ember:       #d97757;
+      --ember-soft:  rgba(217, 119, 87, 0.1);
+      --code-bg:     #050507;
+      --code-text:   #e8e3d4;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--text);
+      background: var(--bg);
+      background-image:
+        radial-gradient(ellipse 80% 50% at 50% -20%, var(--gold-glow), transparent),
+        radial-gradient(ellipse 60% 40% at 100% 100%, rgba(107, 191, 138, 0.05), transparent);
+      background-attachment: fixed;
+      padding: 3rem 1rem 5rem;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .wrap { max-width: 780px; margin: 0 auto; }
+
+    /* ── HEADER ── */
+    header {
+      border-bottom: 1px solid var(--border-soft);
+      padding-bottom: 2.5rem;
+      margin-bottom: 3rem;
+      position: relative;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      width: 80px;
+      height: 1px;
+      background: linear-gradient(90deg, var(--gold), transparent);
+    }
+
+    .eyebrow {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.18em;
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .eyebrow::before {
+      content: '';
+      width: 28px;
+      height: 1px;
+      background: var(--gold);
+      display: inline-block;
+    }
+
+    h1 {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      font-size: 2.6rem;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    h1 em {
+      font-style: italic;
+      color: var(--gold);
+      font-weight: 400;
+    }
+
+    .lede {
+      margin-top: 1.5rem;
+      color: var(--mid);
+      font-size: 1.15rem;
+      line-height: 1.7;
+      max-width: 640px;
+    }
+
+    /* ── HEADINGS ── */
+    h2 {
+      font-family: 'Georgia', 'Times New Roman', serif;
+      font-size: 1.7rem;
+      margin: 3.5rem 0 1.25rem;
+      letter-spacing: -0.01em;
+      color: var(--text);
+      font-weight: 500;
+      position: relative;
+      padding-left: 1.25rem;
+    }
+
+    h2::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0.7rem;
+      bottom: 0.7rem;
+      width: 2px;
+      background: linear-gradient(180deg, var(--gold), var(--gold-soft));
+      border-radius: 2px;
+    }
+
+    h3 {
+      font-size: 1.05rem;
+      margin: 2rem 0 0.6rem;
+      color: var(--text);
+      font-weight: 600;
+      letter-spacing: -0.005em;
+    }
+
+    p { margin-bottom: 1.1rem; color: var(--mid); }
+
+    p strong, li strong { color: var(--text); font-weight: 600; }
+
+    a {
+      color: var(--gold);
+      text-decoration: none;
+      border-bottom: 1px solid var(--gold-soft);
+      transition: border-color 0.2s;
+    }
+    a:hover { border-bottom-color: var(--gold); }
+
+    ul, ol { margin: 0 0 1.4rem 1.5rem; color: var(--mid); }
+    li { margin-bottom: 0.5rem; }
+    li::marker { color: var(--gold-soft); }
+
+    /* ── CALLOUTS ── */
+    .quote {
+      border-left: 2px solid var(--gold);
+      padding: 0.5rem 0 0.5rem 1.5rem;
+      margin: 2rem 0;
+      font-family: 'Georgia', serif;
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .quote cite {
+      display: block;
+      margin-top: 0.75rem;
+      font-style: normal;
+      font-size: 0.85rem;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    .verdict {
+      background: linear-gradient(180deg, var(--bg-elev-2), var(--bg-elev-1));
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.75rem 2rem;
+      margin: 2.5rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .verdict::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    }
+
+    .verdict h3 {
+      margin-top: 0;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      font-weight: 600;
+    }
+
+    .verdict h3::before {
+      content: '◆';
+      color: var(--gold);
+      font-size: 0.6rem;
+    }
+
+    .verdict p:last-child { margin-bottom: 0; }
+
+    /* ── METRICS ── */
+    .metric-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+
+    .metric {
+      background: var(--bg-elev-1);
+      border: 1px solid var(--border-soft);
+      border-radius: 10px;
+      padding: 1.25rem 1.4rem;
+      position: relative;
+      transition: border-color 0.3s;
+    }
+
+    .metric:hover { border-color: var(--gold-soft); }
+
+    .metric .label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      margin-bottom: 0.6rem;
+      font-weight: 600;
+    }
+
+    .metric .value {
+      font-family: 'Georgia', serif;
+      font-size: 2rem;
+      font-weight: 500;
+      color: var(--text);
+      line-height: 1.1;
+    }
+
+    .metric .value .unit {
+      font-size: 1rem;
+      color: var(--gold);
+      margin-left: 0.2rem;
+    }
+
+    .metric .note {
+      font-size: 0.82rem;
+      color: var(--mid);
+      margin-top: 0.5rem;
+    }
+
+    /* ── TOOL CARDS ── */
+    .tools {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+
+    .tool {
+      background: var(--bg-elev-1);
+      border: 1px solid var(--border-soft);
+      border-radius: 10px;
+      padding: 1.5rem 1.75rem;
+      position: relative;
+    }
+
+    .tool-head {
+      display: flex;
+      align-items: baseline;
+      gap: 0.75rem;
+      margin-bottom: 0.6rem;
+      flex-wrap: wrap;
+    }
+
+    .tool-name {
+      font-family: 'Georgia', serif;
+      font-size: 1.25rem;
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .tool-tag {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--gold);
+      font-weight: 600;
+      padding: 0.2rem 0.6rem;
+      border: 1px solid var(--gold-soft);
+      border-radius: 999px;
+    }
+
+    .tool-role {
+      font-size: 0.85rem;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .tool p { margin-bottom: 0; }
+
+    /* ── CODE ── */
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      padding: 1.1rem 1.4rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.88rem;
+      margin: 1.25rem 0 1.75rem;
+      line-height: 1.6;
+      border: 1px solid var(--border-soft);
+    }
+
+    code {
+      font-family: 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+      font-size: 0.92em;
+    }
+
+    p code, li code, td code {
+      background: var(--bg-elev-2);
+      padding: 0.1rem 0.45rem;
+      border-radius: 4px;
+      color: var(--gold);
+      border: 1px solid var(--border-soft);
+      font-size: 0.85em;
+    }
+
+    /* ── FOOTER ── */
+    .nav-back {
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-soft);
+      font-size: 0.9rem;
+    }
+
+    .nav-back a {
+      color: var(--mid);
+      border-bottom: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: color 0.2s;
+    }
+
+    .nav-back a:hover { color: var(--gold); }
+
+    footer {
+      margin-top: 2rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border-soft);
+      font-size: 0.82rem;
+      color: var(--muted);
+      text-align: center;
+      letter-spacing: 0.05em;
+    }
+
+    footer .seal {
+      display: inline-block;
+      margin-bottom: 0.75rem;
+      color: var(--gold);
+      letter-spacing: 0.3em;
+      font-size: 0.7rem;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      body { padding: 2rem 1rem 3rem; }
+      h1 { font-size: 2rem; }
+      h2 { font-size: 1.4rem; }
+      .lede { font-size: 1.05rem; }
+      .metric .value { font-size: 1.6rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <header>
+      <div class="eyebrow">Bitácora · 2026-05-17</div>
+      <h1>Reconciliado con <em>Opus 4.7</em></h1>
+      <p class="lede">
+        Hace cinco días publicamos un análisis demoledor sobre el consumo
+        de tokens de Opus 4.7. Hoy toca contar la otra mitad: cómo, cambiando
+        el cómo trabajo, 4.7 ha pasado de ser un coste a ser una ventaja.
+        Tres ingredientes: <strong>/loop</strong>, <strong>RTK</strong> y
+        <strong>Codex 5.5</strong> para lo difícil.
+      </p>
+    </header>
+
+    <section>
+      <h2>El giro</h2>
+      <p>
+        El problema con Opus 4.7 nunca fue el modelo, fue mi flujo. Lo seguía
+        usando como si fuera 4.6 — sesiones cortas, prompts puntuales, atención
+        humana cada pocos minutos. Con ese patrón, su tendencia a razonar y
+        verificar más era puro coste. La pregunta correcta no era
+        <em>"¿cómo bajo el consumo?"</em> sino
+        <em>"¿qué tipo de trabajo justifica un modelo que razona más?"</em>.
+      </p>
+
+      <div class="quote">
+        4.7 no es un modelo para usar diez minutos. Es un modelo para dejarlo
+        trabajar treinta y seis horas.
+        <cite>— Conclusión, tras dos semanas de /loop</cite>
+      </div>
+    </section>
+
+    <section>
+      <h2>Los números nuevos</h2>
+
+      <div class="metric-row">
+        <div class="metric">
+          <div class="label">Tarea más larga ejecutada</div>
+          <div class="value">36<span class="unit">h</span></div>
+          <div class="note">en modo /loop sin intervención</div>
+        </div>
+        <div class="metric">
+          <div class="label">Ahorro con RTK</div>
+          <div class="value">60–90<span class="unit">%</span></div>
+          <div class="note">en operaciones de dev rutinarias</div>
+        </div>
+        <div class="metric">
+          <div class="label">Tareas duras</div>
+          <div class="value">Codex<span class="unit"> 5.5</span></div>
+          <div class="note">uso intensivo cuando 4.7 no llega</div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <h2>El nuevo set de herramientas</h2>
+
+      <div class="tools">
+
+        <div class="tool">
+          <div class="tool-head">
+            <span class="tool-name">/loop</span>
+            <span class="tool-tag">Autonomía</span>
+            <span class="tool-role">El cambio de paradigma</span>
+          </div>
+          <p>
+            Convierte cualquier prompt en una tarea recurrente que el modelo
+            se auto-marca el ritmo. He llegado a dejar tareas de hasta
+            <strong>36 horas</strong> ejecutándose sin tocar el teclado.
+            Aquí 4.7 brilla — su tendencia a explorar, verificar y replanificar
+            deja de ser sobrecoste y se vuelve la propia razón de ser del bucle.
+          </p>
+        </div>
+
+        <div class="tool">
+          <div class="tool-head">
+            <span class="tool-name">RTK</span>
+            <span class="tool-tag">Eficiencia</span>
+            <span class="tool-role">Rust Token Killer</span>
+          </div>
+          <p>
+            Proxy CLI que recorta entre un <strong>60% y un 90%</strong> de
+            tokens en operaciones de desarrollo rutinarias (<code>git status</code>,
+            lecturas largas, listados). Se enchufa vía hook a Claude Code y es
+            transparente. Resultado: las 36 horas de /loop salen a una fracción
+            de lo que costarían con el proxy desactivado.
+          </p>
+        </div>
+
+        <div class="tool">
+          <div class="tool-head">
+            <span class="tool-name">Codex 5.5</span>
+            <span class="tool-tag">Especialista</span>
+            <span class="tool-role">Para lo que 4.7 no rompe</span>
+          </div>
+          <p>
+            <strong>Uso intensivo</strong> en tareas difíciles: refactors con
+            invariantes sutiles, depuraciones de varias capas, código numérico
+            denso. Cuando 4.7 da vueltas o se atasca en el bucle, Codex 5.5
+            entra como cirujano. No reemplaza a Opus — lo complementa.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <section>
+      <h2>Cómo se reparten el trabajo</h2>
+      <p>
+        La división de tareas que ha emergido tras dos semanas de uso:
+      </p>
+      <ul>
+        <li><strong>Opus 4.7 en /loop</strong> — tareas largas, exploratorias, que requieren mantener contexto y replanificar. El modo donde 4.7 deja de ser caro y empieza a rentar.</li>
+        <li><strong>Opus 4.6</strong> — sesiones interactivas cortas. Sigue siendo el caballo de batalla del día a día cuando se trata de iterar rápido conmigo delante.</li>
+        <li><strong>Codex 5.5</strong> — el escalpelo. Lo lanzo cuando una tarea concreta requiere precisión quirúrgica que 4.7 no garantiza.</li>
+        <li><strong>RTK</strong> — siempre activo. No es un modelo, es la infraestructura que hace que el resto salga rentable.</li>
+      </ul>
+    </section>
+
+    <section>
+      <div class="verdict">
+        <h3>Veredicto</h3>
+        <p>
+          El análisis del 12 de mayo seguía siendo correcto en sus datos:
+          4.7 consume casi el doble por mensaje que 4.6. Lo que faltaba era
+          el contexto del <em>uso</em>: ese coste extra solo se rentabiliza
+          cuando dejas al modelo trabajar de forma autónoma, durante horas,
+          sobre un objetivo bien definido.
+        </p>
+        <p>
+          Con /loop como motor, RTK como infraestructura y Codex 5.5 como
+          especialista, Opus 4.7 ha pasado de "modelo caro que no acompaña"
+          a "modelo correcto para el trabajo correcto". Reconciliados.
+        </p>
+      </div>
+    </section>
+
+    <div class="nav-back">
+      <a href="tokens-4-7.html">← Leer el análisis original de tokens 4.6 vs 4.7</a>
+    </div>
+
+    <footer>
+      <div class="seal">◆ IRIAAGENTS ◆</div>
+      Publicado el 2026-05-17 · Bitácora de uso real
+    </footer>
+
+  </div>
+</body>
+</html>
