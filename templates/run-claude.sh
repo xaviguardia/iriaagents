@@ -2,9 +2,12 @@
 # =============================================================================
 # Lanzar agente Claude Code para {{TITULO}}
 #
+# Modo por defecto: sesión interactiva en /loop (autónomo, ritmo dinámico).
+# Evita `claude -p` porque se tarifica como uso de API.
+#
 # Uso:
-#   ./tasks/{{NOMBRE}}/run-claude.sh              # No-interactivo (print mode)
-#   ./tasks/{{NOMBRE}}/run-claude.sh --interactive # Conversación interactiva
+#   ./tasks/{{NOMBRE}}/run-claude.sh              # /loop autónomo (recomendado)
+#   ./tasks/{{NOMBRE}}/run-claude.sh --interactive # Conversación interactiva normal
 #   ./tasks/{{NOMBRE}}/run-claude.sh --dry-run     # Solo mostrar prompt
 # =============================================================================
 
@@ -34,6 +37,6 @@ if $INTERACTIVE; then
   echo "Lanzando Claude Code interactivo..."
   claude "$PROMPT"
 else
-  echo "Lanzando Claude Code no-interactivo..."
-  claude --dangerously-skip-permissions -p "$PROMPT"
+  echo "Lanzando Claude Code en /loop (autónomo, ritmo dinámico)..."
+  claude --dangerously-skip-permissions "/loop $PROMPT"
 fi
