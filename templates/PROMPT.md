@@ -1,6 +1,6 @@
-# Prompt para lanzar el agente
+# Prompt si se delega a otra sesión
 
-Copiar el bloque de abajo y pasarlo como prompt a Claude Code o Codex.
+En la sesión que ha corrido `/new-task` no hace falta pegar esto: el agente ya tiene `goal.md`. Usa el bloque solo si entregas la tarea a **otra** sesión (cualquier agente).
 
 ---
 

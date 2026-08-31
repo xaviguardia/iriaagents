@@ -105,7 +105,7 @@ for f in "$COMMANDS_SRC"/*.md; do
 done
 
 echo ""
-echo "Commands instalados. Disponibles en Claude Code:"
+echo "Commands instalados. Disponibles en Claude Code, Grok y quien cargue ~/.claude/commands:"
 for f in "$COMMANDS_SRC"/*.md; do
   [ -e "$f" ] || continue
   name=$(basename "$f" .md)

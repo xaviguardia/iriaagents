@@ -37,7 +37,7 @@ cd iriaagents
 ./install.sh
 ```
 
-Crea symlinks en `~/.claude/commands/`. A partir de ahí `/new-task`, `/close-task` y `/coach` están disponibles en Claude Code.
+Crea symlinks en `~/.claude/commands/`. A partir de ahí `/new-task`, `/close-task` y `/coach` están disponibles en Claude Code, Grok y cualquier agente que cargue esa carpeta.
 
 ```bash
 ./install.sh --list       # skills instalados
@@ -51,12 +51,12 @@ Crea symlinks en `~/.claude/commands/`. A partir de ahí `/new-task`, `/close-ta
 
 ![Flujo de /new-task](docs/flow.svg)
 
-Una conversación de 7 preguntas. Las dos que más importan:
+Una conversación de 6 preguntas. Las dos que más importan:
 
 - **¿Qué hay que conseguir?**
 - **¿Cómo se demuestra que está terminado?**
 
-El skill no avanza si la segunda respuesta es vaga. Una vez acordado, genera `tasks/<nombre>/` con todo lo necesario para empezar. Si el proyecto usa GitFlow crea la rama `feature/<nombre>` y el worktree automáticamente.
+El skill no avanza si la segunda respuesta es vaga. Una vez acordado, genera `tasks/<nombre>/`. No genera script de lanzamiento: ejecuta quien está en el chat. Si el proyecto usa GitFlow crea la rama `feature/<nombre>` y el worktree automáticamente.
 
 ---
 
@@ -239,14 +239,14 @@ Los logs de servidor son efímeros y no demuestran el estado final del sistema.
 ```bash
 vim commands/mi-skill.md
 ./install.sh --force
-# disponible como /mi-skill en Claude Code
+# disponible como /mi-skill
 ```
 
 ---
 
 ## Requisitos
 
-- [Claude Code](https://claude.ai/code)
+- Un agente que cargue `~/.claude/commands/` ([Claude Code](https://claude.ai/code), Grok, …)
 - Git
 
 ---
@@ -285,7 +285,7 @@ cd iriaagents
 ./install.sh
 ```
 
-Creates symlinks in `~/.claude/commands/`. From that point `/new-task`, `/close-task` and `/coach` are available in Claude Code.
+Creates symlinks in `~/.claude/commands/`. From that point `/new-task`, `/close-task` and `/coach` are available in Claude Code, Grok, and any agent that loads that folder.
 
 ```bash
 ./install.sh --list       # installed skills
@@ -297,12 +297,12 @@ Creates symlinks in `~/.claude/commands/`. From that point `/new-task`, `/close-
 
 ## How `/new-task` works
 
-A conversation of 7 questions. The two that matter most:
+A conversation of 6 questions. The two that matter most:
 
 - **What needs to be achieved?**
 - **How do we prove it's done?**
 
-The skill won't advance if the second answer is vague. Once agreed, it generates `tasks/<name>/` with everything needed to start. If the project uses GitFlow it creates the `feature/<name>` branch and worktree automatically.
+The skill won't advance if the second answer is vague. Once agreed, it generates `tasks/<name>/`. No launch script: whoever is in the chat runs the work. If the project uses GitFlow it creates the `feature/<name>` branch and worktree automatically.
 
 ---
 
@@ -426,12 +426,12 @@ Server logs are ephemeral and don't prove the final state of the system.
 ```bash
 vim commands/my-skill.md
 ./install.sh --force
-# available as /my-skill in Claude Code
+# available as /my-skill
 ```
 
 ---
 
 ## Requirements
 
-- [Claude Code](https://claude.ai/code)
+- An agent that loads `~/.claude/commands/` ([Claude Code](https://claude.ai/code), Grok, …)
 - Git

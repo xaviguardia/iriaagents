@@ -1,6 +1,6 @@
 # Skill: new-task
 
-Agente conversacional que ancla el objetivo de una tarea con tests ejecutables y genera el scaffolding adaptable para ejecutarla con Claude Code o Codex.
+Agente conversacional que ancla el objetivo de una tarea con tests ejecutables y genera el scaffolding. Quien está en el chat ejecuta: no se genera script de lanzamiento.
 
 **Principio que guía todas las decisiones:**
 - `goal.md` (objetivo + verificación) es el contrato inmutable. No se toca una vez acordado.
@@ -9,7 +9,7 @@ Agente conversacional que ancla el objetivo de una tarea con tests ejecutables y
 
 **Cómo encontrar los templates (portable, sin paths hardcodeados):**
 1. Lee `~/.claude/iriaagents_path` → contiene la ruta absoluta del repo iriaagents en esta máquina.
-2. Los templates están en `<esa-ruta>/templates/`. Lee todos los `.md` y `.sh` antes de generar archivos.
+2. Los templates están en `<esa-ruta>/templates/`. Lee todos los `.md` antes de generar archivos.
 
 ## Cuándo usar este skill
 
@@ -22,7 +22,7 @@ Ejecuta las fases en orden. **No generes archivos hasta tener todas las respuest
 
 ---
 
-### Fase 1: Recopilación (7 preguntas secuenciales)
+### Fase 1: Recopilación (6 preguntas secuenciales)
 
 **P1 — Qué construir**
 > ¿Qué quieres construir o corregir? Describe el problema: qué está mal o qué falta, y qué debe quedar distinto al terminar.
@@ -52,8 +52,7 @@ Ejecuta las fases en orden. **No generes archivos hasta tener todas las respuest
 **P6 — Reglas de codificación**
 > ¿Hay reglas de codificación o restricciones? (lenguaje, framework de tests, naming, prohibiciones). Si no, escribe "ninguna".
 
-**P7 — Runner**
-> ¿Qué runner usará el agente: **Claude Code**, **Codex**, o **ambos**?
+No preguntes por runner ni generes `run-claude.sh` / `run-codex.sh` / equivalentes. El agente de esta sesión ejecuta. `PROMPT.md` solo sirve si más tarde se delega a **otra** sesión.
 
 ---
 
@@ -105,16 +104,13 @@ Una vez confirmada la propuesta:
    **Solo si P5 ≠ "ninguno":**
    - `INSTRUCTIONS.md`
 
-   **Según runner (P7):**
-   - `run-claude.sh` y/o `run-codex.sh` — con `chmod +x`
+   No generar scripts de lanzamiento (`.sh` de runner). `scripts/.gitkeep` queda por si la tarea necesita scripts **suyos**, no para arrancar el agente.
 
-7. En los `.sh`: `cd "$(git rev-parse --show-toplevel)"` si el proyecto tiene git, o ruta absoluta si no.
-
-8. Al terminar, informa:
+7. Al terminar, informa:
    - Rama y worktree creados (si GitFlow)
    - Archivos generados con ruta completa
    - Recuerda al usuario: "El único archivo que no debe modificarse es `goal.md`. El resto evoluciona con el trabajo."
-   - Siguiente paso: `cd ../<proyecto>-<nombre-tarea> && ./tasks/<nombre>/run-claude.sh`
+   - Siguiente paso: seguir en **esta** sesión (leer `goal.md` y ejecutar). `/close-task` cuando los comandos de verificación pasen.
 
 ## Reglas de generación
 
@@ -124,3 +120,4 @@ Una vez confirmada la propuesta:
 - **tasks.md refleja exactamente las tareas generadas**: una fila por taskNN.
 - **Los timestamps usan la fecha de hoy**: obtenerla con la herramienta de fecha del sistema.
 - **No inventar detalles técnicos**: rutas desconocidas → `# VERIFICAR`.
+- **No generar scripts de lanzamiento**: ni `run-claude.sh`, ni `run-codex.sh`, ni equivalentes.

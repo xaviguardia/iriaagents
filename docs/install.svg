@@ -40,7 +40,7 @@
   <circle cx="550" cy="38" r="13" fill="#6366f1"/>
   <text x="550" y="43" fill="white" font-size="13" font-weight="700" text-anchor="middle">3</text>
   <text x="572" y="36" fill="#1e293b" font-size="12" font-weight="700">Disponible</text>
-  <text x="572" y="50" fill="#64748b" font-size="10">en Claude Code</text>
+  <text x="572" y="50" fill="#64748b" font-size="10">en el chat del agente</text>
   <rect x="528" y="58" width="198" height="30" rx="6" fill="#0f172a"/>
   <text x="538" y="77" fill="#a78bfa" font-size="12" font-weight="700">/new-task</text>
 

@@ -408,7 +408,7 @@
 <nav>
   <div class="nav-logo">
     <h1>iriaagents</h1>
-    <p>Skills para Claude Code</p>
+    <p>Skills para el agente</p>
   </div>
 
   <span class="nav-section">Para empezar</span>
@@ -454,7 +454,7 @@
     <p class="tagline">La receta es centrarse en el objetivo.</p>
     <div class="badges">
       <span class="badge">✓ 20+ proyectos entregados</span>
-      <span class="badge">✓ Skills para Claude Code</span>
+      <span class="badge">✓ Skills para el agente</span>
       <span class="badge">✓ Compatible con GitFlow</span>
     </div>
   </div>
@@ -502,7 +502,7 @@
         <div class="step-num">3</div>
         <div class="step-body">
           <h4>Usa</h4>
-          <p>Escribe <code>/new-task</code> en cualquier sesión de Claude Code</p>
+          <p>Escribe <code>/new-task</code> en el chat del agente (Claude Code, Grok, …)</p>
         </div>
       </div>
     </div>
@@ -518,12 +518,12 @@ cd iriaagents
   <!-- /new-task -->
   <section id="new-task">
     <h2>/new-task</h2>
-    <p>Una conversación de 7 preguntas. Las dos que más importan:</p>
+    <p>Una conversación de 6 preguntas. Las dos que más importan:</p>
     <ul style="padding-left:1.25rem; color: var(--mid); margin-bottom:1rem;">
       <li style="margin-bottom:0.4rem"><strong style="color:var(--text)">¿Qué hay que conseguir?</strong></li>
       <li><strong style="color:var(--text)">¿Cómo se demuestra que está terminado?</strong> — comandos exactos, salida esperada</li>
     </ul>
-    <p>El skill no avanza si la segunda respuesta es vaga. Una vez acordado, genera <code>tasks/&lt;nombre&gt;/</code> con todo lo necesario para empezar.</p>
+    <p>El skill no avanza si la segunda respuesta es vaga. Una vez acordado, genera <code>tasks/&lt;nombre&gt;/</code>. No genera script de lanzamiento: ejecuta quien está en el chat.</p>
 
     <h3>Archivos generados</h3>
     <table>
@@ -532,9 +532,8 @@ cd iriaagents
       <tr><td>plan.md</td><td>Documento vivo — reescribir cuando la solución se desvía</td></tr>
       <tr><td>tasks.md</td><td>Documento vivo — añadir, eliminar, reordenar según avanza el trabajo</td></tr>
       <tr><td>AGENT.md</td><td>Instrucciones para el agente</td></tr>
-      <tr><td>PROMPT.md</td><td>Prompt inicial</td></tr>
+      <tr><td>PROMPT.md</td><td>Solo si se delega a otra sesión</td></tr>
       <tr><td>evidence/</td><td>Capturas que demuestran el progreso</td></tr>
-      <tr><td>run-claude.sh</td><td>Script de lanzamiento</td></tr>
     </table>
 
     <h3>Compatibilidad con GitFlow</h3>
@@ -805,7 +804,7 @@ Lee en orden — sin código hasta haber leído esto:
 - NO workarounds inventados — parar e informar en su lugar</code></pre>
 
     <h3>PROMPT.md</h3>
-    <p>El prompt de lanzamiento — pega en Claude Code o Codex para arrancar el agente. Contiene el rol, el orden de lectura de archivos, el bucle de ejecución y las condiciones de parada.</p>
+    <p>Prompt para <strong>otra</strong> sesión. En la que ha corrido <code>/new-task</code> no hace falta: el agente ya tiene <code>goal.md</code>.</p>
 <pre><code class="language-markdown">Eres el agente que {{ROLE_ONE_LINE}}.
 
 Lee estos archivos ANTES de hacer cualquier cambio:
@@ -841,7 +840,7 @@ Ejecuta las tareas en orden (task01 → taskNN). Para cada una:
     <p>Los skills son archivos Markdown simples. Crea uno, instala, listo.</p>
 <pre><code class="language-bash">vim commands/mi-skill.md
 ./install.sh --force
-# disponible como /mi-skill en Claude Code</code></pre>
+# disponible como /mi-skill</code></pre>
     <p>El archivo del skill describe cuándo usarlo, qué preguntas hacer y qué generar. Sin código.</p>
   </section>
 
